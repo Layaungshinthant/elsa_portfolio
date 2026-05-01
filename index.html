@@ -13,34 +13,36 @@
   --rose:#F2A4B5;--rose-d:#C4637A;--rose-deep:#9E3D57;--rose-s:#FDE8EF;
   --lav:#C9B6E4;--lav-d:#8B6DB8;--lav-s:#EDE8F8;
   --gold:#C9A84C;--gold-s:#F5E3A8;
-  --cream:#FFF9F5;--ink:#2D1F2D;--mid:#7A5878;--muted:#B09AAD;
+  --ink:#2D1F2D;--mid:#7A5878;--muted:#B09AAD;
 }
-body{font-family:'Jost',sans-serif;background:linear-gradient(150deg,#FFF9F5 0%,#FDE8EF 38%,#EDE8F8 68%,#FFF5E8 100%);color:var(--ink);min-height:100vh;overflow-x:hidden;}
-
+body{font-family:'Jost',sans-serif;background:linear-gradient(150deg,#FFF9F5 0%,#FDE8EF 38%,#EDE8F8 68%,#FFF5E8 100%);color:var(--ink);min-height:100vh;overflow-x:hidden}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float0{from{transform:translate(0,0) scale(1)}to{transform:translate(22px,-18px) scale(1.06)}}
+@keyframes float0{from{transform:translate(0,0)}to{transform:translate(22px,-18px) scale(1.06)}}
 @keyframes float1{from{transform:translate(0,0)}to{transform:translate(-16px,24px) scale(.94)}}
 @keyframes float2{from{transform:translate(0,0)}to{transform:translate(12px,12px) scale(1.08)}}
 @keyframes shimmer{0%,100%{opacity:.8}50%{opacity:1}}
 @keyframes pulseRing{0%,100%{box-shadow:0 0 0 10px rgba(242,164,181,.18),0 0 0 22px rgba(242,164,181,.08)}50%{box-shadow:0 0 0 14px rgba(242,164,181,.22),0 0 0 28px rgba(242,164,181,.1)}}
+@keyframes bounceIn{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.1) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--rose-s),var(--lav-s),var(--gold-s));display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;transition:opacity .8s ease}
 .blob{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
 #splash-inner{z-index:1;opacity:0;transform:translateY(20px);transition:all 1s ease}
 
-/* CANVAS */
+/* THREE.JS */
 #three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
 /* APP */
 #app{position:relative;z-index:1;display:none}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 32px;transition:all .3s ease}
-nav.scrolled{background:rgba(255,249,245,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(242,164,181,.2);padding:10px 32px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:14px 28px;transition:all .3s ease;flex-wrap:wrap}
+nav.scrolled{background:rgba(255,249,245,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(242,164,181,.2);padding:10px 28px}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--rose-d);font-style:italic;white-space:nowrap;cursor:pointer}
-.nav-tabs{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
-.nav-btn{padding:6px 13px;border:none;border-radius:100px;cursor:pointer;font-family:'Jost',sans-serif;font-size:12px;font-weight:400;color:var(--mid);background:transparent;transition:all .2s ease;letter-spacing:.3px}
+.nav-tabs{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.nav-btn{padding:6px 13px;border:none;border-radius:100px;cursor:pointer;font-family:'Jost',sans-serif;font-size:11.5px;font-weight:400;color:var(--mid);background:transparent;transition:all .2s ease}
 .nav-btn.active,.nav-btn:hover{background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;font-weight:500}
 
 /* GLASS CARD */
@@ -52,7 +54,6 @@ nav.scrolled{background:rgba(255,249,245,.9);backdrop-filter:blur(20px);-webkit-
 .section-sup{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--rose-d);text-transform:uppercase;margin-bottom:8px;display:block;text-align:center}
 .section-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,52px);font-weight:600;color:var(--ink);text-align:center;margin-bottom:12px;line-height:1.2}
 .section-sub{font-size:16px;color:var(--mid);max-width:480px;margin:0 auto 48px;line-height:1.7;text-align:center}
-
 .pill{display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.5px;font-family:'Jost',sans-serif}
 .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
@@ -69,66 +70,223 @@ nav.scrolled{background:rgba(255,249,245,.9);backdrop-filter:blur(20px);-webkit-
 .tab-content.active{display:block}
 a{text-decoration:none;color:inherit}
 
-/* RESPONSIVE */
-@media(max-width:700px){nav{padding:10px 14px}.nav-btn{padding:5px 10px;font-size:11px}.wrap{padding:48px 16px}.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+/* FORM INPUTS */
+.f-input{width:100%;padding:12px 16px;border:1px solid rgba(242,164,181,.35);border-radius:12px;background:rgba(255,255,255,.5);font-family:'Jost',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border .2s ease;backdrop-filter:blur(8px)}
+.f-input:focus{border-color:var(--rose-d);box-shadow:0 0 0 3px rgba(196,99,122,.12)}
+.f-input::placeholder{color:var(--muted)}
+.f-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B09AAD' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+textarea.f-input{resize:vertical;min-height:90px}
+.f-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:12px;font-family:'Jost',sans-serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:8px}
+.f-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,99,122,.35)}
+.f-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* ── CHAT BUBBLE ── */
+#chat-bubble{position:fixed;bottom:28px;right:28px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));border:none;cursor:pointer;box-shadow:0 6px 24px rgba(196,99,122,.45);display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .25s ease;animation:bounceIn .6s ease 1.2s both}
+#chat-bubble:hover{transform:scale(1.1) rotate(-5deg);box-shadow:0 12px 36px rgba(196,99,122,.55)}
+#chat-bubble .bubble-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#ff4d6d;border-radius:50%;border:2px solid white;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+
+#chat-panel{position:fixed;bottom:100px;right:28px;z-index:500;width:340px;background:rgba(255,249,245,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(242,164,181,.3);border-radius:24px;box-shadow:0 20px 60px rgba(196,99,122,.2);padding:24px;display:none;animation:slideUp .3s ease;max-height:80vh;overflow-y:auto}
+#chat-panel.open{display:block}
+.chat-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(242,164,181,.2)}
+.chat-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--rose)}
+.chat-status{display:flex;align-items:center;gap:5px;font-size:11px;color:#4caf50;font-weight:500}<br>.chat-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#4caf50;display:inline-block}
+.chat-close{margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);line-height:1;padding:4px}
+
+/* ── NOTIFICATION TOAST ── */
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:999;background:var(--ink);color:#fff;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;transition:all .3s ease;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── ADMIN MODE ── */
+#admin-overlay{position:fixed;inset:0;z-index:800;background:rgba(45,31,45,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
+#admin-overlay.open{display:flex}
+#admin-panel{background:linear-gradient(135deg,#fff9f5,#ede8f8);border-radius:28px;padding:36px;width:min(520px,92vw);max-height:88vh;overflow-y:auto;border:1px solid rgba(242,164,181,.3);box-shadow:0 30px 80px rgba(45,31,45,.3);animation:slideUp .3s ease}
+#admin-panel h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.admin-section{background:rgba(255,255,255,.5);border-radius:16px;padding:20px;margin-top:16px;border:1px solid rgba(242,164,181,.2)}
+.admin-section h4{font-size:13px;font-weight:600;color:var(--rose-d);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.export-box{background:rgba(45,31,45,.06);border-radius:10px;padding:12px;font-family:monospace;font-size:11px;color:var(--mid);margin-top:12px;word-break:break-all;border:1px dashed rgba(196,99,122,.3);max-height:120px;overflow-y:auto;white-space:pre-wrap}
+
+/* ── ANNOUNCEMENTS / JOURNAL ── */
+.journal-card{background:linear-gradient(135deg,rgba(242,164,181,.08),rgba(201,182,228,.08));border:1px solid rgba(242,164,181,.2);border-radius:16px;padding:20px;margin-bottom:16px;position:relative}
+.journal-date{font-size:11px;color:var(--rose-d);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.journal-body{font-size:15px;color:var(--ink);line-height:1.7}
+
+/* ── STATUS BADGE ── */
+#location-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,.45);border:1px solid rgba(201,182,228,.4);border-radius:100px;font-size:12px;color:var(--mid);backdrop-filter:blur(8px)}
+#location-badge::before{content:'📍';font-size:13px}
+
+/* LOADER SPINNER */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+
+@media(max-width:700px){nav{padding:8px 14px}.nav-btn{padding:4px 9px;font-size:10.5px}.wrap{padding:48px 16px}.grid2,.grid3,.grid4{grid-template-columns:1fr}#chat-panel{width:calc(100vw - 32px);right:16px}#chat-bubble{bottom:20px;right:20px}}
 </style>
 </head>
 <body>
 
-<!-- ════ SPLASH ════ -->
+<!-- ═══════════════════════════════════
+     SPLASH SCREEN
+═══════════════════════════════════ -->
 <div id="splash">
   <div class="blob" style="top:-10%;left:-10%;width:40vw;height:40vw;background:rgba(242,164,181,.22);animation:float0 7s ease-in-out infinite alternate"></div>
   <div class="blob" style="bottom:-15%;right:-10%;width:45vw;height:45vw;background:rgba(201,182,228,.22);animation:float1 9s ease-in-out infinite alternate"></div>
   <div class="blob" style="top:38%;left:28%;width:22vw;height:22vw;background:rgba(201,168,76,.14);animation:float2 6s ease-in-out infinite alternate"></div>
   <div id="splash-inner">
-    <div style="width:110px;height:110px;border-radius:50%;overflow:hidden;margin:0 auto 28px;border:3px solid rgba(255,255,255,.8);box-shadow:0 0 0 10px rgba(242,164,181,.18),0 0 0 22px rgba(242,164,181,.08);animation:pulseRing 3s ease-in-out infinite">
-      <img src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
+    <div style="width:114px;height:114px;border-radius:50%;overflow:hidden;margin:0 auto 24px;border:3px solid rgba(255,255,255,.85);animation:pulseRing 3s ease-in-out infinite">
+      <img src="https://drive.google.com/uc?export=view&id=1TisTqtA2CufBINmfm1YXxF51rSZ6eiSe" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
     </div>
-    <span class="pill" style="background:var(--rose-deep);color:#fff;font-size:10px;letter-spacing:2px;margin-bottom:20px;display:inline-block">✦ DIGITAL PORTFOLIO ✦</span>
-    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,7vw,76px);font-weight:300;color:var(--ink);line-height:1.05;letter-spacing:-1px;margin-bottom:4px">La YaungShin</h1>
-    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(38px,7vw,76px);font-weight:600;color:var(--rose-d);font-style:italic;line-height:1.05;letter-spacing:-1px;margin-bottom:16px">Thant Elsa</h1>
-    <p style="font-size:clamp(13px,2vw,16px);color:var(--mid);margin-bottom:10px;letter-spacing:1px">HR Professional · Personal Assistant · AI-Forward Strategist</p>
-    <p style="font-size:13px;color:var(--lav-d);margin-bottom:44px">⚧ Proudly Transgender Woman</p>
-    <button id="enter-btn" onclick="enterPortfolio()" style="padding:16px 48px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:100px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 30px rgba(196,99,122,.35);transition:all .2s ease">✦ Experience the Portfolio</button>
-    <p style="font-size:11px;color:var(--muted);margin-top:24px;letter-spacing:.5px">Scroll · Discover · Connect</p>
+    <span class="pill" style="background:var(--rose-deep);color:#fff;font-size:10px;letter-spacing:2px;margin-bottom:18px;display:inline-block">✦ DIGITAL PORTFOLIO ✦</span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,72px);font-weight:300;color:var(--ink);line-height:1.05;letter-spacing:-1px;margin-bottom:4px">La YaungShin</h1>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,72px);font-weight:600;color:var(--rose-d);font-style:italic;line-height:1.05;letter-spacing:-1px;margin-bottom:14px">Thant Elsa</h1>
+    <p style="font-size:clamp(12px,2vw,15px);color:var(--mid);margin-bottom:8px;letter-spacing:.5px">HR Professional · Personal Assistant · AI-Forward Strategist</p>
+    <p style="font-size:13px;color:var(--lav-d);margin-bottom:36px">⚧ Proudly Transgender Woman</p>
+    <button id="enter-btn" onclick="enterPortfolio()" style="padding:15px 48px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:100px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 30px rgba(196,99,122,.35);transition:all .25s ease">✦ Experience the Portfolio</button>
+    <p style="font-size:11px;color:var(--muted);margin-top:20px;letter-spacing:.5px">Scroll · Discover · Connect</p>
   </div>
 </div>
 
-<!-- ════ THREE.JS CANVAS ════ -->
+<!-- THREE.JS CANVAS -->
 <canvas id="three-canvas"></canvas>
 
-<!-- ════ APP ════ -->
-<div id="app">
+<!-- ═══════════════════════════════════
+     CHAT BUBBLE + PANEL
+═══════════════════════════════════ -->
+<button id="chat-bubble" onclick="toggleChat()" title="Send me a message">
+  💬
+  <div class="bubble-badge">1</div>
+</button>
 
+<div id="chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar"><img src="https://drive.google.com/uc?export=view&id=1TisTqtA2CufBINmfm1YXxF51rSZ6eiSe" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="Elsa"></div>
+    <div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink)">Elsa</div>
+      <div class="chat-status">Available · Usually replies in 24h</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div style="background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1));border-radius:14px;padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--mid);line-height:1.6;border-left:3px solid var(--rose)">
+    👋 Hi! I'm Elsa — HR Manager, PA & AI Strategist. Drop me a message and I'll get back to you!
+  </div>
+  <form id="chat-form" onsubmit="sendTelegramMessage(event)">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input class="f-input" id="cf-name" type="text" placeholder="Your Name *" required>
+      <select class="f-input f-select" id="cf-type">
+        <option value="General Inquiry">💼 General Inquiry</option>
+        <option value="HR Consultation">👥 HR Consultation</option>
+        <option value="Executive PA Role">🗂️ Executive PA Role</option>
+        <option value="Compliance Advisory">⚖️ Compliance Advisory</option>
+        <option value="AI / Automation Project">🤖 AI / Automation Project</option>
+        <option value="Collaboration">🤝 Collaboration</option>
+      </select>
+      <textarea class="f-input" id="cf-message" placeholder="Your message... *" required></textarea>
+      <button class="f-btn" id="chat-send-btn" type="submit">
+        <span id="chat-send-label">Send Message ✦</span>
+        <div class="spinner" id="chat-spinner" style="display:none"></div>
+      </button>
+      <div id="chat-success" style="display:none;text-align:center;padding:14px;background:linear-gradient(135deg,rgba(242,164,181,.15),rgba(201,182,228,.15));border-radius:12px;border:1px solid rgba(242,164,181,.3)">
+        <div style="font-size:28px;margin-bottom:8px">🌸</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink)">Message Sent!</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:4px">I'll reply within 24 hours. Thank you!</div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- ═══════════════════════════════════
+     TOAST NOTIFICATION
+═══════════════════════════════════ -->
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════
+     ADMIN OVERLAY
+═══════════════════════════════════ -->
+<div id="admin-overlay" onclick="closeAdminIfOutside(event)">
+  <div id="admin-panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <span style="font-size:28px">🔐</span>
+      <div>
+        <h2>Admin Command Center</h2>
+        <p style="font-size:12px;color:var(--muted)">Changes saved to localStorage · Export for permanent deploy</p>
+      </div>
+      <button onclick="closeAdmin()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+
+    <!-- Location Update -->
+    <div class="admin-section">
+      <h4>📍 Current Location / Status</h4>
+      <input class="f-input" id="admin-location" type="text" placeholder="e.g. Yangon, Myanmar · Open to Remote">
+      <button class="f-btn" onclick="saveLocation()" style="margin-top:10px;width:auto;padding:10px 24px">Update Status</button>
+    </div>
+
+    <!-- Daily Article / Announcement -->
+    <div class="admin-section">
+      <h4>✍️ Post New Announcement</h4>
+      <input class="f-input" id="admin-article-title" type="text" placeholder="Article title..." style="margin-bottom:10px">
+      <textarea class="f-input" id="admin-article-body" placeholder="Write your update, insight, or announcement here..." style="min-height:110px"></textarea>
+      <button class="f-btn" onclick="saveArticle()" style="margin-top:10px;width:auto;padding:10px 24px">Publish ✦</button>
+    </div>
+
+    <!-- Manage Articles -->
+    <div class="admin-section">
+      <h4>🗂️ Manage Articles</h4>
+      <div id="admin-articles-list" style="font-size:13px;color:var(--mid);max-height:160px;overflow-y:auto"></div>
+    </div>
+
+    <!-- Export Config -->
+    <div class="admin-section">
+      <h4>📦 Export Config (for permanent deploy)</h4>
+      <p style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.5">Copy the JSON below and paste it as the value of <code style="background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px">window.SITE_CONFIG</code> in the script section to make your updates permanent for all visitors.</p>
+      <button class="f-btn" onclick="exportConfig()" style="width:auto;padding:10px 24px;margin-bottom:10px">Generate Export ↓</button>
+      <div class="export-box" id="export-output">— click Generate Export —</div>
+      <button onclick="copyExport()" style="margin-top:8px;padding:7px 18px;border:1px solid rgba(196,99,122,.4);border-radius:8px;background:transparent;color:var(--rose-d);font-size:12px;cursor:pointer;font-family:'Jost',sans-serif;font-weight:600">Copy to Clipboard</button>
+    </div>
+
+    <!-- Telegram Remote Control Info -->
+    <div class="admin-section">
+      <h4>📡 Telegram Remote Control</h4>
+      <p style="font-size:12px;color:var(--mid);line-height:1.6">Send these commands to your bot to interact remotely:</p>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(242,164,181,.25)">/status — Bot replies with your current site status &amp; last article</code>
+        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,182,228,.25)">/setlocation [city] — Updates your location badge (localStorage)</code>
+        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,168,76,.25)">/inquiries — Lists recent contact form submissions</code>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px">⚠️ Webhook commands require a server. For GitHub Pages, use n8n or Make.com as your bot webhook receiver to process /commands and update your localStorage via a shared API key.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MAIN APP
+═══════════════════════════════════ -->
+<div id="app">
   <nav id="main-nav">
     <div class="nav-logo" onclick="switchTab('home')">Elsa ✦</div>
     <div class="nav-tabs">
-      <button class="nav-btn active" data-tab="home"          onclick="switchTab('home')">About</button>
-      <button class="nav-btn"        data-tab="vault"         onclick="switchTab('vault')">Executive Vault</button>
-      <button class="nav-btn"        data-tab="compliance"    onclick="switchTab('compliance')">Compliance Lab</button>
-      <button class="nav-btn"        data-tab="automation"    onclick="switchTab('automation')">Automation Studio</button>
-      <button class="nav-btn"        data-tab="humanitarian"  onclick="switchTab('humanitarian')">Humanitarian Path</button>
-      <button class="nav-btn"        data-tab="contact"       onclick="switchTab('contact')">Connect</button>
+      <button class="nav-btn active" data-tab="home"         onclick="switchTab('home')">About</button>
+      <button class="nav-btn"        data-tab="journal"      onclick="switchTab('journal')">Journal</button>
+      <button class="nav-btn"        data-tab="vault"        onclick="switchTab('vault')">Executive Vault</button>
+      <button class="nav-btn"        data-tab="compliance"   onclick="switchTab('compliance')">Compliance Lab</button>
+      <button class="nav-btn"        data-tab="automation"   onclick="switchTab('automation')">Automation Studio</button>
+      <button class="nav-btn"        data-tab="humanitarian" onclick="switchTab('humanitarian')">Humanitarian Path</button>
+      <button class="nav-btn"        data-tab="contact"      onclick="switchTab('contact')">Connect</button>
     </div>
   </nav>
 
   <div style="padding-top:72px">
 
-    <!-- ── HOME ── -->
+    <!-- ══ HOME ══ -->
     <div id="tab-home" class="tab-content active">
       <div class="wrap">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center;min-height:80vh">
           <div style="animation:fadeInUp .6s ease forwards">
-            <div style="margin-bottom:20px">
-              <span class="pill" style="background:var(--lav-d);color:#fff;margin-right:8px">⚧ Transgender Woman</span>
+            <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <span class="pill" style="background:var(--lav-d);color:#fff">⚧ Transgender Woman</span>
               <span class="pill" style="background:var(--gold);color:var(--ink)">C1 Advanced English</span>
             </div>
+            <div id="location-badge" style="margin-bottom:20px;width:fit-content">Yangon, Myanmar · Open to Opportunities</div>
             <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,68px);font-weight:300;color:var(--ink);line-height:1.08;margin-bottom:4px">La YaungShin</h1>
             <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,68px);font-weight:600;color:var(--rose-d);font-style:italic;line-height:1.08;margin-bottom:22px">Thant Elsa</h1>
             <p style="font-size:17px;color:var(--mid);line-height:1.85;margin-bottom:28px;max-width:480px">HR Manager · Personal Assistant · Compliance Advisor. Driven by the precision of law and the empathy of human resources — with a decade of experience across Myanmar's most demanding environments.</p>
-            <div class="card" style="border-left:4px solid var(--rose);border-radius:16px;margin-bottom:32px;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--ink);line-height:1.65">
-              "My approach to administration is built on the precision of a legal mind and the empathy of an HR professional. I believe technology should handle the tasks so that people can handle the growth."
-            </div>
+            <div class="card" style="border-left:4px solid var(--rose);border-radius:16px;margin-bottom:32px;font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--ink);line-height:1.65">"My approach to administration is built on the precision of a legal mind and the empathy of an HR professional. I believe technology should handle the tasks so that people can handle the growth."</div>
             <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:center">
               <div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;color:var(--rose-d)">10+</div><div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Years Exp.</div></div>
               <div style="width:1px;height:48px;background:var(--rose);opacity:.4"></div>
@@ -139,15 +297,14 @@ a{text-decoration:none;color:inherit}
           </div>
           <div style="display:flex;justify-content:center;animation:fadeInUp .6s ease .2s both">
             <div style="position:relative;animation:shimmer 5s ease-in-out infinite">
-              <div style="width:290px;height:360px;border-radius:42% 58% 62% 38% / 48% 52% 72% 28%;overflow:hidden;border:3px solid rgba(255,255,255,.80);box-shadow:0 20px 60px rgba(196,99,122,.22),0 0 0 12px rgba(242,164,181,.12)">
-                <img src="my-photo.jpg" alt="La YaungShin Thant Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
+              <div style="width:290px;height:360px;border-radius:42% 58% 62% 38%/48% 52% 72% 28%;overflow:hidden;border:3px solid rgba(255,255,255,.82);box-shadow:0 20px 60px rgba(196,99,122,.22),0 0 0 12px rgba(242,164,181,.12)">
+                <img src="https://drive.google.com/uc?export=view&id=1TisTqtA2CufBINmfm1YXxF51rSZ6eiSe" alt="La YaungShin Thant Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
               </div>
               <span class="pill" style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--rose-deep);color:#fff;font-size:10px;white-space:nowrap;box-shadow:0 4px 16px rgba(158,61,87,.3)">✦ Yangon, Myanmar</span>
             </div>
           </div>
         </div>
       </div>
-
       <!-- SKILLS -->
       <div class="wrap" style="padding-top:20px">
         <span class="section-sup">Expertise</span>
@@ -155,7 +312,6 @@ a{text-decoration:none;color:inherit}
         <p class="section-sub">A rare blend of legal precision, human insight, and digital fluency.</p>
         <div class="grid3" id="skills-grid"></div>
       </div>
-
       <!-- CERTS -->
       <div class="wrap" style="padding-top:0;padding-bottom:80px">
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1))">
@@ -165,73 +321,77 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
-    <!-- ── VAULT ── -->
+    <!-- ══ JOURNAL ══ -->
+    <div id="tab-journal" class="tab-content">
+      <div class="wrap">
+        <span class="section-sup">Thoughts & Updates</span>
+        <h2 class="section-h2">The Daily Journal</h2>
+        <p class="section-sub">365 days of insights — a commitment to continuous learning and professional sharing.</p>
+        <div id="journal-feed">
+          <div style="text-align:center;padding:60px 20px;color:var(--muted)">
+            <div style="font-size:48px;margin-bottom:16px">✍️</div>
+            <p style="font-size:15px">No articles yet. Check back soon — or ask Elsa directly via the chat.</p>
+          </div>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ══ VAULT ══ -->
     <div id="tab-vault" class="tab-content">
       <div class="wrap">
         <span class="section-sup">Executive Support</span>
         <h2 class="section-h2">The Executive Vault</h2>
         <p class="section-sub">A complete suite of PA and Secretary services — built for busy executives who demand precision.</p>
-
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1));margin-bottom:48px">
           <span class="section-sup" style="text-align:left;margin-bottom:4px">The Executive Support Suite</span>
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--ink);font-style:italic;margin-bottom:28px">What I can do for you</h3>
           <div class="grid4" id="services-grid"></div>
         </div>
-
         <span class="section-sup" style="text-align:left">Track Record</span>
         <h2 class="section-h2" style="text-align:left;font-size:clamp(26px,4vw,40px);margin-bottom:24px">Proven Experience</h2>
         <div style="display:flex;flex-direction:column;gap:20px" id="exp-grid"></div>
+        <div style="height:80px"></div>
       </div>
     </div>
 
-    <!-- ── COMPLIANCE LAB ── -->
+    <!-- ══ COMPLIANCE ══ -->
     <div id="tab-compliance" class="tab-content">
       <div class="wrap">
         <span class="section-sup">Legal Insight</span>
         <h2 class="section-h2">The Compliance Lab</h2>
         <p class="section-sub">Where a Law background meets HR practice — your organisation's legal safety net.</p>
-
         <div class="card" style="background:linear-gradient(135deg,rgba(201,182,228,.18),rgba(242,164,181,.07));margin-bottom:36px">
           <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap">
             <div style="width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,var(--lav-d),var(--rose-d));display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0">⚖️</div>
             <div>
               <span class="pill" style="background:var(--lav-d);color:#fff;margin-bottom:8px;display:inline-block">Education</span>
               <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:6px">Undergraduate in Law</h3>
-              <p style="font-size:14px;color:var(--mid);margin-bottom:4px">Monywa Art & Science University · December 2016 – March 2020</p>
-              <p style="font-size:14px;color:var(--mid);line-height:1.6">Legal reasoning · Constitutional law · Labor & commercial law · Advocacy & argumentation</p>
+              <p style="font-size:14px;color:var(--mid);margin-bottom:4px">Monywa Art &amp; Science University · December 2016 – March 2020</p>
+              <p style="font-size:14px;color:var(--mid);line-height:1.6">Legal reasoning · Constitutional law · Labor &amp; commercial law · Advocacy &amp; argumentation</p>
             </div>
           </div>
         </div>
-
         <div class="grid2" style="margin-bottom:36px" id="compliance-grid"></div>
-
         <div class="card" style="background:linear-gradient(135deg,rgba(201,182,228,.12),rgba(201,168,76,.07));text-align:center;padding:48px;margin-bottom:32px">
-          <div style="font-size:48px;opacity:.32;margin-bottom:18px;font-family:'Cormorant Garamond',serif">§</div>
+          <div style="font-size:48px;opacity:.3;margin-bottom:18px;font-family:'Cormorant Garamond',serif">§</div>
           <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3vw,25px);font-style:italic;color:var(--ink);line-height:1.65;max-width:600px;margin:0 auto 20px">"Beyond technical skills, I bring a diplomatic approach to every role — using legal reasoning to ensure every interaction is handled with fairness, tact, and professional grace."</p>
           <p style="font-size:12px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase">— La YaungShin Thant Elsa</p>
         </div>
-
         <div class="grid2" style="padding-bottom:80px">
-          <div class="card">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🇺🇸</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">USAID · Court Survey</h4></div>
-            <p style="font-size:14px;color:var(--mid);line-height:1.7">Maintained professional neutrality and diplomatic communication while conducting court user surveys at Monywa District Court — trusted with sensitive civic data as a student volunteer.</p>
-          </div>
-          <div class="card">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🏥</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">MSF · Data Entry</h4></div>
-            <p style="font-size:14px;color:var(--mid);line-height:1.7">Entrusted with sensitive humanitarian data for Médecins Sans Frontières in Homalin, Sagaing Region — upholding the highest standards of data integrity under pressure.</p>
-          </div>
+          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🇺🇸</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">USAID · Court Survey</h4></div><p style="font-size:14px;color:var(--mid);line-height:1.7">Maintained professional neutrality and diplomatic communication while conducting court user surveys at Monywa District Court — trusted with sensitive civic data as a student volunteer.</p></div>
+          <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🏥</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">MSF · Data Entry</h4></div><p style="font-size:14px;color:var(--mid);line-height:1.7">Entrusted with sensitive humanitarian data for Médecins Sans Frontières in Homalin, Sagaing Region — upholding the highest standards of data integrity under pressure.</p></div>
         </div>
       </div>
     </div>
 
-    <!-- ── AUTOMATION STUDIO ── -->
+    <!-- ══ AUTOMATION ══ -->
     <div id="tab-automation" class="tab-content">
       <div class="wrap">
         <span class="section-sup">Tech Forward</span>
         <h2 class="section-h2">The Automation Studio</h2>
         <p class="section-sub">Not just AI-friendly — AI-powered. A live demonstration of modern workflow architecture.</p>
         <div class="grid4" style="margin-bottom:48px" id="tools-grid"></div>
-
         <div class="card" style="margin-bottom:32px">
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:8px">The Telegram → Website Pipeline</h3>
           <p style="font-size:14px;color:var(--mid);margin-bottom:32px;line-height:1.6">A fully automated content ecosystem — write, tag, and publish from a single Telegram message.</p>
@@ -242,7 +402,6 @@ a{text-decoration:none;color:inherit}
             <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/diplomacy</code>
           </div>
         </div>
-
         <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(242,164,181,.07));padding-bottom:80px">
           <div style="display:flex;gap:16px;align-items:flex-start">
             <span style="font-size:34px">✨</span>
@@ -255,16 +414,13 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
-    <!-- ── HUMANITARIAN PATH ── -->
+    <!-- ══ HUMANITARIAN ══ -->
     <div id="tab-humanitarian" class="tab-content">
       <div class="wrap">
-        <span class="section-sup">Service & Purpose</span>
+        <span class="section-sup">Service &amp; Purpose</span>
         <h2 class="section-h2">The Humanitarian Path</h2>
         <p class="section-sub">A decade of service across Myanmar's most demanding environments — from conflict zones to international aid organisations.</p>
-        <div class="timeline">
-          <div class="tl-line"></div>
-          <div id="timeline-grid"></div>
-        </div>
+        <div class="timeline"><div class="tl-line"></div><div id="timeline-grid"></div></div>
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.07),rgba(201,182,228,.07));margin-top:8px">
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:16px">🗺️ Regional Footprint</h3>
           <div style="display:flex;gap:24px;flex-wrap:wrap">
@@ -278,15 +434,14 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
 
-    <!-- ── CONNECT ── -->
+    <!-- ══ CONTACT ══ -->
     <div id="tab-contact" class="tab-content">
       <div class="wrap">
         <span class="section-sup">Get In Touch</span>
         <h2 class="section-h2">Let's Connect</h2>
         <p class="section-sub">Ready to discuss your next executive challenge. Reach out through any channel.</p>
-
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.12),rgba(201,182,228,.12));text-align:center;padding:48px;margin-bottom:40px">
-          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)"><img src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center"></div>
+          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)"><img src="https://drive.google.com/uc?export=view&id=1TisTqtA2CufBINmfm1YXxF51rSZ6eiSe" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center"></div>
           <h2 style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--ink);font-style:italic;margin-bottom:10px">La YaungShin Thant Elsa</h2>
           <p style="font-size:14px;color:var(--mid);margin-bottom:8px">HR Manager · Personal Assistant · Compliance Advisor · AI Strategist</p>
           <p style="font-size:13px;color:var(--lav-d);margin-bottom:24px">⚧ Proudly Transgender Woman · Lanmadaw, Yangon, Myanmar</p>
@@ -296,13 +451,13 @@ a{text-decoration:none;color:inherit}
             <span class="pill" style="background:var(--gold);color:var(--ink)">AI-Friendly</span>
           </div>
         </div>
-
         <div class="grid2" id="contact-grid"></div>
-
         <div style="text-align:center;margin-top:80px;padding-bottom:60px">
           <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent);margin:0 auto 20px"></div>
+          <!-- SECRET ADMIN TRIGGER: click the rose 5x -->
           <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--mid);margin-bottom:8px">Driven by passion, guided by purpose.</p>
-          <p style="font-size:11px;color:var(--muted);letter-spacing:1px">© 2025 La YaungShin Thant Elsa · All Rights Reserved</p>
+          <span id="admin-trigger" onclick="handleAdminTap()" style="cursor:default;font-size:20px;user-select:none;display:inline-block" title="">🌸</span>
+          <p style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px">© 2025 La YaungShin Thant Elsa · All Rights Reserved</p>
         </div>
       </div>
     </div>
@@ -312,144 +467,144 @@ a{text-decoration:none;color:inherit}
 
 <script>
 /* ═══════════════════════════════════════════════════════
+   TELEGRAM CREDENTIALS — paste your values below
+   Token is split to avoid simple scrapers
+═══════════════════════════════════════════════════════ */
+const _t = ['8609424282',':AAE6P0ryGfp','JZbDWPb1wASMqKk1GDjZGN3c'];
+const TELEGRAM_BOT_TOKEN = _t.join('');
+const TELEGRAM_CHAT_ID   = '7663311859';
+
+/* ── Permanent config (overridden by localStorage) ── */
+window.SITE_CONFIG = {
+  location: 'Yangon, Myanmar · Open to Opportunities',
+  articles: []
+};
+
+/* ═══════════════════════════════════════════════════════
    DATA
 ═══════════════════════════════════════════════════════ */
-const DATA = {
-  skills:[
-    {icon:'🤖',name:'AI & Automation',desc:'ChatGPT, n8n, Make.com, Telegram workflows — transforming repetitive tasks into seamless automation pipelines.'},
-    {icon:'⚖️',name:'Legal Analysis',desc:'Law graduate · Labor regulations · Compliance advisory · Contract synthesis and executive briefing.'},
-    {icon:'👥',name:'Human Resources',desc:'Recruitment · Onboarding · Employee relations across corporate and international environments.'},
-    {icon:'🗂️',name:'Executive Assistance',desc:'Calendar management · Travel logistics · Stakeholder liaison · Confidential executive correspondence.'},
-    {icon:'🌐',name:'C1 English (EFSET)',desc:'Certified C1 Advanced — international correspondence, translation, and global business communication.'},
-    {icon:'🕊️',name:'Strategic Diplomacy',desc:'Mediation · Conflict resolution · High-stakes communication with professional composure and tact.'},
-  ],
-  certs:[
-    {cert:'EFSET English Certificate',detail:'62/100 · C1 Advanced',col:'var(--lav-d)'},
-    {cert:'Business Writing Skills',detail:'Communicating Ideas & Information Training',col:'var(--rose-d)'},
-    {cert:'HR Executive Certified',detail:'Certified Professional Programme',col:'var(--gold)'},
-    {cert:'Job Readiness Skills',detail:'Cohort-3 · Ninggawn Institute',col:'var(--rose-deep)'},
-  ],
-  services:[
-    {icon:'📅',title:'Executive Calendar Management',desc:'Scheduling, travel logistics, and priority filtering across time zones.'},
-    {icon:'📋',title:'Legal & Document Synthesis',desc:'Preparing briefs, summarising contracts, ensuring administrative compliance.'},
-    {icon:'🔗',title:'High-Stakes Coordination',desc:'Managing communications between departments and international stakeholders.'},
-    {icon:'⚡',title:'Digital Transformation',desc:'Implementing AI tools to automate repetitive office tasks.'},
-  ],
-  experience:[
-    {role:'Human Resources Manager',co:'INDAGATE PRIVATE (Step To Singapore) Co. Ltd.',period:'Aug 2024 – Sep 2025',col:'var(--rose)',pts:['Led international placement relations and resolved complex employee grievances','Exercised high-level diplomacy managing cross-border HR operations (Myanmar ↔ Singapore)','Maintained confidential executive-level stakeholder communications']},
-    {role:'Personal Assistant',co:'Hexing Group',period:'Oct 2022 – Feb 2023',col:'var(--lav-d)',pts:['Managed executive schedules, correspondence, and international travel arrangements','Acted as professional liaison between senior management and external partners','Maintained absolute confidentiality in high-stakes business environments']},
-    {role:'Human Resources',co:'Myanmar SpeedNet',period:'Oct 2023 – Jul 2024',col:'var(--gold)',pts:['Oversaw HR operations for a fast-growing telecommunications company','Developed and implemented HR policies and employee relations frameworks','Managed talent acquisition pipelines and onboarding programmes']},
-    {role:'Human Resources Assistant',co:'Tharaphu Chinese & Thai Cuisine Restaurant',period:'May – Oct 2022',col:'var(--rose-deep)',pts:['Led end-to-end recruitment, onboarding, and staff documentation','Facilitated daily operational HR tasks in a fast-paced hospitality environment']},
-  ],
-  compliance:[
-    {icon:'📜',title:'Labor Law Navigation',desc:'Deep understanding of Myanmar\'s labor regulations and international contract requirements, ensuring every HR decision is legally sound.'},
-    {icon:'🔐',title:'Ethical Standards',desc:'Entrusted with sensitive humanitarian data at USAID and MSF — handling high-stakes information with absolute integrity.'},
-    {icon:'🧠',title:'Legal Synthesis',desc:'Ability to translate complex legal language into clear, actionable executive summaries that protect the business.'},
-    {icon:'🛡️',title:'Compliance Advising',desc:'A safe pair of hands — protecting your organisation from legal risk by ensuring every administrative process is above board.'},
-  ],
-  tools:[
-    {icon:'💬',name:'ChatGPT',use:'Drafting, research & content generation'},
-    {icon:'⚙️',name:'n8n / Make.com',use:'Workflow automation & orchestration'},
-    {icon:'🤖',name:'Telegram Bot',use:'Automated content publishing pipeline'},
-    {icon:'📊',name:'Google Sheets',use:'Data management & live dashboards'},
-    {icon:'🌐',name:'Google Sites',use:'Portfolio & knowledge base publishing'},
-    {icon:'☁️',name:'Google Drive',use:'Document storage, sharing & embedding'},
-  ],
-  workflow:[
-    {n:'1',label:'Write Content',desc:'Draft in Telegram with a hashtag command',col:'var(--rose)'},
-    {n:'2',label:'Tag & Send',desc:'#Article or #Law + title + body + image',col:'var(--lav-d)'},
-    {n:'3',label:'Webhook Fires',desc:'n8n parses: extracts title, body & image URL',col:'var(--gold)'},
-    {n:'4',label:'Auto-Published',desc:'Google Sheet updates → live site reflects content',col:'var(--rose-deep)'},
-  ],
-  timeline:[
-    {yr:'Aug 2016',title:'USAID · Court User Survey',org:'Student Volunteer · Monywa District Court',desc:'Maintained professional neutrality conducting user surveys for a USAID justice initiative. Trusted with sensitive civic data alongside government officials.',col:'var(--rose)',icon:'🇺🇸'},
-    {yr:'Jun 2017 – Jun 2018',title:'Refounder & Chairperson',org:'The Light House Altruism Young University Group · Monywa',desc:'Built and led a youth altruism organisation from the ground up — proving the ability to create, inspire, and manage institutions, not just participate in them.',col:'var(--lav-d)',icon:'💡'},
-    {yr:'Dec 2018',title:'Data Entry Assistant',org:'Médecins Sans Frontières (MSF) · Homalin, Sagaing',desc:'Entrusted with sensitive humanitarian data for MSF operations in conflict-adjacent areas. Maintained absolute data integrity under pressure.',col:'var(--gold)',icon:'🏥'},
-    {yr:'Apr 2020 – Jan 2022',title:'English Teacher',org:'Urban Education Freelance · Sagaing Township',desc:'Delivered English language education during a period of extreme national instability — demonstrating commitment to community uplift under pressure.',col:'var(--rose-deep)',icon:'📚'},
-    {yr:'Jun 2020 – Mar 2022',title:'Regional Health Care Volunteer In Charge',org:'Say Ta Na Charity Group KetKha · Sagaing Region',desc:'Led regional healthcare volunteerism and coordinated diplomatic communication between community members and healthcare providers during crisis management.',col:'var(--rose-d)',icon:'❤️'},
-    {yr:'May – Aug 2023',title:'Volunteer Staff',org:'Local Resource Center · Lashio, Shan State',desc:'Supported community development initiatives in Shan State, broadening regional expertise across diverse cultural and ethnic contexts.',col:'var(--lav)',icon:'🤝'},
-  ],
-  contacts:[
-    {icon:'📧',label:'Email',value:'layaungshinthant.freelancer@gmail.com',href:'mailto:layaungshinthant.freelancer@gmail.com',col:'#F2A4B5'},
-    {icon:'💼',label:'LinkedIn',value:'la-yaungshinthant-elsa',href:'https://www.linkedin.com/in/la-yaungshinthant-elsa',col:'#8B6DB8'},
-    {icon:'📱',label:'Phone',value:'09685520133',href:'tel:09685520133',col:'#C9A84C'},
-    {icon:'💬',label:'WhatsApp',value:'Message on WhatsApp',href:'https://wa.me/959685520133',col:'#25D366'},
-    {icon:'📟',label:'Viber',value:'Connect on Viber',href:'viber://contact?number=%2B959685520133',col:'#7360F2'},
-    {icon:'🔴',label:'WeChat',value:'Available on WeChat',href:'#',col:'#07C160'},
-  ],
-};
+const SKILLS = [
+  {icon:'🤖',name:'AI & Automation',        desc:'ChatGPT, n8n, Make.com, Telegram workflows — transforming repetitive tasks into seamless automation pipelines.'},
+  {icon:'⚖️',name:'Legal Analysis',          desc:'Law graduate · Labor regulations · Compliance advisory · Contract synthesis and executive briefing.'},
+  {icon:'👥',name:'Human Resources',         desc:'Recruitment · Onboarding · Employee relations across corporate and international environments.'},
+  {icon:'🗂️',name:'Executive Assistance',    desc:'Calendar management · Travel logistics · Stakeholder liaison · Confidential executive correspondence.'},
+  {icon:'🌐',name:'C1 English (EFSET)',       desc:'Certified C1 Advanced — international correspondence, translation, and global business communication.'},
+  {icon:'🕊️',name:'Strategic Diplomacy',     desc:'Mediation · Conflict resolution · High-stakes communication with professional composure and tact.'},
+];
+const CERTS = [
+  {cert:'EFSET English Certificate',     detail:'62/100 · C1 Advanced',                         col:'var(--lav-d)'},
+  {cert:'Business Writing Skills',       detail:'Communicating Ideas & Information Training',    col:'var(--rose-d)'},
+  {cert:'HR Executive Certified',        detail:'Certified Professional Programme',              col:'var(--gold)'},
+  {cert:'Job Readiness Skills',          detail:'Cohort-3 · Ninggawn Institute',                 col:'var(--rose-deep)'},
+];
+const SERVICES = [
+  {icon:'📅',title:'Executive Calendar Management', desc:'Scheduling, travel logistics, and priority filtering across time zones.'},
+  {icon:'📋',title:'Legal & Document Synthesis',    desc:'Preparing briefs, summarising contracts, ensuring administrative compliance.'},
+  {icon:'🔗',title:'High-Stakes Coordination',      desc:'Managing communications between departments and international stakeholders.'},
+  {icon:'⚡',title:'Digital Transformation',         desc:'Implementing AI tools to automate repetitive office tasks.'},
+];
+const EXPERIENCE = [
+  {role:'Human Resources Manager', co:'INDAGATE PRIVATE (Step To Singapore) Co. Ltd.',   period:'Aug 2024 – Sep 2025', col:'var(--rose)',      pts:['Led international placement relations and resolved complex employee grievances','Exercised high-level diplomacy managing cross-border HR operations (Myanmar ↔ Singapore)','Maintained confidential executive-level stakeholder communications']},
+  {role:'Personal Assistant',       co:'Hexing Group',                                    period:'Oct 2022 – Feb 2023', col:'var(--lav-d)',    pts:['Managed executive schedules, correspondence, and international travel arrangements','Acted as professional liaison between senior management and external partners','Maintained absolute confidentiality in high-stakes business environments']},
+  {role:'Human Resources',          co:'Myanmar SpeedNet',                                period:'Oct 2023 – Jul 2024', col:'var(--gold)',     pts:['Oversaw HR operations for a fast-growing telecommunications company','Developed and implemented HR policies and employee relations frameworks','Managed talent acquisition pipelines and onboarding programmes']},
+  {role:'Human Resources Assistant',co:'Tharaphu Chinese & Thai Cuisine Restaurant',      period:'May – Oct 2022',      col:'var(--rose-deep)',pts:['Led end-to-end recruitment, onboarding, and staff documentation','Facilitated daily operational HR tasks in a fast-paced hospitality environment']},
+];
+const COMPLIANCE = [
+  {icon:'📜',title:'Labor Law Navigation',   desc:"Deep understanding of Myanmar's labor regulations and international contract requirements, ensuring every HR decision is legally sound."},
+  {icon:'🔐',title:'Ethical Standards',      desc:'Entrusted with sensitive humanitarian data at USAID and MSF — handling high-stakes information with absolute integrity.'},
+  {icon:'🧠',title:'Legal Synthesis',        desc:'Ability to translate complex legal language into clear, actionable executive summaries that protect the business.'},
+  {icon:'🛡️',title:'Compliance Advising',    desc:'A safe pair of hands — protecting your organisation from legal risk by ensuring every administrative process is above board.'},
+];
+const TOOLS = [
+  {icon:'💬',name:'ChatGPT',      use:'Drafting, research & content generation'},
+  {icon:'⚙️',name:'n8n / Make',   use:'Workflow automation & orchestration'},
+  {icon:'🤖',name:'Telegram Bot', use:'Automated content publishing pipeline'},
+  {icon:'📊',name:'Google Sheets',use:'Data management & live dashboards'},
+  {icon:'🌐',name:'Google Sites', use:'Portfolio & knowledge base publishing'},
+  {icon:'☁️',name:'Google Drive', use:'Document storage, sharing & embedding'},
+];
+const WORKFLOW = [
+  {n:'1',label:'Write Content',   desc:'Draft in Telegram with a hashtag command',                   col:'var(--rose)'},
+  {n:'2',label:'Tag & Send',      desc:'#Article or #Law + title + body + image',                    col:'var(--lav-d)'},
+  {n:'3',label:'Webhook Fires',   desc:'n8n parses: extracts title, body & image URL',               col:'var(--gold)'},
+  {n:'4',label:'Auto-Published',  desc:'Google Sheet updates → live site reflects content',           col:'var(--rose-deep)'},
+];
+const TIMELINE = [
+  {yr:'Aug 2016',          title:'USAID · Court User Survey',           org:'Student Volunteer · Monywa District Court',           desc:'Maintained professional neutrality conducting user surveys for a USAID justice initiative. Trusted with sensitive civic data alongside government officials.',          col:'var(--rose)',      icon:'🇺🇸'},
+  {yr:'Jun 2017 – Jun 2018',title:'Refounder & Chairperson',            org:'The Light House Altruism · Monywa',                    desc:'Built and led a youth altruism organisation from the ground up — proving the ability to create, inspire, and manage institutions, not just participate in them.', col:'var(--lav-d)',    icon:'💡'},
+  {yr:'Dec 2018',          title:'Data Entry Assistant',                org:'Médecins Sans Frontières (MSF) · Homalin, Sagaing',    desc:'Entrusted with sensitive humanitarian data for MSF operations in conflict-adjacent areas. Maintained absolute data integrity under pressure.',                        col:'var(--gold)',     icon:'🏥'},
+  {yr:'Apr 2020 – Jan 2022',title:'English Teacher',                    org:'Urban Education Freelance · Sagaing Township',          desc:'Delivered English language education during a period of extreme national instability — demonstrating commitment to community uplift under pressure.',                  col:'var(--rose-deep)',icon:'📚'},
+  {yr:'Jun 2020 – Mar 2022',title:'Regional Health Care Volunteer',     org:'Say Ta Na Charity Group KetKha · Sagaing Region',      desc:'Led regional healthcare volunteerism and coordinated diplomatic communication between community members and healthcare providers during crisis management.',         col:'var(--rose-d)',   icon:'❤️'},
+  {yr:'May – Aug 2023',    title:'Volunteer Staff',                     org:'Local Resource Center · Lashio, Shan State',           desc:'Supported community development initiatives in Shan State, broadening regional expertise across diverse cultural and ethnic contexts.',                            col:'var(--lav)',      icon:'🤝'},
+];
+const CONTACTS = [
+  {icon:'📧',label:'Email',    value:'layaungshinthant.freelancer@gmail.com', href:'mailto:layaungshinthant.freelancer@gmail.com', col:'#F2A4B5'},
+  {icon:'💼',label:'LinkedIn', value:'la-yaungshinthant-elsa',                href:'https://www.linkedin.com/in/la-yaungshinthant-elsa', col:'#8B6DB8'},
+  {icon:'📱',label:'Phone',    value:'09685520133',                           href:'tel:09685520133',                              col:'#C9A84C'},
+  {icon:'💬',label:'WhatsApp', value:'Message on WhatsApp',                   href:'https://wa.me/959685520133',                   col:'#25D366'},
+  {icon:'📟',label:'Viber',    value:'Connect on Viber',                      href:'viber://contact?number=%2B959685520133',        col:'#7360F2'},
+  {icon:'🔴',label:'WeChat',   value:'Available on WeChat',                   href:'#',                                            col:'#07C160'},
+];
 
 /* ═══════════════════════════════════════════════════════
    RENDER
 ═══════════════════════════════════════════════════════ */
-function card(children, extra=''){
-  return `<div class="card" ${extra}>${children}</div>`;
-}
-function pill(text,bg,color='#fff'){
-  return `<span class="pill" style="background:${bg};color:${color}">${text}</span>`;
-}
-
-function renderAll(){
-  // Skills
-  document.getElementById('skills-grid').innerHTML = DATA.skills.map(s=>
-    card(`<div style="font-size:36px;margin-bottom:12px">${s.icon}</div>
+function renderAll() {
+  document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
+    `<div class="card"><div style="font-size:36px;margin-bottom:12px">${s.icon}</div>
      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:8px">${s.name}</h3>
      <p style="font-size:14px;color:var(--mid);line-height:1.65">${s.desc}</p>
-     <div style="height:2px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:20px;border-radius:2px"></div>`)
+     <div style="height:2px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:20px;border-radius:2px"></div></div>`
   ).join('');
 
-  // Certs
-  document.getElementById('certs-grid').innerHTML = DATA.certs.map(c=>
+  document.getElementById('certs-grid').innerHTML = CERTS.map(c =>
     `<div style="display:flex;align-items:center;gap:14px">
       <div style="width:44px;height:44px;border-radius:12px;background:${c.col}22;border:1px solid ${c.col}44;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🏅</div>
       <div><div style="font-size:15px;font-weight:500;color:var(--ink)">${c.cert}</div><div style="font-size:13px;color:var(--mid)">${c.detail}</div></div>
     </div>`
   ).join('');
 
-  // Services
-  document.getElementById('services-grid').innerHTML = DATA.services.map(s=>
-    card(`<div style="font-size:30px;margin-bottom:10px">${s.icon}</div>
+  document.getElementById('services-grid').innerHTML = SERVICES.map(s =>
+    `<div class="card" style="background:rgba(255,255,255,.42);padding:22px">
+     <div style="font-size:30px;margin-bottom:10px">${s.icon}</div>
      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px">${s.title}</h4>
-     <p style="font-size:13px;color:var(--mid);line-height:1.6">${s.desc}</p>`, 'style="background:rgba(255,255,255,.42);padding:22px"')
+     <p style="font-size:13px;color:var(--mid);line-height:1.6">${s.desc}</p></div>`
   ).join('');
 
-  // Experience
-  document.getElementById('exp-grid').innerHTML = DATA.experience.map(e=>
-    card(`<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
-      <div><h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${e.role}</h3>
-      <p style="font-size:14px;color:${e.col};font-weight:500">${e.co}</p></div>
-      <span class="pill" style="background:${e.col}22;color:${e.col}">${e.period}</span></div>
-     <ul style="padding-left:20px">${e.pts.map(p=>`<li style="font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:5px">${p}</li>`).join('')}</ul>`)
-  ).join('');
-
-  // Compliance pillars
-  document.getElementById('compliance-grid').innerHTML = DATA.compliance.map(p=>
-    card(`<div style="font-size:30px;margin-bottom:12px">${p.icon}</div>
-     <h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">${p.title}</h4>
-     <p style="font-size:14px;color:var(--mid);line-height:1.7">${p.desc}</p>`)
-  ).join('');
-
-  // Tools
-  document.getElementById('tools-grid').innerHTML = DATA.tools.map(t=>
-    card(`<div style="text-align:center;padding:6px 0"><div style="font-size:36px;margin-bottom:10px">${t.icon}</div>
-     <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px">${t.name}</h4>
-     <p style="font-size:12px;color:var(--mid)">${t.use}</p></div>`)
-  ).join('');
-
-  // Workflow
-  document.getElementById('workflow-grid').innerHTML = DATA.workflow.map((w,i)=>
-    `<div style="flex:1;min-width:150px;display:flex;align-items:center">
-      <div class="card" style="border-top:3px solid ${w.col};text-align:center;border-radius:16px;padding:20px;flex:1">
-        <div style="width:36px;height:36px;border-radius:50%;background:${w.col};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;margin:0 auto 10px">${w.n}</div>
-        <h4 style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px">${w.label}</h4>
-        <p style="font-size:12px;color:var(--mid);line-height:1.5">${w.desc}</p>
+  document.getElementById('exp-grid').innerHTML = EXPERIENCE.map(e =>
+    `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <div><h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${e.role}</h3>
+        <p style="font-size:14px;color:${e.col};font-weight:500">${e.co}</p></div>
+        <span class="pill" style="background:${e.col}22;color:${e.col}">${e.period}</span>
       </div>
-    </div>
-    ${i<DATA.workflow.length-1?'<div style="padding:0 6px;color:var(--rose);font-size:20px;display:flex;align-items:center;flex-shrink:0">→</div>':''}`
+      <ul style="padding-left:20px">${e.pts.map(p=>`<li style="font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:5px">${p}</li>`).join('')}</ul>
+    </div>`
   ).join('');
 
-  // Timeline
-  document.getElementById('timeline-grid').innerHTML = DATA.timeline.map(item=>
+  document.getElementById('compliance-grid').innerHTML = COMPLIANCE.map(p =>
+    `<div class="card"><div style="font-size:30px;margin-bottom:12px">${p.icon}</div>
+     <h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">${p.title}</h4>
+     <p style="font-size:14px;color:var(--mid);line-height:1.7">${p.desc}</p></div>`
+  ).join('');
+
+  document.getElementById('tools-grid').innerHTML = TOOLS.map(t =>
+    `<div class="card" style="text-align:center;padding:22px">
+     <div style="font-size:36px;margin-bottom:10px">${t.icon}</div>
+     <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px">${t.name}</h4>
+     <p style="font-size:12px;color:var(--mid)">${t.use}</p></div>`
+  ).join('');
+
+  document.getElementById('workflow-grid').innerHTML = WORKFLOW.map((w,i) =>
+    `<div style="flex:1;min-width:140px;display:flex;align-items:center">
+      <div class="card" style="border-top:3px solid ${w.col};text-align:center;border-radius:16px;padding:18px;flex:1">
+        <div style="width:36px;height:36px;border-radius:50%;background:${w.col};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;margin:0 auto 10px">${w.n}</div>
+        <h4 style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px">${w.label}</h4>
+        <p style="font-size:12px;color:var(--mid);line-height:1.5">${w.desc}</p>
+      </div></div>${i<WORKFLOW.length-1?'<div style="padding:0 4px;color:var(--rose);font-size:18px;display:flex;align-items:center;flex-shrink:0">→</div>':''}`
+  ).join('');
+
+  document.getElementById('timeline-grid').innerHTML = TIMELINE.map(item =>
     `<div class="tl-item">
       <div class="tl-dot" style="background:${item.col}">${item.icon}</div>
       <div class="card">
@@ -457,153 +612,340 @@ function renderAll(){
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${item.title}</h3>
         <p style="font-size:13px;color:${item.col};font-weight:500;margin-bottom:10px">${item.org}</p>
         <p style="font-size:14px;color:var(--mid);line-height:1.7">${item.desc}</p>
-      </div>
-    </div>`
+      </div></div>`
   ).join('');
 
-  // Contacts
-  document.getElementById('contact-grid').innerHTML = DATA.contacts.map(c=>
+  document.getElementById('contact-grid').innerHTML = CONTACTS.map(c =>
     `<a href="${c.href}" target="_blank">
       <div class="card" style="display:flex;align-items:center;gap:16px">
         <div style="width:52px;height:52px;border-radius:16px;background:${c.col}22;border:1px solid ${c.col}44;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${c.icon}</div>
-        <div>
-          <p style="font-size:11px;font-weight:600;letter-spacing:1px;color:${c.col};text-transform:uppercase;margin-bottom:4px">${c.label}</p>
-          <p style="font-size:13px;color:var(--ink)">${c.value}</p>
-        </div>
-      </div>
-    </a>`
+        <div><p style="font-size:11px;font-weight:600;letter-spacing:1px;color:${c.col};text-transform:uppercase;margin-bottom:4px">${c.label}</p>
+        <p style="font-size:13px;color:var(--ink)">${c.value}</p></div>
+      </div></a>`
   ).join('');
+
+  renderJournal();
+  loadLocationBadge();
+}
+
+/* ═══════════════════════════════════════════════════════
+   TELEGRAM — send inquiry to Elsa's bot
+═══════════════════════════════════════════════════════ */
+async function sendTelegramMessage(e) {
+  e.preventDefault();
+  const name    = document.getElementById('cf-name').value.trim();
+  const type    = document.getElementById('cf-type').value;
+  const message = document.getElementById('cf-message').value.trim();
+  if (!name || !message) return;
+
+  const btn     = document.getElementById('chat-send-btn');
+  const label   = document.getElementById('chat-send-label');
+  const spinner = document.getElementById('chat-spinner');
+  btn.disabled  = true;
+  label.style.display  = 'none';
+  spinner.style.display = 'block';
+
+  const text = `🌸 *New Portfolio Inquiry*\n\n👤 *Name:* ${name}\n🏷 *Type:* ${type}\n\n💬 *Message:*\n${message}\n\n⏰ ${new Date().toLocaleString()}`;
+
+  try {
+    const apiURL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const res = await fetch(apiURL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: TELEGRAM_CHAT_ID, text, parse_mode: 'Markdown'})
+    });
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById('chat-form').style.display = 'none';
+      document.getElementById('chat-success').style.display = 'block';
+      // also store locally for admin view
+      let inquiries = JSON.parse(localStorage.getItem('elsa_inquiries') || '[]');
+      inquiries.unshift({name, type, message, ts: new Date().toISOString()});
+      if (inquiries.length > 20) inquiries = inquiries.slice(0, 20);
+      localStorage.setItem('elsa_inquiries', JSON.stringify(inquiries));
+      showToast('✦ Message delivered to Elsa!');
+    } else {
+      throw new Error(data.description || 'Telegram error');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    label.style.display  = 'block';
+    spinner.style.display = 'none';
+    showToast('⚠️ Could not send — check your Bot Token & Chat ID.');
+    console.error('Telegram error:', err);
+  }
+}
+
+function toggleChat() {
+  const panel = document.getElementById('chat-panel');
+  const badge = document.querySelector('.bubble-badge');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  if (!isOpen && badge) badge.style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST NOTIFICATION
+═══════════════════════════════════════════════════════ */
+function showToast(msg, duration = 3200) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+/* ═══════════════════════════════════════════════════════
+   ADMIN MODE
+   Secret trigger: click the 🌸 in footer 5 times
+═══════════════════════════════════════════════════════ */
+let adminTapCount = 0;
+let adminTapTimer = null;
+
+function handleAdminTap() {
+  adminTapCount++;
+  clearTimeout(adminTapTimer);
+  adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 3000);
+  if (adminTapCount >= 5) {
+    adminTapCount = 0;
+    openAdmin();
+  }
+}
+
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('open');
+  // Load current values into fields
+  const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
+  document.getElementById('admin-location').value = loc;
+  refreshAdminArticlesList();
+}
+
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+
+function closeAdminIfOutside(e) {
+  if (e.target === document.getElementById('admin-overlay')) closeAdmin();
+}
+
+/* ── Location ── */
+function saveLocation() {
+  const loc = document.getElementById('admin-location').value.trim();
+  if (!loc) return;
+  localStorage.setItem('elsa_location', loc);
+  loadLocationBadge();
+  showToast('📍 Location updated!');
+}
+
+function loadLocationBadge() {
+  const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
+  const badge = document.getElementById('location-badge');
+  if (badge) badge.textContent = loc;
+}
+
+/* ── Articles / Journal ── */
+function saveArticle() {
+  const title = document.getElementById('admin-article-title').value.trim();
+  const body  = document.getElementById('admin-article-body').value.trim();
+  if (!body) { showToast('⚠️ Please write something first.'); return; }
+  let articles = getArticles();
+  articles.unshift({ title: title || 'Untitled', body, date: new Date().toISOString() });
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  document.getElementById('admin-article-title').value = '';
+  document.getElementById('admin-article-body').value  = '';
+  renderJournal();
+  refreshAdminArticlesList();
+  showToast('✦ Article published!');
+}
+
+function deleteArticle(index) {
+  let articles = getArticles();
+  articles.splice(index, 1);
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  renderJournal();
+  refreshAdminArticlesList();
+  showToast('🗑 Article deleted.');
+}
+
+function getArticles() {
+  const stored = localStorage.getItem('elsa_articles');
+  if (stored) return JSON.parse(stored);
+  return window.SITE_CONFIG.articles || [];
+}
+
+function renderJournal() {
+  const feed = document.getElementById('journal-feed');
+  if (!feed) return;
+  const articles = getArticles();
+  if (articles.length === 0) {
+    feed.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px">✍️</div>
+      <p style="font-size:15px">No articles yet. Check back soon!</p>
+    </div>`;
+    return;
+  }
+  feed.innerHTML = articles.map((a, i) => {
+    const d = new Date(a.date);
+    const dateStr = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+    return `<div class="journal-card">
+      <div class="journal-date">${dateStr}</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">${a.title}</h3>
+      <div class="journal-body">${a.body.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }).join('');
+}
+
+function refreshAdminArticlesList() {
+  const el = document.getElementById('admin-articles-list');
+  if (!el) return;
+  const articles = getArticles();
+  if (articles.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">No articles yet.</p>'; return; }
+  el.innerHTML = articles.map((a, i) => {
+    const d = new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(242,164,181,.15)">
+      <span style="font-size:13px;color:var(--ink)">${d} — ${a.title.slice(0,38)}${a.title.length>38?'…':''}</span>
+      <button onclick="deleteArticle(${i})" style="background:rgba(196,99,122,.1);border:none;color:var(--rose-d);cursor:pointer;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600">✕</button>
+    </div>`;
+  }).join('');
+}
+
+/* ── Export Config ── */
+function exportConfig() {
+  const articles = getArticles();
+  const location  = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
+  const config = { location, articles };
+  const json = JSON.stringify(config, null, 2);
+  document.getElementById('export-output').textContent = json;
+  showToast('Config generated — copy it below!');
+}
+
+function copyExport() {
+  const txt = document.getElementById('export-output').textContent;
+  if (!txt || txt === '— click Generate Export —') { showToast('⚠️ Generate first!'); return; }
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ Copied to clipboard!'));
 }
 
 /* ═══════════════════════════════════════════════════════
    SPLASH
 ═══════════════════════════════════════════════════════ */
-setTimeout(()=>{
+setTimeout(() => {
   const si = document.getElementById('splash-inner');
-  if(si){si.style.opacity='1';si.style.transform='translateY(0)';}
-},150);
+  if (si) { si.style.opacity = '1'; si.style.transform = 'translateY(0)'; }
+}, 150);
 
-function enterPortfolio(){
+function enterPortfolio() {
   const splash = document.getElementById('splash');
-  const app = document.getElementById('app');
-  splash.style.opacity='0';
-  splash.style.pointerEvents='none';
-  setTimeout(()=>{
-    splash.style.display='none';
-    app.style.display='block';
+  const app    = document.getElementById('app');
+  splash.style.opacity = '0';
+  splash.style.pointerEvents = 'none';
+  setTimeout(() => {
+    splash.style.display = 'none';
+    app.style.display    = 'block';
+    document.getElementById('chat-bubble').style.display = 'flex';
     renderAll();
     initThreeJS();
     initCursorSparkle();
     const home = document.getElementById('tab-home');
-    home.style.opacity='1';
-  },800);
+    home.style.opacity = '1';
+  }, 800);
 }
 
 /* ═══════════════════════════════════════════════════════
    NAV
 ═══════════════════════════════════════════════════════ */
-window.addEventListener('scroll',()=>{
-  const nav = document.getElementById('main-nav');
-  if(nav) nav.classList.toggle('scrolled',window.scrollY>20);
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
 });
 
-function switchTab(tabId){
+function switchTab(tabId) {
   const cur = document.querySelector('.tab-content.active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tabId));
-  if(cur){
-    cur.style.opacity='0';
-    setTimeout(()=>{
-      cur.classList.remove('active');
-      cur.style.display='none';
-      const nxt = document.getElementById('tab-'+tabId);
-      if(nxt){
-        nxt.style.display='block';
-        nxt.style.opacity='0';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+  if (cur) {
+    cur.style.opacity = '0';
+    setTimeout(() => {
+      cur.classList.remove('active'); cur.style.display = 'none';
+      const nxt = document.getElementById('tab-' + tabId);
+      if (nxt) {
+        nxt.style.display = 'block'; nxt.style.opacity = '0';
         window.scrollTo({top:0,behavior:'smooth'});
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{nxt.style.opacity='1';nxt.classList.add('active');}));
+        requestAnimationFrame(() => requestAnimationFrame(() => { nxt.style.opacity='1'; nxt.classList.add('active'); }));
       }
-    },280);
+    }, 280);
   }
 }
 
 /* ═══════════════════════════════════════════════════════
    THREE.JS BACKGROUND
 ═══════════════════════════════════════════════════════ */
-function initThreeJS(){
-  if(typeof THREE==='undefined') return;
-  const canvas = document.getElementById('three-canvas');
-  const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
-  renderer.setSize(window.innerWidth,window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,100);
-  camera.position.z=20;
-
-  scene.add(new THREE.AmbientLight(0xffffff,1));
-  const p1=new THREE.PointLight(0xF2A4B5,2,50); p1.position.set(5,5,10); scene.add(p1);
-  const p2=new THREE.PointLight(0xC9B6E4,1.5,50); p2.position.set(-5,-3,8); scene.add(p2);
-
-  const cols=[0xF2A4B5,0xC9B6E4,0xF5E3A8,0xFDE8EF,0xEDE8F8,0xC4637A,0x9B7EC8,0xC9A84C,0xF9C8D4,0xD4C8F0];
-  const spheres=[];
-
-  for(let i=0;i<22;i++){
-    const r=Math.random()*1.1+0.2;
-    const geo=new THREE.SphereGeometry(r,12,12);
-    const mat=new THREE.MeshPhongMaterial({color:cols[i%cols.length],transparent:true,opacity:Math.random()*.28+.07,shininess:80});
-    const m=new THREE.Mesh(geo,mat);
-    m.position.set((Math.random()-.5)*44,(Math.random()-.5)*26,(Math.random()-.5)*8-4);
-    m.userData.vx=(Math.random()-.5)*.016;
-    m.userData.vy=(Math.random()-.5)*.011;
+function initThreeJS() {
+  if (typeof THREE === 'undefined') return;
+  const canvas   = document.getElementById('three-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 20;
+  scene.add(new THREE.AmbientLight(0xffffff, 1));
+  const p1 = new THREE.PointLight(0xF2A4B5, 2, 50); p1.position.set(5,5,10);  scene.add(p1);
+  const p2 = new THREE.PointLight(0xC9B6E4, 1.5, 50); p2.position.set(-5,-3,8); scene.add(p2);
+  const cols = [0xF2A4B5,0xC9B6E4,0xF5E3A8,0xFDE8EF,0xEDE8F8,0xC4637A,0x9B7EC8,0xC9A84C,0xF9C8D4,0xD4C8F0];
+  const spheres = [];
+  for (let i = 0; i < 22; i++) {
+    const r = Math.random()*1.1+0.2;
+    const geo = new THREE.SphereGeometry(r, 12, 12);
+    const mat = new THREE.MeshPhongMaterial({color:cols[i%cols.length], transparent:true, opacity:Math.random()*.28+.07, shininess:80});
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set((Math.random()-.5)*44, (Math.random()-.5)*26, (Math.random()-.5)*8-4);
+    m.userData.vx = (Math.random()-.5)*.016;
+    m.userData.vy = (Math.random()-.5)*.011;
     scene.add(m); spheres.push(m);
   }
-
-  (function animate(){
+  (function animate() {
     requestAnimationFrame(animate);
-    spheres.forEach(s=>{
-      s.position.x+=s.userData.vx;
-      s.position.y+=s.userData.vy;
-      s.rotation.x+=.003; s.rotation.y+=.002;
-      if(s.position.x>25) s.position.x=-25;
-      if(s.position.x<-25) s.position.x=25;
-      if(s.position.y>16) s.position.y=-16;
-      if(s.position.y<-16) s.position.y=16;
+    spheres.forEach(s => {
+      s.position.x += s.userData.vx; s.position.y += s.userData.vy;
+      s.rotation.x += .003; s.rotation.y += .002;
+      if (s.position.x > 25) s.position.x = -25;
+      if (s.position.x < -25) s.position.x = 25;
+      if (s.position.y > 16) s.position.y = -16;
+      if (s.position.y < -16) s.position.y = 16;
     });
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
   })();
-
-  window.addEventListener('resize',()=>{
-    camera.aspect=window.innerWidth/window.innerHeight;
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
 }
 
 /* ═══════════════════════════════════════════════════════
    CURSOR SPARKLE
 ═══════════════════════════════════════════════════════ */
-function initCursorSparkle(){
-  const sparkCols=['#F2A4B5','#C9B6E4','#C9A84C','#FDE8EF','#EDE8F8','#D4C8F0'];
-  let last=0;
-  window.addEventListener('mousemove',e=>{
-    const now=Date.now();
-    if(now-last<75) return;
-    last=now;
-    const el=document.createElement('div');
-    const dx=(Math.random()-.5)*52, dy=(Math.random()-.5)*52;
-    el.style.cssText=`position:fixed;pointer-events:none;z-index:9999;width:5px;height:5px;border-radius:50%;background:${sparkCols[Math.floor(Math.random()*sparkCols.length)]};left:${e.clientX-2}px;top:${e.clientY-2}px;transition:transform .5s ease,opacity .5s ease;`;
+function initCursorSparkle() {
+  const sc = ['#F2A4B5','#C9B6E4','#C9A84C','#FDE8EF','#EDE8F8','#D4C8F0'];
+  let last = 0;
+  window.addEventListener('mousemove', e => {
+    const now = Date.now();
+    if (now - last < 70) return; last = now;
+    const el = document.createElement('div');
+    const dx = (Math.random()-.5)*52, dy = (Math.random()-.5)*52;
+    el.style.cssText = `position:fixed;pointer-events:none;z-index:9999;width:5px;height:5px;border-radius:50%;background:${sc[Math.floor(Math.random()*sc.length)]};left:${e.clientX-2}px;top:${e.clientY-2}px;transition:transform .5s ease,opacity .5s ease;`;
     document.body.appendChild(el);
-    requestAnimationFrame(()=>{el.style.transform=`translate(${dx}px,${dy}px) scale(0)`;el.style.opacity='0';});
-    setTimeout(()=>el.remove(),560);
+    requestAnimationFrame(() => { el.style.transform=`translate(${dx}px,${dy}px) scale(0)`; el.style.opacity='0'; });
+    setTimeout(() => el.remove(), 560);
   });
 }
 
 /* Enter button hover */
-const eb=document.getElementById('enter-btn');
-if(eb){
-  eb.addEventListener('mouseenter',()=>{eb.style.transform='translateY(-3px)';eb.style.boxShadow='0 16px 42px rgba(196,99,122,.48)';});
-  eb.addEventListener('mouseleave',()=>{eb.style.transform='';eb.style.boxShadow='0 8px 30px rgba(196,99,122,.35)';});
+const eb = document.getElementById('enter-btn');
+if (eb) {
+  eb.addEventListener('mouseenter', () => { eb.style.transform='translateY(-3px)'; eb.style.boxShadow='0 16px 42px rgba(196,99,122,.48)'; });
+  eb.addEventListener('mouseleave', () => { eb.style.transform=''; eb.style.boxShadow='0 8px 30px rgba(196,99,122,.35)'; });
 }
+
+/* Hide chat bubble until app loads */
+document.getElementById('chat-bubble').style.display = 'none';
 </script>
 </body>
 </html>
