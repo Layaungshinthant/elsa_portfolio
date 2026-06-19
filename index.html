@@ -493,11 +493,12 @@ textarea.f-input{resize:vertical;min-height:90px}
 </div><!-- /app -->
 
 <script>
+<script>
 /* ═══════════════════════════════════════════════════════
-   GLOBAL SITE CONFIGURATION (HARDCODED URL FIXED)
+   GLOBAL SITE CONFIGURATION (HARDCODED NEW URL FIXED)
 ═══════════════════════════════════════════════════════ */
 window.SITE_CONFIG = {
-  google_sheet_script_url: "https://script.google.com/macros/s/AKfycbyVHVKPhQ6dSl-dbwb7sAWhsz7UjRnsow8V9K7tJnHdyl1EFHUIBUMciD5BYpYUKarp9A/exec"
+  google_sheet_script_url: "https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec"
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -553,7 +554,9 @@ async function submitEngagementInquiry(e) {
   } finally {
     sendBtn.disabled = false;
     label.style.display = 'inline';
-    spinner.style.display = 'none';
+    spinner.style.none = 'none';
+    const dispSpinner = document.getElementById('chat-spinner');
+    if(dispSpinner) dispSpinner.style.display = 'none';
   }
 }
 
@@ -568,16 +571,16 @@ function enterPortfolio() {
     splash.style.display = 'none';
     app.style.display = 'block';
     // Initialize standard dynamic sections
-    renderSkills();
-    renderCerts();
-    renderServices();
-    renderExperience();
-    renderCompliance();
-    renderAutomation();
-    renderHumanitarian();
-    loadLocalSettings();
-    initThreeBackground();
-    initCursorSparkle();
+    if (typeof renderSkills === 'function') renderSkills();
+    if (typeof renderCerts === 'function') renderCerts();
+    if (typeof renderServices === 'function') renderServices();
+    if (typeof renderExperience === 'function') renderExperience();
+    if (typeof renderCompliance === 'function') renderCompliance();
+    if (typeof renderAutomation === 'function') renderAutomation();
+    if (typeof renderHumanitarian === 'function') renderHumanitarian();
+    if (typeof loadLocalSettings === 'function') loadLocalSettings();
+    if (typeof initThreeBackground === 'function') initThreeBackground();
+    if (typeof initCursorSparkle === 'function') initCursorSparkle();
   }, 800);
 }
 
@@ -600,41 +603,22 @@ function toggleChat() {
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
+  if (t) {
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
 }
 
 // Ensure navigation background updates beautifully on scroll
 window.addEventListener('scroll', () => {
   const nav = document.getElementById('main-nav');
-  if (window.scrollY > 20) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
+  if (nav) {
+    if (window.scrollY > 20) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
 });
-  
-/* ═══════════════════════════════════════════════════════
-   ECOSYSTEM BRIDGE - LOCAL STORAGE CONFIG PIPELINE
-═══════════════════════════════════════════════════════ */
-// This key holds the link to your Google Sheets deployed Apps Script Web App.
-// If empty or set to placeholder, the page works perfectly in "Local Fallback Mode".
-let GOOGLE_APP_URL = localStorage.getItem("elsa_app_url") || "";
-
-/* ── Fallback Config Database (Always acts as baseline structure) ── */
-window.SITE_CONFIG = {
-  location: 'Yangon, Myanmar · Open to Opportunities',
-  articles: [
-    { title: 'The Intersection of Labor Compliance and AI Automation', body: 'Modern HR operations cannot survive on manual spreadsheets alone. Integrating dynamic databases allows us to minimize human error and scale hiring protocols cleanly.', date: '2026-06-15T08:00:00.000Z' },
-    { title: 'Maintaining Diplomatic Composure in Complex HR Landscapes', body: 'Navigating employment dispute frameworks requires deep mediation skills, structural legal education, and professional empathy.', date: '2026-05-10T08:00:00.000Z' }
-  ],
-  testimonials: [
-    { Name: 'Thura Soe', Role: 'Chief Operations Officer', Text: 'Elsa transformed our operations with structured AI integrations while keeping labor guidelines completely compliant.' },
-    { Name: 'Yin Min', Role: 'Executive Board Member', Text: 'Her legal reasoning, combined with advanced PA workflow orchestration, saved our executive team dozens of planning hours every week.' }
-  ],
-  downloads: [
-    { FileName: 'Elsa Professional CV.pdf', FileUrl: '#', Category: 'Resume' },
-    { FileName: 'HR Compliance Whitepaper.pdf', FileUrl: '#', Category: 'Case Study' }
-  ]
-};
+</script>
 
 /* ═══════════════════════════════════════════════════════
    BASELINE DATA ARRAYS
