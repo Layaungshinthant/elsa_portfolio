@@ -1,7 +1,7 @@
 /**
  * Production Client Engine - Connects HTML UI elements to Google Apps Backend Web App
  */
-const GOOGLE_APP_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_WEB_APP_ID/exec";
+const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
   initializePortfolioAssets();
