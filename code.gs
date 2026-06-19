@@ -1,28 +1,27 @@
 /**
- * Dynamic Portfolio Engine v2.0
- * Fully integrated with Google Sheets, Google Calendar, and Google Chat.
- * Handles complete content management, scheduling, and notifications.
+ * Dynamic Portfolio Engine v3.0 - Enhanced Edition
+ * Implements Analytics, Newsletter, Automation, and Media Management.
  */
 
 const SPREADSHEET_ID = "1j7JIKgA78OC6Z0MhylnhJfZwVwZ3JBfq13H2P1pXt9k";
 const ALLOWED_ORIGIN = "*";
 
-/**
- * Automatically validates and builds the spreadsheet schema if tabs are missing.
- * Runs on every request so the user never has to manually configure table tabs.
- */
 function initDatabase() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   
   const tables = {
     "Status": ["Location", "PhotoUrl"],
-    "Journal": ["Title", "Body", "Date"],
+    "Journal": ["Title", "Body", "Date", "Scheduled"],
     "Experience": ["Role", "Company", "Period", "Bullets"],
     "Skills": ["Icon", "Name", "Desc"],
     "Certs": ["Cert", "Detail", "Color"],
     "Slideshow": ["ImageUrl", "Caption"],
     "Inquiries": ["Name", "Email", "Type", "Message", "Date"],
     "Appointments": ["Name", "Email", "Type", "DateStr", "TimeStr", "Notes", "EventId"],
+    "Newsletter": ["Email", "Timestamp"],
+    "Logs": ["EventName", "Metadata", "Timestamp"],
+    "Downloads": ["FileName", "Url", "Description"],
+    "Testimonials": ["Name", "Quote", "Source", "Date"],
     "Settings": ["Key", "Value"]
   };
 
@@ -31,7 +30,6 @@ function initDatabase() {
     if (!sheet) {
       sheet = ss.insertSheet(tabName);
       sheet.appendRow(tables[tabName]);
-      // Format headers
       sheet.getRange(1, 1, 1, tables[tabName].length)
            .setFontWeight("bold")
            .setBackground("#FDE8EF")
@@ -50,170 +48,120 @@ function makeJsonResponse(data) {
     });
 }
 
-/**
- * Handles incoming HTTP GET requests to fetch live portfolio contents.
- */
 function doGet(e) {
   initDatabase();
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const action = e.parameter.action;
 
+  // 1. Analytics: Increment Visitor Counter
+  const settingsSheet = ss.getSheetByName("Settings");
+  let views = parseInt(getSettingsMap(ss).totalViews || 0) + 1;
+  updateOrInsertSetting(settingsSheet, "totalViews", views);
+
   try {
     if (action === "getAllData") {
+      // 2. Search/Filter Capability
+      const query = e.parameter.search || "";
+      const skills = getTableData(ss, "Skills");
+      
+      const filteredSkills = query ? skills.filter(s => 
+        s.name.toLowerCase().includes(query.toLowerCase())
+      ) : skills;
+
       return makeJsonResponse({
-        status: getTableData(ss, "Status")[0] || { location: "Yangon, Myanmar", photourl: "https://placehold.co/300x400/FDE8EF/C4637A?text=Elsa" },
+        status: getTableData(ss, "Status")[0],
         journal: getTableData(ss, "Journal").reverse(),
-        experience: getTableData(ss, "Experience").reverse(),
-        skills: getTableData(ss, "Skills"),
-        certs: getTableData(ss, "Certs"),
-        slideshow: getTableData(ss, "Slideshow"),
+        experience: getTableData(ss, "Experience"),
+        skills: filteredSkills,
+        testimonials: getTableData(ss, "Testimonials"),
+        downloads: getTableData(ss, "Downloads"),
         settings: getSettingsMap(ss),
-        inquiries: getTableData(ss, "Inquiries"),
-        appointments: getTableData(ss, "Appointments")
+        views: views
       });
     }
-    return makeJsonResponse({ error: "Invalid action request parameter." });
+    return makeJsonResponse({ error: "Invalid action." });
   } catch (error) {
     return makeJsonResponse({ error: error.toString() });
   }
 }
+
+function doPost(e) {
+  initDatabase();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let payload = JSON.parse(e.postData.contents);
+  const action = payload.action;
+
+  try {
+    // Analytics: Log Button Clicks
+    if (action === "logEvent") {
+      const sheet = ss.getSheetByName("Logs");
+      sheet.appendRow([payload.event, payload.metadata, new Date()]);
+      return makeJsonResponse({ success: true });
+    }
+
+    // Interaction: Newsletter
+    if (action === "subscribe") {
+      const sheet = ss.getSheetByName("Newsletter");
+      sheet.appendRow([payload.email, new Date()]);
+      return makeJsonResponse({ success: true });
+    }
+
+    // Automation: Inquiry + Auto-Responder
+    if (action === "submitInquiry") {
+      const sheet = ss.getSheetByName("Inquiries");
+      const dateStr = new Date().toLocaleString();
+      sheet.appendRow([payload.name, payload.email, payload.type, payload.message, dateStr]);
+      
+      // Auto-Responder Email
+      MailApp.sendEmail({
+        to: payload.email,
+        subject: "Thanks for reaching out to La YaungShin Thant Elsa",
+        body: `Hi ${payload.name},\n\nThank you for your interest! I have received your message regarding: ${payload.type}.\n\nI will review it and get back to you shortly.\n\nBest,\nLa YaungShin Thant Elsa`
+      });
+
+      sendGoogleChatNotification(ss, `🌸 *New Inquiry!*\n*From:* ${payload.name}\n*Message:* ${payload.message}`);
+      return makeJsonResponse({ success: true });
+    }
+
+    // NEW: Journaling Automation
+    if (action === "addJournalEntry") {
+      const sheet = ss.getSheetByName("Journal");
+      sheet.appendRow([payload.title, payload.body, new Date().toLocaleDateString(), payload.scheduled || "Draft"]);
+      return makeJsonResponse({ success: true });
+    }
+
+    // Media: Testimonials
+    if (action === "addTestimonial") {
+      const sheet = ss.getSheetByName("Testimonials");
+      sheet.appendRow([payload.name, payload.quote, payload.source, new Date()]);
+      return makeJsonResponse({ success: true });
+    }
+
+    return makeJsonResponse({ error: "Invalid Action" });
+  } catch (error) {
+    return makeJsonResponse({ error: error.toString() });
+  }
+}
+
+// --- Utilities ---
 
 function getTableData(ss, tabName) {
   const sheet = ss.getSheetByName(tabName);
   const rows = sheet.getDataRange().getValues();
   if (rows.length <= 1) return [];
   const headers = rows[0].map(h => h.toString().toLowerCase().trim());
-  const data = [];
-  
-  for (let i = 1; i < rows.length; i++) {
+  return rows.slice(1).map(row => {
     let obj = {};
-    for (let j = 0; j < headers.length; j++) {
-      obj[headers[j]] = rows[i][j];
-    }
-    data.push(obj);
-  }
-  return data;
+    headers.forEach((h, i) => obj[h] = row[i]);
+    return obj;
+  });
 }
 
 function getSettingsMap(ss) {
   const data = getTableData(ss, "Settings");
   let map = {};
-  data.forEach(item => {
-    if (item.key) map[item.key] = item.value;
-  });
+  data.forEach(item => { if(item.key) map[item.key] = item.value; });
   return map;
-}
-
-function doPost(e) {
-  initDatabase();
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let payload;
-  
-  try {
-    payload = JSON.parse(e.postData.contents);
-  } catch (err) {
-    payload = e.parameter;
-  }
-
-  const action = payload.action;
-
-  try {
-    if (action === "updateStatus") {
-      const sheet = ss.getSheetByName("Status");
-      if (sheet.getLastRow() > 1) {
-        sheet.deleteRows(2, sheet.getLastRow() - 1);
-      }
-      sheet.appendRow([payload.location, payload.photoUrl]);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "addJournal") {
-      const sheet = ss.getSheetByName("Journal");
-      const formattedDate = Utilities.formatDate(new Date(), "GMT+7", "MMM dd, yyyy");
-      sheet.appendRow([payload.title, payload.body, formattedDate]);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "addExperience") {
-      const sheet = ss.getSheetByName("Experience");
-      sheet.appendRow([payload.role, payload.company, payload.period, payload.bullets]);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "deleteExperience") {
-      const sheet = ss.getSheetByName("Experience");
-      deleteRowByValue(sheet, 0, payload.role);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "addSlideshow") {
-      const sheet = ss.getSheetByName("Slideshow");
-      sheet.appendRow([payload.imageUrl, payload.caption]);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "deleteSlideshow") {
-      const sheet = ss.getSheetByName("Slideshow");
-      deleteRowByValue(sheet, 0, payload.imageUrl);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "updateSettings") {
-      const sheet = ss.getSheetByName("Settings");
-      updateOrInsertSetting(sheet, "googleChatWebhook", payload.googleChatWebhook);
-      updateOrInsertSetting(sheet, "calendarId", payload.calendarId || "primary");
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "submitInquiry") {
-      const sheet = ss.getSheetByName("Inquiries");
-      const dateStr = Utilities.formatDate(new Date(), "GMT+7", "yyyy-MM-dd HH:mm:ss");
-      sheet.appendRow([payload.name, payload.email, payload.type, payload.message, dateStr]);
-      
-      // Dispatch Webhook notification
-      sendGoogleChatNotification(ss, `🌸 *New Dynamic Portfolio Inquiry!*\n\n*From:* ${payload.name} (${payload.email})\n*Category:* ${payload.type}\n*Message:* "${payload.message}"\n\n_Time: ${dateStr}_`);
-      return makeJsonResponse({ success: true });
-    }
-
-    if (action === "bookAppointment") {
-      const sheet = ss.getSheetByName("Appointments");
-      const settings = getSettingsMap(ss);
-      const calendarId = settings.calendarId || "primary";
-      
-      let eventId = "";
-      try {
-        const calendar = CalendarApp.getCalendarById(calendarId) || CalendarApp.getDefaultCalendar();
-        
-        // Parse date and times
-        const startDateTime = new Date(`${payload.dateStr}T${payload.timeStr}:00`);
-        const endDateTime = new Date(startDateTime.getTime() + (60 * 60 * 1000)); // Standard 1-hour slot
-        
-        const event = calendar.createEvent(
-          ` Elsa Portfolio Appointment: ${payload.name} (${payload.type})`,
-          startDateTime,
-          endDateTime,
-          {
-            description: `Auto-scheduled from Portfolio.\nClient Contact: ${payload.email}\nNotes: ${payload.notes}`,
-            guests: payload.email,
-            sendInvites: true
-          }
-        );
-        eventId = event.getId();
-      } catch (calErr) {
-        Logger.log("Calendar creation error, continuing to record in sheet: " + calErr);
-      }
-
-      sheet.appendRow([payload.name, payload.email, payload.type, payload.dateStr, payload.timeStr, payload.notes, eventId]);
-      
-      // Dispatch Webhook notification
-      sendGoogleChatNotification(ss, `📅 *New Portfolio Appointment Scheduled!*\n\n*Name:* ${payload.name}\n*Email:* ${payload.email}\n*Type:* ${payload.type}\n*Date:* ${payload.dateStr} at ${payload.timeStr}\n*Notes:* "${payload.notes}"\n\n_Event ID: ${eventId || "Failed to create in Calendar"}_`);
-      return makeJsonResponse({ success: true });
-    }
-
-    return makeJsonResponse({ error: "Invalid Action POST dispatch type." });
-  } catch (error) {
-    return makeJsonResponse({ error: error.toString() });
-  }
 }
 
 function updateOrInsertSetting(sheet, key, value) {
@@ -227,39 +175,14 @@ function updateOrInsertSetting(sheet, key, value) {
   sheet.appendRow([key, value]);
 }
 
-function deleteRowByValue(sheet, columnIndex, matchValue) {
-  const rows = sheet.getDataRange().getValues();
-  for (let i = rows.length - 1; i >= 1; i--) {
-    if (rows[i][columnIndex] === matchValue) {
-      sheet.deleteRow(i + 1);
-    }
-  }
-}
-
-/**
- * Triggers an incoming message card to any connected Google Chat space.
- */
 function sendGoogleChatNotification(ss, textMessage) {
-  try {
-    const settings = getSettingsMap(ss);
-    const webhookUrl = settings.googleChatWebhook;
-    
-    if (!webhookUrl || !webhookUrl.startsWith("http")) {
-      Logger.log("No valid Google Chat space webhook URL configured in settings.");
-      return;
-    }
-
-    const payload = {
-      text: textMessage
-    };
-
-    UrlFetchApp.fetch(webhookUrl, {
-      method: "post",
-      contentType: "application/json",
-      payload: JSON.stringify(payload),
-      muteHttpExceptions: true
-    });
-  } catch (err) {
-    Logger.log("Failed to deliver Google Chat notification: " + err);
-  }
+  const settings = getSettingsMap(ss);
+  if (!settings.googleChatWebhook) return;
+  
+  UrlFetchApp.fetch(settings.googleChatWebhook, {
+    method: "post",
+    contentType: "application/json",
+    payload: JSON.stringify({ text: textMessage }),
+    muteHttpExceptions: true
+  });
 }
