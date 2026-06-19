@@ -1,142 +1,265 @@
 /**
- * Google Apps Script Backend for La YaungShin Thant Elsa's Portfolio
- * File: code.gs
- * 
- * This script runs serverless inside Google Sheets and serves as a custom API
- * to dynamically read and write site data (Journal and Location Status) directly from the web.
+ * Dynamic Portfolio Engine v2.0
+ * Fully integrated with Google Sheets, Google Calendar, and Google Chat.
+ * Handles complete content management, scheduling, and notifications.
  */
 
-// Allow cross-origin requests from any website domain
-const ALLOWED_ORIGIN = "*"; 
+const SPREADSHEET_ID = "1j7JIKgA78OC6Z0MhylnhJfZwVwZ3JBfq13H2P1pXt9k";
+const ALLOWED_ORIGIN = "*";
 
 /**
- * doGet handles incoming HTTP GET requests.
- * Used by the website to read data securely from the spreadsheet database.
- * 
- * Parameters expected in URL query:
- *   - action: "getJournal" (returns all posts sorted newest first)
- *   - action: "getStatus"  (returns the most recent location status string)
+ * Automatically validates and builds the spreadsheet schema if tabs are missing.
+ * Runs on every request so the user never has to manually configure table tabs.
  */
-function doGet(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet();
-  const action = e.parameter.action;
+function initDatabase() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   
-  let resultData = {};
-  
-  try {
-    if (action === "getJournal") {
-      const journalSheet = sheet.getSheetByName("Journal");
-      if (!journalSheet) {
-        throw new Error("Journal sheet tab not found. Make sure you created a tab named 'Journal'.");
-      }
-      
-      const rows = journalSheet.getDataRange().getValues();
-      const headers = rows[0]; // First row contains headers: Title, Body, Date
-      const posts = [];
-      
-      // Map rows skipping header line
-      for (let i = 1; i < rows.length; i++) {
-        let post = {};
-        for (let j = 0; j < headers.length; j++) {
-          const key = headers[j].toString().toLowerCase().trim();
-          post[key] = rows[i][j];
-        }
-        posts.push(post);
-      }
-      
-      // Reverse to deliver newest posts first to the portfolio UI
-      resultData = posts.reverse();
-      
-    } else if (action === "getStatus") {
-      const statusSheet = sheet.getSheetByName("Status");
-      if (!statusSheet) {
-        throw new Error("Status sheet tab not found. Make sure you created a tab named 'Status'.");
-      }
-      
-      const lastRow = statusSheet.getLastRow();
-      if (lastRow > 1) {
-        resultData = { location: statusSheet.getRange(lastRow, 1).getValue().toString() };
-      } else {
-        resultData = { location: "Yangon, Myanmar · Open to Opportunities" };
-      }
-    } else {
-      resultData = { error: "Unknown action parameter specified." };
-    }
-  } catch (error) {
-    resultData = { error: error.toString() };
-  }
+  const tables = {
+    "Status": ["Location", "PhotoUrl"],
+    "Journal": ["Title", "Body", "Date"],
+    "Experience": ["Role", "Company", "Period", "Bullets"],
+    "Skills": ["Icon", "Name", "Desc"],
+    "Certs": ["Cert", "Detail", "Color"],
+    "Slideshow": ["ImageUrl", "Caption"],
+    "Inquiries": ["Name", "Email", "Type", "Message", "Date"],
+    "Appointments": ["Name", "Email", "Type", "DateStr", "TimeStr", "Notes", "EventId"],
+    "Settings": ["Key", "Value"]
+  };
 
-  // Pack the response securely into standard JSON format with explicit CORS headers
-  return ContentService.createTextOutput(JSON.stringify(resultData))
+  for (let tabName in tables) {
+    let sheet = ss.getSheetByName(tabName);
+    if (!sheet) {
+      sheet = ss.insertSheet(tabName);
+      sheet.appendRow(tables[tabName]);
+      // Format headers
+      sheet.getRange(1, 1, 1, tables[tabName].length)
+           .setFontWeight("bold")
+           .setBackground("#FDE8EF")
+           .setFontColor("#9E3D57");
+    }
+  }
+}
+
+function makeJsonResponse(data) {
+  return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON)
     .setHeaders({
       'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-      'Access-Control-Allow-Methods': 'GET'
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
     });
 }
 
 /**
- * doPost handles incoming HTTP POST requests.
- * Triggered securely by the portfolio's Admin dashboard to update data.
- * 
- * Expects a raw JSON payload with:
- *   - action: "addJournal" (requires "title" and "body" fields)
- *   - action: "updateStatus" (requires "location" field)
+ * Handles incoming HTTP GET requests to fetch live portfolio contents.
  */
+function doGet(e) {
+  initDatabase();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const action = e.parameter.action;
+
+  try {
+    if (action === "getAllData") {
+      return makeJsonResponse({
+        status: getTableData(ss, "Status")[0] || { location: "Yangon, Myanmar", photourl: "https://placehold.co/300x400/FDE8EF/C4637A?text=Elsa" },
+        journal: getTableData(ss, "Journal").reverse(),
+        experience: getTableData(ss, "Experience").reverse(),
+        skills: getTableData(ss, "Skills"),
+        certs: getTableData(ss, "Certs"),
+        slideshow: getTableData(ss, "Slideshow"),
+        settings: getSettingsMap(ss),
+        inquiries: getTableData(ss, "Inquiries"),
+        appointments: getTableData(ss, "Appointments")
+      });
+    }
+    return makeJsonResponse({ error: "Invalid action request parameter." });
+  } catch (error) {
+    return makeJsonResponse({ error: error.toString() });
+  }
+}
+
+function getTableData(ss, tabName) {
+  const sheet = ss.getSheetByName(tabName);
+  const rows = sheet.getDataRange().getValues();
+  if (rows.length <= 1) return [];
+  const headers = rows[0].map(h => h.toString().toLowerCase().trim());
+  const data = [];
+  
+  for (let i = 1; i < rows.length; i++) {
+    let obj = {};
+    for (let j = 0; j < headers.length; j++) {
+      obj[headers[j]] = rows[i][j];
+    }
+    data.push(obj);
+  }
+  return data;
+}
+
+function getSettingsMap(ss) {
+  const data = getTableData(ss, "Settings");
+  let map = {};
+  data.forEach(item => {
+    if (item.key) map[item.key] = item.value;
+  });
+  return map;
+}
+
 function doPost(e) {
-  let response = { success: false };
+  initDatabase();
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let payload;
   
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet();
-    let payload;
-    
-    // Safety check to parse incoming string payloads correctly
-    if (e.postData && e.postData.contents) {
-      payload = JSON.parse(e.postData.contents);
-    } else {
-      payload = e.parameter;
-    }
-    
-    const action = payload.action;
-    
-    if (action === "addJournal") {
-      const journalSheet = sheet.getSheetByName("Journal");
-      if (!journalSheet) {
-        throw new Error("Journal sheet tab not found.");
-      }
-      
-      // Format current timestamp elegantly for your daily feed
-      const formattedDate = Utilities.formatDate(new Date(), "GMT+7", "MMM dd, yyyy");
-      
-      // Append row to the bottom of the Sheet
-      journalSheet.appendRow([payload.title, payload.body, formattedDate]);
-      response.success = true;
-      
-    } else if (action === "updateStatus") {
-      const statusSheet = sheet.getSheetByName("Status");
-      if (!statusSheet) {
-        throw new Error("Status sheet tab not found.");
-      }
-      
-      // Clear old rows under headers to keep database lightweight
-      if (statusSheet.getLastRow() > 1) {
-        statusSheet.deleteRows(2, statusSheet.getLastRow() - 1);
-      }
-      
-      statusSheet.appendRow([payload.location]);
-      response.success = true;
-    } else {
-      response.error = "Unknown action or parameters in POST request payload.";
-    }
-  } catch (error) {
-    response.error = error.toString();
+    payload = JSON.parse(e.postData.contents);
+  } catch (err) {
+    payload = e.parameter;
   }
-  
-  // Respond safely to bypass cross-domain preflight blocks (no-cors mode friendly)
-  return ContentService.createTextOutput(JSON.stringify(response))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-      'Access-Control-Allow-Methods': 'POST'
+
+  const action = payload.action;
+
+  try {
+    if (action === "updateStatus") {
+      const sheet = ss.getSheetByName("Status");
+      if (sheet.getLastRow() > 1) {
+        sheet.deleteRows(2, sheet.getLastRow() - 1);
+      }
+      sheet.appendRow([payload.location, payload.photoUrl]);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "addJournal") {
+      const sheet = ss.getSheetByName("Journal");
+      const formattedDate = Utilities.formatDate(new Date(), "GMT+7", "MMM dd, yyyy");
+      sheet.appendRow([payload.title, payload.body, formattedDate]);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "addExperience") {
+      const sheet = ss.getSheetByName("Experience");
+      sheet.appendRow([payload.role, payload.company, payload.period, payload.bullets]);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "deleteExperience") {
+      const sheet = ss.getSheetByName("Experience");
+      deleteRowByValue(sheet, 0, payload.role);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "addSlideshow") {
+      const sheet = ss.getSheetByName("Slideshow");
+      sheet.appendRow([payload.imageUrl, payload.caption]);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "deleteSlideshow") {
+      const sheet = ss.getSheetByName("Slideshow");
+      deleteRowByValue(sheet, 0, payload.imageUrl);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "updateSettings") {
+      const sheet = ss.getSheetByName("Settings");
+      updateOrInsertSetting(sheet, "googleChatWebhook", payload.googleChatWebhook);
+      updateOrInsertSetting(sheet, "calendarId", payload.calendarId || "primary");
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "submitInquiry") {
+      const sheet = ss.getSheetByName("Inquiries");
+      const dateStr = Utilities.formatDate(new Date(), "GMT+7", "yyyy-MM-dd HH:mm:ss");
+      sheet.appendRow([payload.name, payload.email, payload.type, payload.message, dateStr]);
+      
+      // Dispatch Webhook notification
+      sendGoogleChatNotification(ss, `🌸 *New Dynamic Portfolio Inquiry!*\n\n*From:* ${payload.name} (${payload.email})\n*Category:* ${payload.type}\n*Message:* "${payload.message}"\n\n_Time: ${dateStr}_`);
+      return makeJsonResponse({ success: true });
+    }
+
+    if (action === "bookAppointment") {
+      const sheet = ss.getSheetByName("Appointments");
+      const settings = getSettingsMap(ss);
+      const calendarId = settings.calendarId || "primary";
+      
+      let eventId = "";
+      try {
+        const calendar = CalendarApp.getCalendarById(calendarId) || CalendarApp.getDefaultCalendar();
+        
+        // Parse date and times
+        const startDateTime = new Date(`${payload.dateStr}T${payload.timeStr}:00`);
+        const endDateTime = new Date(startDateTime.getTime() + (60 * 60 * 1000)); // Standard 1-hour slot
+        
+        const event = calendar.createEvent(
+          ` Elsa Portfolio Appointment: ${payload.name} (${payload.type})`,
+          startDateTime,
+          endDateTime,
+          {
+            description: `Auto-scheduled from Portfolio.\nClient Contact: ${payload.email}\nNotes: ${payload.notes}`,
+            guests: payload.email,
+            sendInvites: true
+          }
+        );
+        eventId = event.getId();
+      } catch (calErr) {
+        Logger.log("Calendar creation error, continuing to record in sheet: " + calErr);
+      }
+
+      sheet.appendRow([payload.name, payload.email, payload.type, payload.dateStr, payload.timeStr, payload.notes, eventId]);
+      
+      // Dispatch Webhook notification
+      sendGoogleChatNotification(ss, `📅 *New Portfolio Appointment Scheduled!*\n\n*Name:* ${payload.name}\n*Email:* ${payload.email}\n*Type:* ${payload.type}\n*Date:* ${payload.dateStr} at ${payload.timeStr}\n*Notes:* "${payload.notes}"\n\n_Event ID: ${eventId || "Failed to create in Calendar"}_`);
+      return makeJsonResponse({ success: true });
+    }
+
+    return makeJsonResponse({ error: "Invalid Action POST dispatch type." });
+  } catch (error) {
+    return makeJsonResponse({ error: error.toString() });
+  }
+}
+
+function updateOrInsertSetting(sheet, key, value) {
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === key) {
+      sheet.getRange(i + 1, 2).setValue(value);
+      return;
+    }
+  }
+  sheet.appendRow([key, value]);
+}
+
+function deleteRowByValue(sheet, columnIndex, matchValue) {
+  const rows = sheet.getDataRange().getValues();
+  for (let i = rows.length - 1; i >= 1; i--) {
+    if (rows[i][columnIndex] === matchValue) {
+      sheet.deleteRow(i + 1);
+    }
+  }
+}
+
+/**
+ * Triggers an incoming message card to any connected Google Chat space.
+ */
+function sendGoogleChatNotification(ss, textMessage) {
+  try {
+    const settings = getSettingsMap(ss);
+    const webhookUrl = settings.googleChatWebhook;
+    
+    if (!webhookUrl || !webhookUrl.startsWith("http")) {
+      Logger.log("No valid Google Chat space webhook URL configured in settings.");
+      return;
+    }
+
+    const payload = {
+      text: textMessage
+    };
+
+    UrlFetchApp.fetch(webhookUrl, {
+      method: "post",
+      contentType: "application/json",
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
     });
+  } catch (err) {
+    Logger.log("Failed to deliver Google Chat notification: " + err);
+  }
 }
