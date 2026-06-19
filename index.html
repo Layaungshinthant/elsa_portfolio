@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La YaungShin Thant Elsa · Portfolio & Workspace Hub</title>
+<title>La YaungShin Thant Elsa · Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -82,6 +82,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 
 /* ── CHAT BUBBLE ── */
 #chat-bubble{position:fixed;bottom:28px;right:28px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));border:none;cursor:pointer;box-shadow:0 6px 24px rgba(196,99,122,.45);display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .25s ease;animation:bounceIn .6s ease 1.2s both}
+#chat-bubble:hover{transform:scale(1.1) rotate(-5deg);box-shadow:0 12px 36px rgba(196,99,122,.55)}
 #chat-bubble .bubble-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#ff4d6d;border-radius:50%;border:2px solid white;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
 
 #chat-panel{position:fixed;bottom:100px;right:28px;z-index:500;width:340px;background:rgba(255,249,245,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(242,164,181,.3);border-radius:24px;box-shadow:0 20px 60px rgba(196,99,122,.2);padding:24px;display:none;animation:slideUp .3s ease;max-height:80vh;overflow-y:auto}
@@ -96,7 +97,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:999;background:var(--ink);color:#fff;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;transition:all .3s ease;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── ADMIN OVERLAY ── */
+/* ── ADMIN MODE ── */
 #admin-overlay{position:fixed;inset:0;z-index:800;background:rgba(45,31,45,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
 #admin-overlay.open{display:flex}
 #admin-panel{background:linear-gradient(135deg,#fff9f5,#ede8f8);border-radius:28px;padding:36px;width:min(520px,92vw);max-height:88vh;overflow-y:auto;border:1px solid rgba(242,164,181,.3);box-shadow:0 30px 80px rgba(45,31,45,.3);animation:slideUp .3s ease}
@@ -147,7 +148,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 <canvas id="three-canvas"></canvas>
 
 <!-- ═══════════════════════════════════
-     CHAT BUBBLE + PANEL (GOOGLE INTEGRATED)
+     CHAT BUBBLE + PANEL (GOOGLE CONNECTED)
 ═══════════════════════════════════ -->
 <button id="chat-bubble" onclick="toggleChat()" title="Send me a message">
   💬
@@ -156,41 +157,39 @@ textarea.f-input{resize:vertical;min-height:90px}
 
 <div id="chat-panel">
   <div class="chat-header">
-    <div class="chat-avatar"><img id="chat-pfp" src="my-photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="Elsa" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80'"></div>
+    <div class="chat-avatar"><img id="chat-avatar-img" src="my-photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="Elsa" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80'"></div>
     <div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink)">Elsa</div>
-      <div class="chat-status">Synced with Workspace</div>
+      <div class="chat-status">Synced with Google Workspace</div>
     </div>
     <button class="chat-close" onclick="toggleChat()">✕</button>
   </div>
   <div style="background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1));border-radius:14px;padding:14px 16px;margin-bottom:18px;font-size:13px;color:var(--mid);line-height:1.6;border-left:3px solid var(--rose)">
-    👋 Hello! I'm Elsa. Let's arrange a schedule. Fill this out to secure a calendar slot.
+    👋 Hi! Let's arrange a schedule. Submit below to log on my Calendar &amp; Google Chat automatically!
   </div>
   <form id="chat-form" onsubmit="submitEngagementInquiry(event)">
     <div style="display:flex;flex-direction:column;gap:12px">
       <input class="f-input" id="cf-name" type="text" placeholder="Your Name *" required>
-      <input class="f-input" id="cf-email" type="email" placeholder="Your Email *" required>
+      <input class="f-input" id="cf-email" type="email" placeholder="Your Email Address *" required>
       <select class="f-input f-select" id="cf-type">
-        <option value="Interview Appointment">📆 Interview Appointment</option>
+        <option value="Interview Appointment">📆 Schedule Interview Appointment</option>
         <option value="HR Consultation">👥 HR Consultation</option>
         <option value="Executive PA Role">🗂️ Executive PA Role</option>
         <option value="Compliance Advisory">⚖️ Compliance Advisory</option>
         <option value="AI / Automation Project">🤖 AI / Automation Project</option>
         <option value="Collaboration">🤝 Collaboration</option>
       </select>
-      <div style="font-size:11px;color:var(--mid);margin-top:2px;margin-bottom:-8px;padding-left:4px;">📅 Pick Calendar Date &amp; Time (Optional)</div>
-      <input class="f-input" id="cf-date" type="datetime-local" title="Optionally book a meeting block directly onto my calendar">
+      <div style="font-size:11px;color:var(--mid);margin-top:2px;margin-bottom:-8px;padding-left:4px;">📅 Pick Appointment Date &amp; Time (Optional)</div>
+      <input class="f-input" id="cf-date" type="datetime-local" title="Schedule appointment">
       <textarea class="f-input" id="cf-message" placeholder="Your message... *" required></textarea>
-      
       <button class="f-btn" id="chat-send-btn" type="submit">
         <span id="chat-send-label">Sync with Calendar ✦</span>
         <div class="spinner" id="chat-spinner" style="display:none"></div>
       </button>
-      
       <div id="chat-success" style="display:none;text-align:center;padding:14px;background:linear-gradient(135deg,rgba(242,164,181,.15),rgba(201,182,228,.15));border-radius:12px;border:1px solid rgba(242,164,181,.3)">
         <div style="font-size:28px;margin-bottom:8px">🌸</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink)">Ecosystem Engaged!</div>
-        <div style="font-size:12px;color:var(--mid);margin-top:4px">Calendar booked &amp; Google Chat updated. Check your email inbox!</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:4px">Your meeting has been mapped directly. Check your email for auto-replies!</div>
       </div>
     </div>
   </form>
@@ -209,40 +208,50 @@ textarea.f-input{resize:vertical;min-height:90px}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
       <span style="font-size:28px">🔐</span>
       <div>
-        <h2>Admin Workspace Bridge</h2>
+        <h2>Admin Command Center</h2>
         <p style="font-size:12px;color:var(--muted)">Connected directly with Google Sheets API</p>
       </div>
       <button onclick="closeAdmin()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
     </div>
 
-    <!-- DB Settings -->
-    <div class="admin-section">
-      <h4>🔗 Google Web App Connection Link</h4>
-      <p style="font-size:11px;color:var(--mid);margin-bottom:8px;">Enter your deployed Google Apps Script URL here to sync the portfolio dynamically:</p>
-      <input class="f-input" id="admin-app-url" type="text" placeholder="https://script.google.com/macros/s/.../exec">
-      <button class="f-btn" onclick="saveAppConnection()" style="margin-top:10px;width:auto;padding:10px 24px">Verify &amp; Link Connection</button>
-    </div>
-
     <!-- Location Update -->
     <div class="admin-section">
-      <h4>📍 Status Location Overwrite</h4>
+      <h4>📍 Current Location / Status</h4>
       <input class="f-input" id="admin-location" type="text" placeholder="e.g. Yangon, Myanmar · Open to Remote">
-      <button class="f-btn" onclick="saveLocation()" style="margin-top:10px;width:auto;padding:10px 24px">Update Location</button>
+      <button class="f-btn" onclick="saveLocation()" style="margin-top:10px;width:auto;padding:10px 24px">Update Status</button>
+    </div>
+
+    <!-- Daily Article / Announcement -->
+    <div class="admin-section">
+      <h4>✍️ Post New Announcement (Google Sheets Stream)</h4>
+      <input class="f-input" id="admin-article-title" type="text" placeholder="Article title..." style="margin-bottom:10px">
+      <textarea class="f-input" id="admin-article-body" placeholder="Write your update, insight, or announcement here..." style="min-height:110px"></textarea>
+      <button class="f-btn" onclick="saveArticle()" style="margin-top:10px;width:auto;padding:10px 24px">Publish ✦</button>
     </div>
 
     <!-- Manage Articles -->
     <div class="admin-section">
-      <h4>🗂️ Local Backup Journal Content</h4>
+      <h4>🗂️ Manage Articles</h4>
       <div id="admin-articles-list" style="font-size:13px;color:var(--mid);max-height:160px;overflow-y:auto"></div>
     </div>
 
+    <!-- Export Config -->
     <div class="admin-section">
-      <h4>🌐 Ecosystem Operations Guide</h4>
-      <p style="font-size:12px;color:var(--mid);line-height:1.6">When synced with your linked Web App, this portfolio writes directly to your dynamic tracking tabs:</p>
+      <h4>📦 Export Config (for permanent deploy)</h4>
+      <p style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.5">Copy the JSON below and paste it as the value of <code style="background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px">window.SITE_CONFIG</code> in the script section to make your updates permanent for all visitors.</p>
+      <button class="f-btn" onclick="exportConfig()" style="width:auto;padding:10px 24px;margin-bottom:10px">Generate Export ↓</button>
+      <div class="export-box" id="export-output">— click Generate Export —</div>
+      <button onclick="copyExport()" style="margin-top:8px;padding:7px 18px;border:1px solid rgba(196,99,122,.4);border-radius:8px;background:transparent;color:var(--rose-d);font-size:12px;cursor:pointer;font-family:'Jost',sans-serif;font-weight:600">Copy to Clipboard</button>
+    </div>
+
+    <!-- Telegram Remote Control Info -->
+    <div class="admin-section">
+      <h4>📡 Ecosystem Operations Guide</h4>
+      <p style="font-size:12px;color:var(--mid);line-height:1.6">Your portfolio dynamically tracks user engagements directly to your Sheets tabs:</p>
       <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
-        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:12px;">Analytics tab -> Unique counts + user agents logged</code>
-        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:12px;">Clicks tab -> UI interaction heatmaps stored automatically</code>
-        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:12px;">Calendar App -> Dynamic booking blocks inserted instantly</code>
+        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(242,164,181,.25)">Analytics tab -> Visitor logs and device fingerprint analytics</code>
+        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,182,228,.25)">Clicks tab -> Interactive heatmap events written automatically</code>
+        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,168,76,.25)">Inquiries tab -> New business client forms appended instantly</code>
       </div>
     </div>
   </div>
@@ -286,10 +295,12 @@ textarea.f-input{resize:vertical;min-height:90px}
             <div class="card" style="margin-bottom:32px;background:rgba(201,182,228,0.12);padding:20px;border-radius:16px;">
               <h4 style="font-size:13px;font-weight:600;color:var(--lav-d);margin-bottom:8px;letter-spacing:1px;">📨 ECOSYSTEM NEWSLETTER SUBSCRIPTION</h4>
               <p style="font-size:12px;color:var(--mid);margin-bottom:12px;">Get automated alerts inside your inbox whenever I publish new content to my workspace database.</p>
-              <div style="display:flex;gap:8px;">
-                <input class="f-input" id="newsletter-email" type="email" placeholder="Enter email address" style="flex:1;">
-                <button class="f-btn" onclick="submitNewsletter(event)" style="width:auto;padding:0 24px;">Subscribe</button>
-              </div>
+              <form id="newsletter-form" onsubmit="submitNewsletter(event)">
+                <div style="display:flex;gap:8px;">
+                  <input class="f-input" id="newsletter-email" type="email" placeholder="Enter email address" required style="flex:1;">
+                  <button class="f-btn" type="submit" style="width:auto;padding:0 24px;">Subscribe</button>
+                </div>
+              </form>
             </div>
 
             <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:center">
@@ -360,7 +371,7 @@ textarea.f-input{resize:vertical;min-height:90px}
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--ink);font-style:italic;margin-bottom:28px">What I can do for you</h3>
           <div class="grid4" id="services-grid"></div>
         </div>
-        
+
         <!-- LIVE VERIFIED ATTACHMENTS SHEETS PIPELINE -->
         <div class="card" style="background:rgba(255,255,255,0.45);margin-bottom:48px;border:1px solid rgba(242,164,181,0.25);">
           <span class="section-sup" style="text-align:left;margin-bottom:4px">Dynamic Assets</span>
@@ -420,13 +431,13 @@ textarea.f-input{resize:vertical;min-height:90px}
         <p class="section-sub">Not just AI-friendly — AI-powered. A live demonstration of modern workflow architecture.</p>
         <div class="grid4" style="margin-bottom:48px" id="tools-grid"></div>
         <div class="card" style="margin-bottom:32px">
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:8px">The Google Apps Script → Website Pipeline</h3>
-          <p style="font-size:14px;color:var(--mid);margin-bottom:32px;line-height:1.6">A fully automated operational environment — update data models directly inside Google Sheets and instantly reflect the mutations on this portfolio page.</p>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:8px">The Google Workspace → Website Pipeline</h3>
+          <p style="font-size:14px;color:var(--mid);margin-bottom:32px;line-height:1.6">A fully automated operational environment — write, schedule and manage your site logs directly inside your Google Sheet.</p>
           <div style="display:flex;gap:0;flex-wrap:wrap;align-items:stretch" id="workflow-grid"></div>
           <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-            <code style="background:rgba(242,164,181,.15);color:var(--rose-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(242,164,181,.3)">/dynamic_status</code>
-            <code style="background:rgba(201,182,228,.15);color:var(--lav-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,182,228,.3)">/inbox_alerts</code>
-            <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/calendar_synced</code>
+            <code style="background:rgba(242,164,181,.15);color:var(--rose-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(242,164,181,.3)">/analytics_tracking</code>
+            <code style="background:rgba(201,182,228,.15);color:var(--lav-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,182,228,.3)">/gmail_autoresponse</code>
+            <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/google_calendar</code>
           </div>
         </div>
         <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(242,164,181,.07));padding-bottom:80px">
@@ -493,135 +504,25 @@ textarea.f-input{resize:vertical;min-height:90px}
 </div><!-- /app -->
 
 <script>
-<script>
 /* ═══════════════════════════════════════════════════════
-   GLOBAL SITE CONFIGURATION (HARDCODED NEW URL FIXED)
+   ECOSYSTEM ENGINE & PERMANENT CONFIG - (HARDCODED URL FIXED)
 ═══════════════════════════════════════════════════════ */
 window.SITE_CONFIG = {
-  google_sheet_script_url: "https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec"
+  location: 'Yangon, Myanmar · Open to Opportunities',
+  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec',
+  articles: [],
+  testimonials: [
+    { Name: 'Thura Soe', Role: 'Chief Operations Officer', Text: 'Elsa transformed our operations with structured AI integrations while keeping labor guidelines completely compliant.' },
+    { Name: 'Yin Min', Role: 'Executive Board Member', Text: 'Her legal reasoning, combined with advanced PA workflow orchestration, saved our executive team dozens of planning hours every week.' }
+  ],
+  downloads: [
+    { FileName: 'Elsa Professional CV.pdf', FileUrl: '#', Category: 'Resume' },
+    { FileName: 'HR Compliance Whitepaper.pdf', FileUrl: '#', Category: 'Case Study' }
+  ]
 };
 
 /* ═══════════════════════════════════════════════════════
-   FORM SUBMISSION LOGIC (REMOVING NO-CORS Payload Strip)
-═══════════════════════════════════════════════════════ */
-async function submitEngagementInquiry(e) {
-  if (e) e.preventDefault();
-  
-  const sendBtn = document.getElementById('chat-send-btn');
-  const label = document.getElementById('chat-send-label');
-  const spinner = document.getElementById('chat-spinner');
-  const successBox = document.getElementById('chat-success');
-  const form = document.getElementById('chat-form');
-
-  // Trigger loading animation state
-  sendBtn.disabled = true;
-  label.style.display = 'none';
-  spinner.style.display = 'inline-block';
-
-  // Gather current form field values
-  const payload = {
-    name: document.getElementById('cf-name').value,
-    email: document.getElementById('cf-email').value,
-    type: document.getElementById('cf-type').value,
-    date: document.getElementById('cf-date').value,
-    message: document.getElementById('cf-message').value
-  };
-
-  const targetUrl = window.SITE_CONFIG.google_sheet_script_url;
-
-  if (!targetUrl) {
-    showToast("⚠️ Backend API URL connection missing inside configuration.");
-    sendBtn.disabled = false;
-    label.style.display = 'inline';
-    spinner.style.display = 'none';
-    return;
-  }
-
-  try {
-    // Standard POST transmission handles redirects natively without stripping data
-    await fetch(targetUrl, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-
-    // Reset UI view parameters upon successful trigger
-    form.reset();
-    successBox.style.display = 'block';
-    showToast("Ecosystem Sync Initialized! 🚀");
-  } catch (err) {
-    console.error("Transmission error:", err);
-    showToast("❌ Sync failure: Check connectivity.");
-  } finally {
-    sendBtn.disabled = false;
-    label.style.display = 'inline';
-    spinner.style.none = 'none';
-    const dispSpinner = document.getElementById('chat-spinner');
-    if(dispSpinner) dispSpinner.style.display = 'none';
-  }
-}
-
-/* ═══════════════════════════════════════════════════════
-   PORTFOLIO CORE ROUTING & UI NAVIGATION
-═══════════════════════════════════════════════════════ */
-function enterPortfolio() {
-  const splash = document.getElementById('splash');
-  const app = document.getElementById('app');
-  splash.style.opacity = '0';
-  setTimeout(() => {
-    splash.style.display = 'none';
-    app.style.display = 'block';
-    // Initialize standard dynamic sections
-    if (typeof renderSkills === 'function') renderSkills();
-    if (typeof renderCerts === 'function') renderCerts();
-    if (typeof renderServices === 'function') renderServices();
-    if (typeof renderExperience === 'function') renderExperience();
-    if (typeof renderCompliance === 'function') renderCompliance();
-    if (typeof renderAutomation === 'function') renderAutomation();
-    if (typeof renderHumanitarian === 'function') renderHumanitarian();
-    if (typeof loadLocalSettings === 'function') loadLocalSettings();
-    if (typeof initThreeBackground === 'function') initThreeBackground();
-    if (typeof initCursorSparkle === 'function') initCursorSparkle();
-  }, 800);
-}
-
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  
-  const targetTab = document.getElementById('tab-' + tabId);
-  if (targetTab) targetTab.classList.add('active');
-  
-  const targetBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
-  if (targetBtn) targetBtn.classList.add('active');
-  
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toggleChat() {
-  document.getElementById('chat-panel').classList.toggle('open');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  if (t) {
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-}
-
-// Ensure navigation background updates beautifully on scroll
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('main-nav');
-  if (nav) {
-    if (window.scrollY > 20) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-});
-</script>
-
-/* ═══════════════════════════════════════════════════════
-   BASELINE DATA ARRAYS
+   STATIC BASELINE DATA ARRAYS
 ═══════════════════════════════════════════════════════ */
 const SKILLS = [
   {icon:'🤖',name:'AI & Automation',        desc:'ChatGPT, n8n, Make.com, Telegram workflows — transforming repetitive tasks into seamless automation pipelines.'},
@@ -656,18 +557,18 @@ const COMPLIANCE = [
   {icon:'🛡️',title:'Compliance Advising',    desc:'A safe pair of hands — protecting your organisation from legal risk by ensuring every administrative process is above board.'},
 ];
 const TOOLS = [
-  {icon:'🤖',name:'Google Suite', use:'Calendar syncs, Gmail autoresponses & Sheets DB'},
+  {icon:'💬',name:'Google Sheets API',use:'Ecosystem Database synchronization'},
   {icon:'⚙️',name:'n8n / Make',   use:'Workflow automation & orchestration'},
-  {icon:'💬',name:'Google Chat',  use:'Automated workspace inquiry streams'},
-  {icon:'📊',name:'Google Sheets',use:'Data management & live dashboards'},
-  {icon:'🌐',name:'Github Pages', use:'Static server architecture'},
-  {icon:'☁️',name:'Google Drive', use:'Document storage, sharing & embedding'},
+  {icon:'🤖',name:'Google Chat API', use:'Direct Workspace card-alert streaming'},
+  {icon:'📊',name:'Google Sheet', use:'Visitor counts & interaction event logging'},
+  {icon:'🌐',name:'Github Pages', use:'Static server CDN environment'},
+  {icon:'☁️',name:'Google Drive', use:'Resume & document file sharing pipelines'},
 ];
 const WORKFLOW = [
-  {n:'1',label:'Inquiry Submitted', desc:'Visitor requests an interview block or advisory slot',     col:'var(--rose)'},
+  {n:'1',label:'Inquiry Lodged',  desc:'Client selects appointment slots and sends form',             col:'var(--rose)'},
   {n:'2',label:'Database Ingest',  desc:'Data logs instantly to Analytics, Clicks & Inquiries Sheets', col:'var(--lav-d)'},
   {n:'3',label:'Calendar Booked',  desc:'Apps Script reads parameters and schedules slot',            col:'var(--gold)'},
-  {n:'4',label:'Workspace Notified', desc:'Webhook posts structured card update to Google Chat Space',  col:'var(--rose-deep)'},
+  {n:'4',label:'Workspace Alert',  desc:'Webhook posts structured card alert to Google Chat Space',   col:'var(--rose-deep)'},
 ];
 const TIMELINE = [
   {yr:'Aug 2016',          title:'USAID · Court User Survey',           org:'Student Volunteer · Monywa District Court',           desc:'Maintained professional neutrality conducting user surveys for a USAID justice initiative. Trusted with sensitive civic data alongside government officials.',          col:'var(--rose)',      icon:'🇺🇸'},
@@ -687,29 +588,31 @@ const CONTACTS = [
 ];
 
 /* ═══════════════════════════════════════════════════════
-   RENDER ENGINE CORES
+   ECOSYSTEM COMPONENT RENDER ENGINES
 ═══════════════════════════════════════════════════════ */
-function renderStaticGrids() {
+function renderAll() {
   document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
-    `<div class="card"><div style="font-size:36px;margin-bottom:12px">${s.icon}</div>
+    `<div class="card" onclick="logActionClick('${s.name}', 'Expertise Section')"><div style="font-size:36px;margin-bottom:12px">${s.icon}</div>
      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:8px">${s.name}</h3>
      <p style="font-size:14px;color:var(--mid);line-height:1.65">${s.desc}</p>
      <div style="height:2px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:20px;border-radius:2px"></div></div>`
   ).join('');
 
   document.getElementById('certs-grid').innerHTML = CERTS.map(c =>
-    `<div style="display:flex;align-items:center;gap:14px">
+    `<div style="display:flex;align-items:center;gap:14px" onclick="logActionClick('${c.cert}', 'Certifications Layer')">
       <div style="width:44px;height:44px;border-radius:12px;background:${c.col}22;border:1px solid ${c.col}44;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px">🏅</div>
       <div><div style="font-size:15px;font-weight:500;color:var(--ink)">${c.cert}</div><div style="font-size:13px;color:var(--mid)">${c.detail}</div></div>
     </div>`
   ).join('');
 
   document.getElementById('services-grid').innerHTML = SERVICES.map(s =>
-    `<div class="card" style="background:rgba(255,255,255,.42);padding:22px">
+    `<div class="card" style="background:rgba(255,255,255,.42);padding:22px" onclick="logActionClick('${s.title}', 'Executive Vault Services')">
      <div style="font-size:30px;margin-bottom:10px">${s.icon}</div>
      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:8px">${s.title}</h4>
      <p style="font-size:13px;color:var(--mid);line-height:1.6">${s.desc}</p></div>`
   ).join('');
+
+  renderExperienceList(EXPERIENCE);
 
   document.getElementById('compliance-grid').innerHTML = COMPLIANCE.map(p =>
     `<div class="card"><div style="font-size:30px;margin-bottom:12px">${p.icon}</div>
@@ -718,7 +621,7 @@ function renderStaticGrids() {
   ).join('');
 
   document.getElementById('tools-grid').innerHTML = TOOLS.map(t =>
-    `<div class="card" style="text-align:center;padding:22px">
+    `<div class="card" style="text-align:center;padding:22px" onclick="logActionClick('${t.name}', 'Automation Tools List')">
      <div style="font-size:36px;margin-bottom:10px">${t.icon}</div>
      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px">${t.name}</h4>
      <p style="font-size:12px;color:var(--mid)">${t.use}</p></div>`
@@ -736,7 +639,7 @@ function renderStaticGrids() {
   document.getElementById('timeline-grid').innerHTML = TIMELINE.map(item =>
     `<div class="tl-item">
       <div class="tl-dot" style="background:${item.col}">${item.icon}</div>
-      <div class="card">
+      <div class="card" onclick="logActionClick('${item.title}', 'Humanitarian Pathway Timeline')">
         <span class="pill" style="background:${item.col}22;color:${item.col};margin-bottom:10px;display:inline-block">${item.yr}</span>
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${item.title}</h3>
         <p style="font-size:13px;color:${item.col};font-weight:500;margin-bottom:10px">${item.org}</p>
@@ -745,62 +648,150 @@ function renderStaticGrids() {
   ).join('');
 
   document.getElementById('contact-grid').innerHTML = CONTACTS.map(c =>
-    `<a href="${c.href}" target="_blank">
+    `<a href="${c.href}" target="_blank" onclick="logActionClick('Contact: ${c.label}', 'Footer Connections')">
       <div class="card" style="display:flex;align-items:center;gap:16px">
         <div style="width:52px;height:52px;border-radius:16px;background:${c.col}22;border:1px solid ${c.col}44;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${c.icon}</div>
         <div><p style="font-size:11px;font-weight:600;letter-spacing:1px;color:${c.col};text-transform:uppercase;margin-bottom:4px">${c.label}</p>
         <p style="font-size:13px;color:var(--ink)">${c.value}</p></div>
       </div></a>`
   ).join('');
-}
 
-function loadDynamicInterface() {
-  renderStaticGrids();
-  
-  // Set local state locations or baseline values
-  const cachedLocation = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
-  document.getElementById('location-badge').textContent = cachedLocation;
-
-  renderExperience(EXPERIENCE);
-  renderArticles(getArticles());
+  renderJournal();
   renderTestimonials(window.SITE_CONFIG.testimonials);
   renderDownloads(window.SITE_CONFIG.downloads);
+  loadLocationBadge();
+}
 
-  // Trigger dynamic Google Sync if app link configured
-  if (GOOGLE_APP_URL && GOOGLE_APP_URL.trim() !== "" && !GOOGLE_APP_URL.includes("YOUR_")) {
-    syncDynamicEcosystem();
+function renderExperienceList(arr) {
+  document.getElementById('exp-grid').innerHTML = arr.map(e =>
+    `<div class="card" onclick="logActionClick('${e.role}', 'Executive Support Experience Timeline')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+        <div><h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${e.role}</h3>
+        <p style="font-size:14px;color:${e.col || 'var(--rose)'};font-weight:500">${e.co}</p></div>
+        <span class="pill" style="background:${(e.col || 'var(--rose)')}22;color:${e.col || 'var(--rose)'}">${e.period}</span>
+      </div>
+      <ul style="padding-left:20px">${(e.pts || [e.Description]).map(p=>`<li style="font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:5px">${p}</li>`).join('')}</ul>
+    </div>`
+  ).join('');
+}
+
+function renderTestimonials(arr) {
+  const grid = document.getElementById('testimonials-grid');
+  if (grid && arr && arr.length > 0) {
+    grid.innerHTML = arr.map(t => `
+      <div class="card">
+        <p style="font-style:italic;font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:12px">"${t.Text || t.text}"</p>
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--rose-d)">${t.Name || t.name}</h4>
+        <div style="font-size:12px;color:var(--muted)">${t.Role || t.role}</div>
+      </div>
+    `).join('');
   }
 }
 
-/* ── Dynamic Rendering Subroutines ── */
-function renderExperience(arr) {
-  const grid = document.getElementById('exp-grid');
-  if (!grid || !arr.length) return;
-  grid.innerHTML = arr.map(e => `
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:14px">
-        <div><h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">${e.role || e.Role}</h3>
-        <p style="font-size:14px;color:${e.col || 'var(--rose)'};font-weight:500">${e.co || e.Company}</p></div>
-        <span class="pill" style="background:${(e.col || 'var(--rose)')}22;color:${e.col || 'var(--rose-d)'}">${e.period || e.Period}</span>
+function renderDownloads(arr) {
+  const grid = document.getElementById('downloads-grid');
+  if (grid && arr && arr.length > 0) {
+    grid.innerHTML = arr.map(d => `
+      <div class="card" style="text-align:center;padding:22px;">
+        <div style="font-size:32px;margin-bottom:12px;">📄</div>
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px;">${d.FileName || d.filename}</h4>
+        <span class="pill" style="background:var(--lav-s);color:var(--lav-d);font-size:10px;margin-bottom:12px;">${d.Category || d.category}</span>
+        <a href="${d.FileUrl || d.fileurl || '#'}" target="_blank" onclick="logActionClick('Download: ${d.FileName || d.filename}', 'Vault Downloads Panel')" class="f-btn" style="padding:8px 16px;font-size:12px;margin-top:10px;">Get Document</a>
       </div>
-      <ul style="padding-left:20px">
-        ${(e.pts || [e.Description || '']).map(p=>`<li style="font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:5px">${p}</li>`).join('')}
-      </ul>
-    </div>
-  `).join('');
+    `).join('');
+  }
 }
 
-function renderArticles(arr) {
+/* ═══════════════════════════════════════════════════════
+   ECOSYSTEM CONNECTOR & INTEGRATION HANDLING
+═══════════════════════════════════════════════════════ */
+async function syncDynamicEcosystem() {
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (!api || api.includes("YOUR_")) return;
+
+  try {
+    const res = await fetch(`${api}?action=init`);
+    if (!res.ok) throw new Error("Connection failed");
+    const data = await res.json();
+    
+    // 1. Check & Sync Location Badge
+    if (data.config && data.config.location_status) {
+      localStorage.setItem('elsa_location', data.config.location_status);
+      loadLocationBadge();
+    }
+    
+    // 2. Check & Sync Profile Picture across Splash and Chat Avatars
+    if (data.config && data.config.profile_picture) {
+      const pfp = data.config.profile_picture;
+      document.getElementById('splash-avatar').src = pfp;
+      document.getElementById('chat-avatar-img').src = pfp;
+      document.getElementById('main-avatar').src = pfp;
+      document.getElementById('contact-avatar').src = pfp;
+    }
+
+    // 3. Sync and override Experience lists
+    if (data.experience && data.experience.length > 0) {
+      renderExperienceList(data.experience);
+    }
+
+    // 4. Sync dynamic Testimonials
+    if (data.testimonials && data.testimonials.length > 0) {
+      renderTestimonials(data.testimonials);
+    }
+
+    // 5. Sync dynamic Downloads
+    if (data.downloads && data.downloads.length > 0) {
+      renderDownloads(data.downloads);
+    }
+
+    // 6. Cache and Sync dynamic articles
+    if (data.articles && data.articles.length > 0) {
+      localStorage.setItem('elsa_articles', JSON.stringify(data.articles));
+      renderJournal();
+    }
+
+    showToast("✨ Connected with Workspace");
+  } catch(e) {
+    console.warn("Ecosystem offline or CORS restricted. Running smoothly in secure fallback mode.");
+  }
+}
+
+/* ── Live Search Journal ── */
+async function executeJournalSearch() {
+  const query = document.getElementById('journal-search').value.trim();
+  logActionClick(`Search: ${query}`, 'Journal Field');
+
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (api && !api.includes("YOUR_")) {
+    try {
+      const res = await fetch(`${api}?action=search&q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      renderArticlesFeed(data.articles);
+      return;
+    } catch(e) {
+      console.warn("Search API down, executing local fallback index matching");
+    }
+  }
+
+  // Local Filter Fallback
+  const list = getArticles().filter(a => 
+    a.title.toLowerCase().includes(query.toLowerCase()) || 
+    a.body.toLowerCase().includes(query.toLowerCase())
+  );
+  renderArticlesFeed(list);
+}
+
+function renderArticlesFeed(arr) {
   const feed = document.getElementById('journal-feed');
   if (!feed) return;
   if (!arr || arr.length === 0) {
     feed.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
-      <div style="font-size:48px;margin-bottom:16px">✍️</div>
-      <p style="font-size:15px">No articles matched filter criteria.</p>
+      <div style="font-size:48px;margin-bottom:16px">🔍</div>
+      <p style="font-size:15px">No matches found inside journal files.</p>
     </div>`;
     return;
   }
-  feed.innerHTML = arr.map((a) => {
+  feed.innerHTML = arr.map(a => {
     const d = new Date(a.date || a.Date);
     const dateStr = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
     return `<div class="journal-card">
@@ -811,104 +802,16 @@ function renderArticles(arr) {
   }).join('');
 }
 
-function renderTestimonials(arr) {
-  const container = document.getElementById('testimonials-grid');
-  if (!container || !arr) return;
-  container.innerHTML = arr.map(t => `
-    <div class="card">
-      <p style="font-style:italic;font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:12px">"${t.Text || t.text}"</p>
-      <h4 style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--rose-d)">${t.Name || t.name}</h4>
-      <div style="font-size:12px;color:var(--muted)">${t.Role || t.role}</div>
-    </div>
-  `).join('');
-}
-
-function renderDownloads(arr) {
-  const container = document.getElementById('downloads-grid');
-  if (!container || !arr) return;
-  container.innerHTML = arr.map(d => `
-    <div class="card" style="text-align:center;padding:22px;">
-      <div style="font-size:32px;margin-bottom:12px;">📄</div>
-      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:4px;">${d.FileName || d.filename}</h4>
-      <span class="pill" style="background:var(--lav-s);color:var(--lav-d);font-size:10px;margin-bottom:12px;">${d.Category || d.category}</span>
-      <a href="${d.FileUrl || d.fileurl || '#'}" target="_blank" onclick="logUserEngagementClick('Download: ${d.FileName || d.filename}', 'Downloads Panel')" class="f-btn" style="padding:8px 16px;font-size:12px;margin-top:10px;">Get Document</a>
-    </div>
-  `).join('');
-}
-
-/* ═══════════════════════════════════════════════════════
-   ECOSYSTEM ENGINE CLOUD SYNCING PIPELINE
-═══════════════════════════════════════════════════════ */
-async function syncDynamicEcosystem() {
-  try {
-    const response = await fetch(`${GOOGLE_APP_URL}?action=init`);
-    if (!response.ok) throw new Error("Connection failed");
-    const data = await response.json();
-    
-    // Process config overloads
-    if (data.config) {
-      if (data.config.location_status) {
-        document.getElementById('location-badge').textContent = data.config.location_status;
-        localStorage.setItem('elsa_location', data.config.location_status);
-      }
-      if (data.config.profile_picture) {
-        const pfp = data.config.profile_picture;
-        document.getElementById('splash-avatar').src = pfp;
-        document.getElementById('chat-pfp').src = pfp;
-        document.getElementById('main-avatar').src = pfp;
-        document.getElementById('contact-avatar').src = pfp;
-      }
-    }
-
-    // Process table overloads
-    if (data.experience && data.experience.length > 0) renderExperience(data.experience);
-    if (data.articles && data.articles.length > 0) {
-      localStorage.setItem('elsa_articles', JSON.stringify(data.articles));
-      renderArticles(data.articles);
-    }
-    if (data.testimonials && data.testimonials.length > 0) renderTestimonials(data.testimonials);
-    if (data.downloads && data.downloads.length > 0) renderDownloads(data.downloads);
-
-    showToast("Ecosystem fully synchronized.");
-  } catch (err) {
-    showToast("Ecosystem synced using local fallback data.");
-    console.warn("Apps Script web-app link offline or misconfigured: ", err);
-  }
-}
-
-async function executeJournalSearch() {
-  const query = document.getElementById('journal-search').value.trim();
-  logUserEngagementClick(`Search: ${query}`, 'Journal Field');
-
-  if (GOOGLE_APP_URL && GOOGLE_APP_URL.trim() !== "" && !GOOGLE_APP_URL.includes("YOUR_")) {
-    try {
-      const res = await fetch(`${GOOGLE_APP_URL}?action=search&q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      renderArticles(data.articles);
-    } catch(e) {
-      fallbackFilter(query);
-    }
-  } else {
-    fallbackFilter(query);
-  }
-}
-
-function fallbackFilter(query) {
-  const list = getArticles().filter(a => 
-    (a.title || a.Title || '').toLowerCase().includes(query.toLowerCase()) || 
-    (a.body || a.Body || '').toLowerCase().includes(query.toLowerCase())
-  );
-  renderArticles(list);
-}
-
-/* ── Form Transactions ── */
+/* ── Interactive Scheduling & inquiries POST ── */
 async function submitEngagementInquiry(e) {
   e.preventDefault();
-  const btn = document.getElementById('chat-send-btn');
+  const sendBtn = document.getElementById('chat-send-btn');
   const label = document.getElementById('chat-send-label');
   const spinner = document.getElementById('chat-spinner');
+  const successBox = document.getElementById('chat-success');
+  const form = document.getElementById('chat-form');
 
-  btn.disabled = true;
+  sendBtn.disabled = true;
   label.style.display = 'none';
   spinner.style.display = 'block';
 
@@ -921,88 +824,64 @@ async function submitEngagementInquiry(e) {
     message: document.getElementById('cf-message').value.trim()
   };
 
-  if (GOOGLE_APP_URL && GOOGLE_APP_URL.trim() !== "" && !GOOGLE_APP_URL.includes("YOUR_")) {
-    try {
-      await fetch(GOOGLE_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      document.getElementById('chat-form').style.display = 'none';
-      document.getElementById('chat-success').style.display = 'block';
-      showToast("🌸 Calendar Slot synced!");
-    } catch(err) {
-      showToast("⚠️ API transport fault. Reverting...");
-      btn.disabled = false;
-      label.style.display = 'block';
-      spinner.style.display = 'none';
-    }
-  } else {
-    // Elegant fallback simulation
-    setTimeout(() => {
-      document.getElementById('chat-form').style.display = 'none';
-      document.getElementById('chat-success').style.display = 'block';
-      showToast("Connected simulated successfully!");
-    }, 1200);
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  try {
+    await fetch(api, {
+      method: "POST",
+      mode: "no-cors", // Bypasses pre-flight blockings on redirect parameters smoothly
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    form.reset();
+    successBox.style.display = 'block';
+    showToast("Ecosystem Engaged successfully! 🚀");
+  } catch (err) {
+    console.error("Payload transmission fault: ", err);
+    showToast("❌ Network error. Check connection.");
+  } finally {
+    sendBtn.disabled = false;
+    label.style.display = 'block';
+    spinner.style.display = 'none';
   }
 }
 
+/* ── Newsletter Subscriptions POST ── */
 async function submitNewsletter(e) {
   e.preventDefault();
-  const email = document.getElementById("newsletter-email").value.trim();
+  const email = document.getElementById('newsletter-email').value.trim();
   if(!email) return;
 
-  if (GOOGLE_APP_URL && GOOGLE_APP_URL.trim() !== "" && !GOOGLE_APP_URL.includes("YOUR_")) {
-    try {
-      await fetch(GOOGLE_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "subscribe", email })
-      });
-      showToast("Newsletter registration saved!");
-      document.getElementById("newsletter-email").value = "";
-    } catch(e) {
-      showToast("Connection failed.");
-    }
-  } else {
-    showToast("Newsletter simulation successful!");
-    document.getElementById("newsletter-email").value = "";
-  }
-}
-
-function logUserEngagementClick(btnName, section) {
-  if (GOOGLE_APP_URL && GOOGLE_APP_URL.trim() !== "" && !GOOGLE_APP_URL.includes("YOUR_")) {
-    fetch(GOOGLE_APP_URL, {
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  try {
+    await fetch(api, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "log_click", buttonName: btnName, section })
+      body: JSON.stringify({ action: "subscribe", email: email })
     });
+    showToast("Ecosystem Newsletter registration logged! 📥");
+    document.getElementById('newsletter-form').reset();
+  } catch(err) {
+    showToast("Connection fault.");
   }
 }
 
-/* ═══════════════════════════════════════════════════════
-   TOASTS & NOTIFICATIONS
-═══════════════════════════════════════════════════════ */
-function showToast(msg, duration = 3200) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
-}
+/* ── Analytics: Button clicks logs POST ── */
+function logActionClick(btnName, section) {
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (!api || api.includes("YOUR_")) return;
 
-function toggleChat() {
-  const panel = document.getElementById('chat-panel');
-  const badge = document.querySelector('.bubble-badge');
-  const isOpen = panel.classList.contains('open');
-  panel.classList.toggle('open', !isOpen);
-  if (!isOpen && badge) badge.style.display = 'none';
+  fetch(api, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "log_click", buttonName: btnName, section: section })
+  });
 }
 
 /* ═══════════════════════════════════════════════════════
-   ADMIN COMMAND PANELS & SECRET LOCKS
+   ADMIN MODE & SECRET TRIGGERS
 ═══════════════════════════════════════════════════════ */
 let adminTapCount = 0;
 let adminTapTimer = null;
@@ -1019,7 +898,6 @@ function handleAdminTap() {
 
 function openAdmin() {
   document.getElementById('admin-overlay').classList.add('open');
-  document.getElementById('admin-app-url').value = GOOGLE_APP_URL;
   const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
   document.getElementById('admin-location').value = loc;
   refreshAdminArticlesList();
@@ -1033,43 +911,88 @@ function closeAdminIfOutside(e) {
   if (e.target === document.getElementById('admin-overlay')) closeAdmin();
 }
 
-function saveAppConnection() {
-  const url = document.getElementById('admin-app-url').value.trim();
-  localStorage.setItem("elsa_app_url", url);
-  GOOGLE_APP_URL = url;
-  showToast("🔗 New connection registered. Syncing...");
-  syncDynamicEcosystem();
-}
-
+/* ── Location Badge loader ── */
 function saveLocation() {
   const loc = document.getElementById('admin-location').value.trim();
   if (!loc) return;
   localStorage.setItem('elsa_location', loc);
-  document.getElementById('location-badge').textContent = loc;
+  loadLocationBadge();
   showToast('📍 Location updated!');
+}
+
+function loadLocationBadge() {
+  const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
+  const badge = document.getElementById('location-badge');
+  if (badge) badge.textContent = loc;
+}
+
+/* ── Articles / Journal Handling ── */
+function saveArticle() {
+  const title = document.getElementById('admin-article-title').value.trim();
+  const body  = document.getElementById('admin-article-body').value.trim();
+  if (!body) { showToast('⚠️ Please write something first.'); return; }
+  let articles = getArticles();
+  articles.unshift({ title: title || 'Untitled', body, date: new Date().toISOString() });
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  document.getElementById('admin-article-title').value = '';
+  document.getElementById('admin-article-body').value  = '';
+  renderJournal();
+  refreshAdminArticlesList();
+  showToast('✦ Article published!');
+}
+
+function deleteArticle(index) {
+  let articles = getArticles();
+  articles.splice(index, 1);
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  renderJournal();
+  refreshAdminArticlesList();
+  showToast('🗑 Article deleted.');
 }
 
 function getArticles() {
   const stored = localStorage.getItem('elsa_articles');
   if (stored) return JSON.parse(stored);
-  return window.SITE_CONFIG.articles;
+  return window.SITE_CONFIG.articles || [];
+}
+
+function renderJournal() {
+  const articles = getArticles();
+  renderArticlesFeed(articles);
 }
 
 function refreshAdminArticlesList() {
   const el = document.getElementById('admin-articles-list');
   if (!el) return;
   const articles = getArticles();
-  if (articles.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">No local backups stored.</p>'; return; }
+  if (articles.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">No articles yet.</p>'; return; }
   el.innerHTML = articles.map((a, i) => {
-    const d = new Date(a.date || a.Date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const d = new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(242,164,181,.15)">
-      <span style="font-size:13px;color:var(--ink)">${d} — ${(a.title || a.Title || '').slice(0,38)}</span>
+      <span style="font-size:13px;color:var(--ink)">${d} — ${a.title.slice(0,38)}${a.title.length>38?'…':''}</span>
+      <button onclick="deleteArticle(${i})" style="background:rgba(196,99,122,.1);border:none;color:var(--rose-d);cursor:pointer;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600">✕</button>
     </div>`;
   }).join('');
 }
 
+/* ── Export Config ── */
+function exportConfig() {
+  const articles = getArticles();
+  const location  = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
+  const config = { location, articles };
+  const json = JSON.stringify(config, null, 2);
+  document.getElementById('export-output').textContent = json;
+  showToast('Config generated — copy it below!');
+}
+
+function copyExport() {
+  const txt = document.getElementById('export-output').textContent;
+  if (!txt || txt === '— click Generate Export —') { showToast('⚠️ Generate first!'); return; }
+  navigator.clipboard.writeText(txt).then(() => showToast('✓ Copied to clipboard!'));
+}
+
 /* ═══════════════════════════════════════════════════════
-   SPLASH
+   SPLASH CONTROL & LIFECYCLE
 ═══════════════════════════════════════════════════════ */
 setTimeout(() => {
   const si = document.getElementById('splash-inner');
@@ -1085,16 +1008,20 @@ function enterPortfolio() {
     splash.style.display = 'none';
     app.style.display    = 'block';
     document.getElementById('chat-bubble').style.display = 'flex';
-    loadDynamicInterface();
+    renderAll();
     initThreeJS();
     initCursorSparkle();
+    
+    // Automatically trigger ecosystems sync asynchronously in the background
+    syncDynamicEcosystem();
+    
     const home = document.getElementById('tab-home');
     home.style.opacity = '1';
   }, 800);
 }
 
 /* ═══════════════════════════════════════════════════════
-   NAV
+   NAVCONTROLLER & ROUTING
 ═══════════════════════════════════════════════════════ */
 window.addEventListener('scroll', () => {
   document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
@@ -1115,10 +1042,11 @@ function switchTab(tabId) {
       }
     }, 280);
   }
+  logActionClick(`Switch to: ${tabId}`, 'Navigation Bar Menu');
 }
 
 /* ═══════════════════════════════════════════════════════
-   THREE.JS BACKGROUND
+   THREE.JS BACKGROUND LAYER
 ═══════════════════════════════════════════════════════ */
 function initThreeJS() {
   if (typeof THREE === 'undefined') return;
@@ -1164,7 +1092,7 @@ function initThreeJS() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   CURSOR SPARKLE
+   CURSOR SPARKLE EFFECT
 ═══════════════════════════════════════════════════════ */
 function initCursorSparkle() {
   const sc = ['#F2A4B5','#C9B6E4','#C9A84C','#FDE8EF','#EDE8F8','#D4C8F0'];
@@ -1181,12 +1109,14 @@ function initCursorSparkle() {
   });
 }
 
+/* Enter button hover effects */
 const eb = document.getElementById('enter-btn');
 if (eb) {
   eb.addEventListener('mouseenter', () => { eb.style.transform='translateY(-3px)'; eb.style.boxShadow='0 16px 42px rgba(196,99,122,.48)'; });
   eb.addEventListener('mouseleave', () => { eb.style.transform=''; eb.style.boxShadow='0 8px 30px rgba(196,99,122,.35)'; });
 }
 
+/* Hide chat bubble until app enters */
 document.getElementById('chat-bubble').style.display = 'none';
 </script>
 </body>
