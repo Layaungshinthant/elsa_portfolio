@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Tailwind CSS for robust Layouting & Dynamic Panels -->
+<script src="https://cdn.tailwindcss.com"></script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -80,7 +83,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 .f-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,99,122,.35)}
 .f-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-/* ── CHAT BUBBLE ── */
+/* CHAT BUBBLE */
 #chat-bubble{position:fixed;bottom:28px;right:28px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));border:none;cursor:pointer;box-shadow:0 6px 24px rgba(196,99,122,.45);display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .25s ease;animation:bounceIn .6s ease 1.2s both}
 #chat-bubble:hover{transform:scale(1.1) rotate(-5deg);box-shadow:0 12px 36px rgba(196,99,122,.55)}
 #chat-bubble .bubble-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#ff4d6d;border-radius:50%;border:2px solid white;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
@@ -89,28 +92,28 @@ textarea.f-input{resize:vertical;min-height:90px}
 #chat-panel.open{display:block}
 .chat-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(242,164,181,.2)}
 .chat-avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--rose)}
-.chat-status{display:flex;align-items:center;gap:5px;font-size:11px;color:#4caf50;font-weight:500}<br>.chat-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#4caf50;display:inline-block}
+.chat-status{display:flex;align-items:center;gap:5px;font-size:11px;color:#4caf50;font-weight:500}
+.chat-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#4caf50;display:inline-block}
 .chat-close{margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);line-height:1;padding:4px}
 
-/* ── NOTIFICATION TOAST ── */
+/* NOTIFICATION TOAST */
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:999;background:var(--ink);color:#fff;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;transition:all .3s ease;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── ADMIN MODE ── */
+/* ADMIN OVERLAY */
 #admin-overlay{position:fixed;inset:0;z-index:800;background:rgba(45,31,45,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
 #admin-overlay.open{display:flex}
-#admin-panel{background:linear-gradient(135deg,#fff9f5,#ede8f8);border-radius:28px;padding:36px;width:min(520px,92vw);max-height:88vh;overflow-y:auto;border:1px solid rgba(242,164,181,.3);box-shadow:0 30px 80px rgba(45,31,45,.3);animation:slideUp .3s ease}
+#admin-panel{background:linear-gradient(135deg,#fff9f5,#ede8f8);border-radius:28px;padding:36px;width:min(550px,94vw);max-height:88vh;overflow-y:auto;border:1px solid rgba(242,164,181,.3);box-shadow:0 30px 80px rgba(45,31,45,.3);animation:slideUp .3s ease}
 #admin-panel h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:4px}
 .admin-section{background:rgba(255,255,255,.5);border-radius:16px;padding:20px;margin-top:16px;border:1px solid rgba(242,164,181,.2)}
 .admin-section h4{font-size:13px;font-weight:600;color:var(--rose-d);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.export-box{background:rgba(45,31,45,.06);border-radius:10px;padding:12px;font-family:monospace;font-size:11px;color:var(--mid);margin-top:12px;word-break:break-all;border:1px dashed rgba(196,99,122,.3);max-height:120px;overflow-y:auto;white-space:pre-wrap}
 
-/* ── ANNOUNCEMENTS / JOURNAL ── */
-.journal-card{background:linear-gradient(135deg,rgba(242,164,181,.08),rgba(201,182,228,.08));border:1px solid rgba(242,164,181,.2);border-radius:16px;padding:20px;margin-bottom:16px;position:relative}
+/* ANNOUNCEMENTS / JOURNAL */
+.journal-card{background:linear-gradient(135deg,rgba(242,164,181,.08),rgba(201,182,228,.08));border:1px solid rgba(242,164,181,.2);border-radius:16px;padding:24px;margin-bottom:18px;position:relative}
 .journal-date{font-size:11px;color:var(--rose-d);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
 .journal-body{font-size:15px;color:var(--ink);line-height:1.7}
 
-/* ── STATUS BADGE ── */
+/* STATUS BADGE */
 #location-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,.45);border:1px solid rgba(201,182,228,.4);border-radius:100px;font-size:12px;color:var(--mid);backdrop-filter:blur(8px)}
 #location-badge::before{content:'📍';font-size:13px}
 
@@ -131,7 +134,7 @@ textarea.f-input{resize:vertical;min-height:90px}
   <div class="blob" style="top:38%;left:28%;width:22vw;height:22vw;background:rgba(201,168,76,.14);animation:float2 6s ease-in-out infinite alternate"></div>
   <div id="splash-inner">
     <div style="width:114px;height:114px;border-radius:50%;overflow:hidden;margin:0 auto 24px;border:3px solid rgba(255,255,255,.85);animation:pulseRing 3s ease-in-out infinite">
-      <img src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
+      <img src="https://placehold.co/150x150/FDE8EF/C4637A?text=Elsa" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
     </div>
     <span class="pill" style="background:var(--rose-deep);color:#fff;font-size:10px;letter-spacing:2px;margin-bottom:18px;display:inline-block">✦ DIGITAL PORTFOLIO ✦</span>
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,72px);font-weight:300;color:var(--ink);line-height:1.05;letter-spacing:-1px;margin-bottom:4px">La YaungShin</h1>
@@ -156,7 +159,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 
 <div id="chat-panel">
   <div class="chat-header">
-    <div class="chat-avatar"><img src="my-photo.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="Elsa"></div>
+    <div class="chat-avatar"><img src="https://placehold.co/150x150/FDE8EF/C4637A?text=Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="Elsa"></div>
     <div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink)">Elsa</div>
       <div class="chat-status">Available · Usually replies in 24h</div>
@@ -205,9 +208,25 @@ textarea.f-input{resize:vertical;min-height:90px}
       <span style="font-size:28px">🔐</span>
       <div>
         <h2>Admin Command Center</h2>
-        <p style="font-size:12px;color:var(--muted)">Changes saved to localStorage · Export for permanent deploy</p>
+        <p style="font-size:12px;color:var(--muted)">Connect and update your dynamic Google Sheets integration</p>
       </div>
       <button onclick="closeAdmin()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
+    </div>
+
+    <!-- Integration Setup Toggle -->
+    <div class="admin-section border-2 border-pink-300 bg-pink-50/50">
+      <h4 class="flex justify-between items-center text-rose-deep">
+        <span>⚙️ Cloud Sheets Integration Setup</span>
+        <span id="conn-badge" class="bg-amber-400 text-[10px] text-white py-1 px-3 rounded-full font-bold uppercase tracking-wider">Demo Sandbox</span>
+      </h4>
+      <p class="text-[12px] leading-relaxed text-[#7A5878] mb-4">
+        Paste your Google Apps Script URL below to transition from local simulation mode to your live Cloud Database.
+      </p>
+      <input class="f-input mb-3" id="admin-gas-url" type="text" placeholder="https://script.google.com/macros/s/.../exec">
+      <div class="flex gap-2">
+        <button class="f-btn flex-1 py-2 text-[13px]" onclick="saveConnectionSettings()">Connect Live Endpoint</button>
+        <button class="bg-gray-100 border border-gray-200 text-gray-500 rounded-xl px-4 text-[12px] hover:bg-gray-200 transition" onclick="resetToSandbox()">Reset to Sandbox</button>
+      </div>
     </div>
 
     <!-- Location Update -->
@@ -231,25 +250,10 @@ textarea.f-input{resize:vertical;min-height:90px}
       <div id="admin-articles-list" style="font-size:13px;color:var(--mid);max-height:160px;overflow-y:auto"></div>
     </div>
 
-    <!-- Export Config -->
+    <!-- Info Command Sheet -->
     <div class="admin-section">
-      <h4>📦 Export Config (for permanent deploy)</h4>
-      <p style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.5">Copy the JSON below and paste it as the value of <code style="background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px">window.SITE_CONFIG</code> in the script section to make your updates permanent for all visitors.</p>
-      <button class="f-btn" onclick="exportConfig()" style="width:auto;padding:10px 24px;margin-bottom:10px">Generate Export ↓</button>
-      <div class="export-box" id="export-output">— click Generate Export —</div>
-      <button onclick="copyExport()" style="margin-top:8px;padding:7px 18px;border:1px solid rgba(196,99,122,.4);border-radius:8px;background:transparent;color:var(--rose-d);font-size:12px;cursor:pointer;font-family:'Jost',sans-serif;font-weight:600">Copy to Clipboard</button>
-    </div>
-
-    <!-- Telegram Remote Control Info -->
-    <div class="admin-section">
-      <h4>📡 Telegram Remote Control</h4>
-      <p style="font-size:12px;color:var(--mid);line-height:1.6">Send these commands to your bot to interact remotely:</p>
-      <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
-        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(242,164,181,.25)">/status — Bot replies with your current site status &amp; last article</code>
-        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,182,228,.25)">/setlocation [city] — Updates your location badge (localStorage)</code>
-        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,168,76,.25)">/inquiries — Lists recent contact form submissions</code>
-      </div>
-      <p style="font-size:11px;color:var(--muted);margin-top:10px">⚠️ Webhook commands require a server. For GitHub Pages, use n8n or Make.com as your bot webhook receiver to process /commands and update your localStorage via a shared API key.</p>
+      <h4>📡 Telegram Integration Status</h4>
+      <p style="font-size:12px;color:var(--mid);line-height:1.6">You can also link n8n or Make webhooks to post to this spreadsheet directly using standard chat syntax commands.</p>
     </div>
   </div>
 </div>
@@ -298,7 +302,7 @@ textarea.f-input{resize:vertical;min-height:90px}
           <div style="display:flex;justify-content:center;animation:fadeInUp .6s ease .2s both">
             <div style="position:relative;animation:shimmer 5s ease-in-out infinite">
               <div style="width:290px;height:360px;border-radius:42% 58% 62% 38%/48% 52% 72% 28%;overflow:hidden;border:3px solid rgba(255,255,255,.82);box-shadow:0 20px 60px rgba(196,99,122,.22),0 0 0 12px rgba(242,164,181,.12)">
-                <img src="my-photo.jpg" alt="La YaungShin Thant Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
+                <img src="https://placehold.co/300x400/FDE8EF/C4637A?text=Elsa" alt="La YaungShin Thant Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center">
               </div>
               <span class="pill" style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--rose-deep);color:#fff;font-size:10px;white-space:nowrap;box-shadow:0 4px 16px rgba(158,61,87,.3)">✦ Yangon, Myanmar</span>
             </div>
@@ -327,6 +331,16 @@ textarea.f-input{resize:vertical;min-height:90px}
         <span class="section-sup">Thoughts & Updates</span>
         <h2 class="section-h2">The Daily Journal</h2>
         <p class="section-sub">365 days of insights — a commitment to continuous learning and professional sharing.</p>
+        
+        <!-- Live Loading Status Banner -->
+        <div id="journal-cloud-status" class="hidden mb-6 p-4 rounded-xl border border-pink-200 bg-pink-50/50 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="animate-pulse flex h-3.5 w-3.5 rounded-full bg-emerald-500"></span>
+            <span class="text-sm text-gray-700 font-medium">Live Connection Active: Fetching dynamically from Google Sheets</span>
+          </div>
+          <button class="text-xs text-rose-deep font-semibold underline hover:text-rose-600 transition" onclick="openAdmin()">Configure Settings</button>
+        </div>
+
         <div id="journal-feed">
           <div style="text-align:center;padding:60px 20px;color:var(--muted)">
             <div style="font-size:48px;margin-bottom:16px">✍️</div>
@@ -393,13 +407,13 @@ textarea.f-input{resize:vertical;min-height:90px}
         <p class="section-sub">Not just AI-friendly — AI-powered. A live demonstration of modern workflow architecture.</p>
         <div class="grid4" style="margin-bottom:48px" id="tools-grid"></div>
         <div class="card" style="margin-bottom:32px">
-          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:8px">The Telegram → Website Pipeline</h3>
-          <p style="font-size:14px;color:var(--mid);margin-bottom:32px;line-height:1.6">A fully automated content ecosystem — write, tag, and publish from a single Telegram message.</p>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--ink);margin-bottom:8px">The Google Sheets Dynamic Ecosystem</h3>
+          <p style="font-size:14px;color:var(--mid);margin-bottom:32px;line-height:1.6">An automated content delivery pipeline — publish articles and change location status on the web dynamically right from a linked spreadsheet.</p>
           <div style="display:flex;gap:0;flex-wrap:wrap;align-items:stretch" id="workflow-grid"></div>
           <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-            <code style="background:rgba(242,164,181,.15);color:var(--rose-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(242,164,181,.3)">/article</code>
-            <code style="background:rgba(201,182,228,.15);color:var(--lav-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,182,228,.3)">/law</code>
-            <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/diplomacy</code>
+            <code style="background:rgba(242,164,181,.15);color:var(--rose-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(242,164,181,.3)">/sheets</code>
+            <code style="background:rgba(201,182,228,.15);color:var(--lav-d);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,182,228,.3)">/apps-script</code>
+            <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/continuous-sync</code>
           </div>
         </div>
         <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(242,164,181,.07));padding-bottom:80px">
@@ -441,7 +455,7 @@ textarea.f-input{resize:vertical;min-height:90px}
         <h2 class="section-h2">Let's Connect</h2>
         <p class="section-sub">Ready to discuss your next executive challenge. Reach out through any channel.</p>
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.12),rgba(201,182,228,.12));text-align:center;padding:48px;margin-bottom:40px">
-          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)"><img src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center"></div>
+          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)"><img src="https://placehold.co/150x150/FDE8EF/C4637A?text=Elsa" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center"></div>
           <h2 style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--ink);font-style:italic;margin-bottom:10px">La YaungShin Thant Elsa</h2>
           <p style="font-size:14px;color:var(--mid);margin-bottom:8px">HR Manager · Personal Assistant · Compliance Advisor · AI Strategist</p>
           <p style="font-size:13px;color:var(--lav-d);margin-bottom:24px">⚧ Proudly Transgender Woman · Lanmadaw, Yangon, Myanmar</p>
@@ -456,8 +470,8 @@ textarea.f-input{resize:vertical;min-height:90px}
           <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent);margin:0 auto 20px"></div>
           <!-- SECRET ADMIN TRIGGER: click the rose 5x -->
           <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--mid);margin-bottom:8px">Driven by passion, guided by purpose.</p>
-          <span id="admin-trigger" onclick="handleAdminTap()" style="cursor:default;font-size:20px;user-select:none;display:inline-block" title="">🌸</span>
-          <p style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px">© 2025 La YaungShin Thant Elsa · All Rights Reserved</p>
+          <span id="admin-trigger" onclick="handleAdminTap()" style="cursor:pointer;font-size:24px;user-select:none;display:inline-block" class="transition hover:scale-125 duration-300" title="Click me 5 times to open Apps Connection panel!">🌸</span>
+          <p style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px">© 2026 La YaungShin Thant Elsa · All Rights Reserved</p>
         </div>
       </div>
     </div>
@@ -474,14 +488,24 @@ const _t = ['8609424282',':AAE6P0ryGfp','JZbDWPb1wASMqKk1GDjZGN3c'];
 const TELEGRAM_BOT_TOKEN = _t.join('');
 const TELEGRAM_CHAT_ID   = '7663311859';
 
-/* ── Permanent config (overridden by localStorage) ── */
-window.SITE_CONFIG = {
-  location: 'Yangon, Myanmar · Open to Opportunities',
-  articles: []
-};
+/* ── Live configuration parameters & fallsbacks ── */
+let APPS_SCRIPT_URL = localStorage.getItem('elsa_apps_script_url') || "";
+
+const FALLBACK_MOCK_JOURNAL = [
+  {
+    title: "Understanding Compliance framework in Myanmar's labor landscape",
+    body: "Structuring modern compliance requires translating complex statutory rules into everyday operating logic. Across local and international structures, ensuring labor guidelines protect both employees and company objectives remains paramount.",
+    date: "Jun 18, 2026"
+  },
+  {
+    title: "Optimizing PA Productivity with Dynamic Web Databases",
+    body: "Connecting portfolio nodes directly to live Google Sheet engines transforms manual static web deployment into an instantaneous publishing experience, removing coding barriers entirely for real-time adjustments.",
+    date: "May 24, 2026"
+  }
+];
 
 /* ═══════════════════════════════════════════════════════
-   DATA
+   DATA STRUCTURES
 ═══════════════════════════════════════════════════════ */
 const SKILLS = [
   {icon:'🤖',name:'AI & Automation',        desc:'ChatGPT, n8n, Make.com, Telegram workflows — transforming repetitive tasks into seamless automation pipelines.'},
@@ -518,16 +542,14 @@ const COMPLIANCE = [
 const TOOLS = [
   {icon:'💬',name:'ChatGPT',      use:'Drafting, research & content generation'},
   {icon:'⚙️',name:'n8n / Make',   use:'Workflow automation & orchestration'},
-  {icon:'🤖',name:'Telegram Bot', use:'Automated content publishing pipeline'},
-  {icon:'📊',name:'Google Sheets',use:'Data management & live dashboards'},
-  {icon:'🌐',name:'Google Sites', use:'Portfolio & knowledge base publishing'},
+  {icon:'📊',name:'Google Sheets',use:'Realtime dynamic content management'},
   {icon:'☁️',name:'Google Drive', use:'Document storage, sharing & embedding'},
 ];
 const WORKFLOW = [
-  {n:'1',label:'Write Content',   desc:'Draft in Telegram with a hashtag command',                   col:'var(--rose)'},
-  {n:'2',label:'Tag & Send',      desc:'#Article or #Law + title + body + image',                    col:'var(--lav-d)'},
-  {n:'3',label:'Webhook Fires',   desc:'n8n parses: extracts title, body & image URL',               col:'var(--gold)'},
-  {n:'4',label:'Auto-Published',  desc:'Google Sheet updates → live site reflects content',           col:'var(--rose-deep)'},
+  {n:'1',label:'Update Spreadsheet', desc:'Input title & article content into your Google Sheet',    col:'var(--rose)'},
+  {n:'2',label:'Apps Script Webhook',desc:'API fetches spreadsheet cells instantly',                 col:'var(--lav-d)'},
+  {n:'3',label:'Live Stream Update', desc:'The Website dynamic controller fetches live sheets',      col:'var(--gold)'},
+  {n:'4',label:'Instant Render',     desc:'Articles publish securely without redeploying code',      col:'var(--rose-deep)'},
 ];
 const TIMELINE = [
   {yr:'Aug 2016',          title:'USAID · Court User Survey',           org:'Student Volunteer · Monywa District Court',           desc:'Maintained professional neutrality conducting user surveys for a USAID justice initiative. Trusted with sensitive civic data alongside government officials.',          col:'var(--rose)',      icon:'🇺🇸'},
@@ -543,11 +565,10 @@ const CONTACTS = [
   {icon:'📱',label:'Phone',    value:'09685520133',                           href:'tel:09685520133',                              col:'#C9A84C'},
   {icon:'💬',label:'WhatsApp', value:'Message on WhatsApp',                   href:'https://wa.me/959685520133',                   col:'#25D366'},
   {icon:'📟',label:'Viber',    value:'Connect on Viber',                      href:'viber://contact?number=%2B959685520133',        col:'#7360F2'},
-  {icon:'🔴',label:'WeChat',   value:'Available on WeChat',                   href:'#',                                            col:'#07C160'},
 ];
 
 /* ═══════════════════════════════════════════════════════
-   RENDER
+   DYNAMIC LAYOUT RENDERING Engine
 ═══════════════════════════════════════════════════════ */
 function renderAll() {
   document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
@@ -624,12 +645,225 @@ function renderAll() {
       </div></a>`
   ).join('');
 
-  renderJournal();
+  // Auto load connection settings dynamic indicators
+  updateConnectionBadge();
   loadLocationBadge();
+  renderJournal();
 }
 
 /* ═══════════════════════════════════════════════════════
-   TELEGRAM — send inquiry to Elsa's bot
+   HYBRID SOURCE AND CONFIG SWITCHER logic
+═══════════════════════════════════════════════════════ */
+function updateConnectionBadge() {
+  const badge = document.getElementById('conn-badge');
+  const indicator = document.getElementById('journal-cloud-status');
+  if (APPS_SCRIPT_URL) {
+    badge.innerText = "Live Connected";
+    badge.className = "bg-emerald-500 text-[10px] text-white py-1 px-3 rounded-full font-bold uppercase tracking-wider";
+    indicator.classList.remove('hidden');
+  } else {
+    badge.innerText = "Demo Sandbox";
+    badge.className = "bg-amber-400 text-[10px] text-white py-1 px-3 rounded-full font-bold uppercase tracking-wider";
+    indicator.classList.add('hidden');
+  }
+}
+
+function saveConnectionSettings() {
+  const inputUrl = document.getElementById('admin-gas-url').value.trim();
+  if(!inputUrl.startsWith("http")) {
+    showToast("⚠️ Invalid Endpoint. Must be a secure URL starting with http:// or https://");
+    return;
+  }
+  APPS_SCRIPT_URL = inputUrl;
+  localStorage.setItem('elsa_apps_script_url', inputUrl);
+  updateConnectionBadge();
+  loadLocationBadge();
+  renderJournal();
+  showToast("📡 Deployed endpoint configured successfully!");
+}
+
+function resetToSandbox() {
+  APPS_SCRIPT_URL = "";
+  localStorage.removeItem('elsa_apps_script_url');
+  document.getElementById('admin-gas-url').value = "";
+  updateConnectionBadge();
+  loadLocationBadge();
+  renderJournal();
+  showToast("🧹 Configuration cleared. Running in Demo Mode.");
+}
+
+/* ═══════════════════════════════════════════════════════
+   GOOGLE SHEETS DYNAMIC STREAM CONNECTORS (Real vs Sandbox)
+═══════════════════════════════════════════════════════ */
+async function loadLocationBadge() {
+  const badge = document.getElementById('location-badge');
+  const adminInput = document.getElementById('admin-location');
+
+  if (APPS_SCRIPT_URL) {
+    // Live Cloud Connect
+    try {
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=getStatus`);
+      const data = await res.json();
+      if (data && data.location) {
+        badge.innerText = data.location;
+        adminInput.value = data.location;
+      }
+    } catch (e) {
+      console.error("Live Status fetch failed, using cached values", e);
+      fallbackLocalStatus(badge, adminInput);
+    }
+  } else {
+    fallbackLocalStatus(badge, adminInput);
+  }
+}
+
+function fallbackLocalStatus(badge, adminInput) {
+  const loc = localStorage.getItem('elsa_location') || 'Yangon, Myanmar · Open to Opportunities';
+  badge.innerText = loc;
+  adminInput.value = loc;
+}
+
+async function saveLocation() {
+  const loc = document.getElementById('admin-location').value.trim();
+  if (!loc) return;
+
+  if (APPS_SCRIPT_URL) {
+    showToast("Publishing status to Google Sheets...");
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "updateStatus", location: loc })
+      });
+      showToast("📍 Live Status update request dispatched!");
+      setTimeout(() => loadLocationBadge(), 1000);
+    } catch (err) {
+      showToast("⚠️ API network communication timeout.");
+      console.error(err);
+    }
+  } else {
+    localStorage.setItem('elsa_location', loc);
+    loadLocationBadge();
+    showToast("📍 Location saved to local sandbox.");
+  }
+}
+
+/* ── Articles / Journal Fetch ── */
+async function getArticles() {
+  if (APPS_SCRIPT_URL) {
+    try {
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=getJournal`);
+      const data = await res.json();
+      return Array.isArray(data) ? data : FALLBACK_MOCK_JOURNAL;
+    } catch (e) {
+      console.error("Failed to connect with cloud database, fallback to mock logs", e);
+      return getLocalSandboxArticles();
+    }
+  } else {
+    return getLocalSandboxArticles();
+  }
+}
+
+function getLocalSandboxArticles() {
+  const stored = localStorage.getItem('elsa_articles');
+  if (stored) return JSON.parse(stored);
+  return FALLBACK_MOCK_JOURNAL;
+}
+
+async function renderJournal() {
+  const feed = document.getElementById('journal-feed');
+  if (!feed) return;
+  
+  feed.innerHTML = `<div class="text-center py-6 text-gray-400">Loading dynamic data...</div>`;
+  
+  const articles = await getArticles();
+  
+  if (articles.length === 0) {
+    feed.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px">✍️</div>
+      <p style="font-size:15px">No articles yet. Check back soon!</p>
+    </div>`;
+    return;
+  }
+  
+  feed.innerHTML = articles.map(a => {
+    return `<div class="journal-card">
+      <div class="journal-date">${a.date}</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">${a.title}</h3>
+      <div class="journal-body">${a.body.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }).join('');
+}
+
+async function refreshAdminArticlesList() {
+  const el = document.getElementById('admin-articles-list');
+  if (!el) return;
+  const articles = await getArticles();
+  
+  if (articles.length === 0) {
+    el.innerHTML = '<p style="color:var(--muted);font-style:italic">No articles yet.</p>'; 
+    return; 
+  }
+  
+  el.innerHTML = articles.map((a, i) => {
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(242,164,181,.15)">
+      <span style="font-size:13px;color:var(--ink)">${a.date} — ${a.title.slice(0,35)}${a.title.length>35?'…':''}</span>
+      ${!APPS_SCRIPT_URL ? `<button onclick="deleteSandboxArticle(${i})" style="background:rgba(196,99,122,.1);border:none;color:var(--rose-d);cursor:pointer;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600">✕</button>` : `<span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">Cloud</span>`}
+    </div>`;
+  }).join('');
+}
+
+async function saveArticle() {
+  const title = document.getElementById('admin-article-title').value.trim();
+  const body  = document.getElementById('admin-article-body').value.trim();
+  if (!body || !title) { showToast('⚠️ Please write title and content first.'); return; }
+
+  if (APPS_SCRIPT_URL) {
+    showToast("Publishing post to Google Sheets...");
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "addJournal", title: title, body: body })
+      });
+      document.getElementById('admin-article-title').value = '';
+      document.getElementById('admin-article-body').value  = '';
+      showToast("✦ Article publication request sent to Cloud Sheet!");
+      setTimeout(() => {
+        renderJournal();
+        refreshAdminArticlesList();
+      }, 1200);
+    } catch (e) {
+      showToast("⚠️ Cloud communication timed out.");
+    }
+  } else {
+    // Sandbox write path
+    let articles = getLocalSandboxArticles();
+    const formattedDate = new Date().toLocaleDateString('en-US', {year:'numeric', month:'short', day:'numeric'});
+    articles.unshift({ title, body, date: formattedDate });
+    localStorage.setItem('elsa_articles', JSON.stringify(articles));
+    
+    document.getElementById('admin-article-title').value = '';
+    document.getElementById('admin-article-body').value  = '';
+    renderJournal();
+    refreshAdminArticlesList();
+    showToast('✦ Article published to local sandbox!');
+  }
+}
+
+function deleteSandboxArticle(index) {
+  let articles = getLocalSandboxArticles();
+  articles.splice(index, 1);
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  renderJournal();
+  refreshAdminArticlesList();
+  showToast('🗑 Sandbox Article deleted.');
+}
+
+/* ═══════════════════════════════════════════════════════
+   TELEGRAM CONNECTORS
 ═══════════════════════════════════════════════════════ */
 async function sendTelegramMessage(e) {
   e.preventDefault();
@@ -658,11 +892,6 @@ async function sendTelegramMessage(e) {
     if (data.ok) {
       document.getElementById('chat-form').style.display = 'none';
       document.getElementById('chat-success').style.display = 'block';
-      // also store locally for admin view
-      let inquiries = JSON.parse(localStorage.getItem('elsa_inquiries') || '[]');
-      inquiries.unshift({name, type, message, ts: new Date().toISOString()});
-      if (inquiries.length > 20) inquiries = inquiries.slice(0, 20);
-      localStorage.setItem('elsa_inquiries', JSON.stringify(inquiries));
       showToast('✦ Message delivered to Elsa!');
     } else {
       throw new Error(data.description || 'Telegram error');
@@ -684,9 +913,7 @@ function toggleChat() {
   if (!isOpen && badge) badge.style.display = 'none';
 }
 
-/* ═══════════════════════════════════════════════════════
-   TOAST NOTIFICATION
-═══════════════════════════════════════════════════════ */
+/* ── UI Toast System ── */
 function showToast(msg, duration = 3200) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -694,10 +921,7 @@ function showToast(msg, duration = 3200) {
   setTimeout(() => t.classList.remove('show'), duration);
 }
 
-/* ═══════════════════════════════════════════════════════
-   ADMIN MODE
-   Secret trigger: click the 🌸 in footer 5 times
-═══════════════════════════════════════════════════════ */
+/* ── Admin overlay controller ── */
 let adminTapCount = 0;
 let adminTapTimer = null;
 
@@ -713,9 +937,7 @@ function handleAdminTap() {
 
 function openAdmin() {
   document.getElementById('admin-overlay').classList.add('open');
-  // Load current values into fields
-  const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
-  document.getElementById('admin-location').value = loc;
+  document.getElementById('admin-gas-url').value = APPS_SCRIPT_URL;
   refreshAdminArticlesList();
 }
 
@@ -727,105 +949,8 @@ function closeAdminIfOutside(e) {
   if (e.target === document.getElementById('admin-overlay')) closeAdmin();
 }
 
-/* ── Location ── */
-function saveLocation() {
-  const loc = document.getElementById('admin-location').value.trim();
-  if (!loc) return;
-  localStorage.setItem('elsa_location', loc);
-  loadLocationBadge();
-  showToast('📍 Location updated!');
-}
-
-function loadLocationBadge() {
-  const loc = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
-  const badge = document.getElementById('location-badge');
-  if (badge) badge.textContent = loc;
-}
-
-/* ── Articles / Journal ── */
-function saveArticle() {
-  const title = document.getElementById('admin-article-title').value.trim();
-  const body  = document.getElementById('admin-article-body').value.trim();
-  if (!body) { showToast('⚠️ Please write something first.'); return; }
-  let articles = getArticles();
-  articles.unshift({ title: title || 'Untitled', body, date: new Date().toISOString() });
-  localStorage.setItem('elsa_articles', JSON.stringify(articles));
-  document.getElementById('admin-article-title').value = '';
-  document.getElementById('admin-article-body').value  = '';
-  renderJournal();
-  refreshAdminArticlesList();
-  showToast('✦ Article published!');
-}
-
-function deleteArticle(index) {
-  let articles = getArticles();
-  articles.splice(index, 1);
-  localStorage.setItem('elsa_articles', JSON.stringify(articles));
-  renderJournal();
-  refreshAdminArticlesList();
-  showToast('🗑 Article deleted.');
-}
-
-function getArticles() {
-  const stored = localStorage.getItem('elsa_articles');
-  if (stored) return JSON.parse(stored);
-  return window.SITE_CONFIG.articles || [];
-}
-
-function renderJournal() {
-  const feed = document.getElementById('journal-feed');
-  if (!feed) return;
-  const articles = getArticles();
-  if (articles.length === 0) {
-    feed.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted)">
-      <div style="font-size:48px;margin-bottom:16px">✍️</div>
-      <p style="font-size:15px">No articles yet. Check back soon!</p>
-    </div>`;
-    return;
-  }
-  feed.innerHTML = articles.map((a, i) => {
-    const d = new Date(a.date);
-    const dateStr = d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
-    return `<div class="journal-card">
-      <div class="journal-date">${dateStr}</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">${a.title}</h3>
-      <div class="journal-body">${a.body.replace(/\n/g,'<br>')}</div>
-    </div>`;
-  }).join('');
-}
-
-function refreshAdminArticlesList() {
-  const el = document.getElementById('admin-articles-list');
-  if (!el) return;
-  const articles = getArticles();
-  if (articles.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">No articles yet.</p>'; return; }
-  el.innerHTML = articles.map((a, i) => {
-    const d = new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(242,164,181,.15)">
-      <span style="font-size:13px;color:var(--ink)">${d} — ${a.title.slice(0,38)}${a.title.length>38?'…':''}</span>
-      <button onclick="deleteArticle(${i})" style="background:rgba(196,99,122,.1);border:none;color:var(--rose-d);cursor:pointer;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600">✕</button>
-    </div>`;
-  }).join('');
-}
-
-/* ── Export Config ── */
-function exportConfig() {
-  const articles = getArticles();
-  const location  = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
-  const config = { location, articles };
-  const json = JSON.stringify(config, null, 2);
-  document.getElementById('export-output').textContent = json;
-  showToast('Config generated — copy it below!');
-}
-
-function copyExport() {
-  const txt = document.getElementById('export-output').textContent;
-  if (!txt || txt === '— click Generate Export —') { showToast('⚠️ Generate first!'); return; }
-  navigator.clipboard.writeText(txt).then(() => showToast('✓ Copied to clipboard!'));
-}
-
 /* ═══════════════════════════════════════════════════════
-   SPLASH
+   PRE-INIT LIFECYCLES & PRESENTATION
 ═══════════════════════════════════════════════════════ */
 setTimeout(() => {
   const si = document.getElementById('splash-inner');
@@ -849,9 +974,7 @@ function enterPortfolio() {
   }, 800);
 }
 
-/* ═══════════════════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════════════════ */
+/* ── Nav Actions ── */
 window.addEventListener('scroll', () => {
   document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
 });
@@ -873,9 +996,7 @@ function switchTab(tabId) {
   }
 }
 
-/* ═══════════════════════════════════════════════════════
-   THREE.JS BACKGROUND
-═══════════════════════════════════════════════════════ */
+/* ── Canvas Graphics background ── */
 function initThreeJS() {
   if (typeof THREE === 'undefined') return;
   const canvas   = document.getElementById('three-canvas');
@@ -900,6 +1021,7 @@ function initThreeJS() {
     m.userData.vy = (Math.random()-.5)*.011;
     scene.add(m); spheres.push(m);
   }
+  
   (function animate() {
     requestAnimationFrame(animate);
     spheres.forEach(s => {
@@ -912,6 +1034,7 @@ function initThreeJS() {
     });
     renderer.render(scene, camera);
   })();
+
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
@@ -919,9 +1042,7 @@ function initThreeJS() {
   });
 }
 
-/* ═══════════════════════════════════════════════════════
-   CURSOR SPARKLE
-═══════════════════════════════════════════════════════ */
+/* ── Decorative Mouse Particles ── */
 function initCursorSparkle() {
   const sc = ['#F2A4B5','#C9B6E4','#C9A84C','#FDE8EF','#EDE8F8','#D4C8F0'];
   let last = 0;
@@ -937,14 +1058,7 @@ function initCursorSparkle() {
   });
 }
 
-/* Enter button hover */
-const eb = document.getElementById('enter-btn');
-if (eb) {
-  eb.addEventListener('mouseenter', () => { eb.style.transform='translateY(-3px)'; eb.style.boxShadow='0 16px 42px rgba(196,99,122,.48)'; });
-  eb.addEventListener('mouseleave', () => { eb.style.transform=''; eb.style.boxShadow='0 8px 30px rgba(196,99,122,.35)'; });
-}
-
-/* Hide chat bubble until app loads */
+/* Clean UI defaults */
 document.getElementById('chat-bubble').style.display = 'none';
 </script>
 </body>
