@@ -60,6 +60,49 @@ nav.scrolled{background:rgba(255,249,245,.93);backdrop-filter:blur(24px);-webkit
 .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
 .grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
 
+/* CUTE CALENDAR */
+.cal-card{background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1));border-radius:20px;padding:28px;max-width:380px;margin:0 auto}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.cal-head h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink)}
+.cal-nav{width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.7);color:var(--rose-d);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.cal-nav:hover{background:var(--rose-d);color:#fff}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-dow{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;padding-bottom:6px}
+.cal-day{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12.5px;border-radius:50%;color:var(--ink);cursor:default}
+.cal-day.today{background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(196,99,122,.3)}
+.cal-day.holiday{background:rgba(201,168,76,.22);font-weight:600;color:var(--rose-deep);cursor:pointer}
+.cal-day.holiday::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.cal-day.empty{visibility:hidden}
+.cal-legend{display:flex;gap:14px;justify-content:center;margin-top:14px;font-size:11px;color:var(--mid)}
+.cal-legend span{display:flex;align-items:center;gap:5px}
+.cal-dot{width:8px;height:8px;border-radius:50%}
+#cal-holiday-tip{margin-top:14px;text-align:center;font-size:12.5px;color:var(--rose-deep);min-height:18px;font-style:italic}
+
+
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.media-card{position:relative;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.5);border:1px solid rgba(242,164,181,.2);cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
+.media-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(196,99,122,.18)}
+.media-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:linear-gradient(135deg,rgba(242,164,181,.15),rgba(201,182,228,.15));display:block}
+.media-type-badge{position:absolute;top:10px;left:10px;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.5px;color:#fff;backdrop-filter:blur(4px)}
+.media-type-badge.presentation{background:rgba(201,182,228,.85)}
+.media-type-badge.video{background:rgba(242,164,181,.9)}
+.media-type-badge.image{background:rgba(201,168,76,.9)}
+.media-type-badge.pdf{background:rgba(139,109,184,.9)}
+.media-type-badge.other{background:rgba(120,120,120,.85)}
+.media-caption{padding:12px 14px}
+.media-caption-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.media-caption-sub{font-size:11px;color:var(--muted)}
+.media-empty{font-size:13px;color:var(--muted);text-align:center;padding:32px 0;font-style:italic}
+
+#media-lightbox{display:none;position:fixed;inset:0;background:rgba(20,12,18,.88);z-index:9000;align-items:center;justify-content:center;padding:24px}
+#media-lightbox.open{display:flex}
+.media-lightbox-inner{width:100%;max-width:960px;background:#000;border-radius:14px;overflow:hidden;position:relative}
+.media-lightbox-inner iframe,.media-lightbox-inner img,.media-lightbox-inner video{width:100%;height:min(70vh,640px);display:block;border:none;object-fit:contain;background:#000}
+.media-lightbox-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:rgba(255,255,255,.96)}
+.media-lightbox-title{font-size:14px;font-weight:600;color:var(--ink)}
+.media-lightbox-actions a{font-size:12px;color:var(--rose-d);text-decoration:none;font-weight:600;margin-left:14px}
+.media-lightbox-close{position:absolute;top:10px;right:14px;background:rgba(0,0,0,.5);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;z-index:1}
+
 /* TIMELINE */
 .timeline{position:relative;padding-left:48px}
 .tl-line{position:absolute;left:19px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--rose),var(--lav),var(--gold));border-radius:2px}
@@ -178,6 +221,20 @@ textarea.f-input{resize:vertical;min-height:90px}
 <!-- ═══════════════════════════════════
      CHAT BUBBLE + PANEL (GOOGLE CONNECTED)
 ═══════════════════════════════════ -->
+<!-- ══ MEDIA LIGHTBOX (used by every section's media gallery) ══ -->
+<div id="media-lightbox" onclick="if(event.target===this) closeMediaLightbox()">
+  <div class="media-lightbox-inner">
+    <span class="media-lightbox-close" onclick="closeMediaLightbox()">✕</span>
+    <div id="media-lightbox-frame"></div>
+    <div class="media-lightbox-bar">
+      <span class="media-lightbox-title" id="media-lightbox-title">—</span>
+      <span class="media-lightbox-actions">
+        <a id="media-lightbox-open" href="#" target="_blank" rel="noopener">Open in Drive ↗</a>
+      </span>
+    </div>
+  </div>
+</div>
+
 <button id="chat-bubble" onclick="toggleChat()" title="Send me a message">
   💬
   <div class="bubble-badge">1</div>
@@ -295,6 +352,7 @@ textarea.f-input{resize:vertical;min-height:90px}
       <button class="nav-btn active" data-tab="home"         onclick="switchTab('home')">About</button>
       <button class="nav-btn"        data-tab="journal"      onclick="switchTab('journal')">Journal</button>
       <button class="nav-btn"        data-tab="vault"        onclick="switchTab('vault')">Executive Vault</button>
+      <button class="nav-btn"        data-tab="gallery"      onclick="switchTab('gallery')">Gallery</button>
       <button class="nav-btn"        data-tab="hr-suite"     onclick="switchTab('hr-suite')">HR Toolroom</button>
       <button class="nav-btn"        data-tab="compliance"   onclick="switchTab('compliance')">Compliance Lab</button>
       <button class="nav-btn"        data-tab="automation"   onclick="switchTab('automation')">Automation Studio</button>
@@ -364,6 +422,8 @@ textarea.f-input{resize:vertical;min-height:90px}
           <div class="grid2" id="certs-grid"></div>
         </div>
       </div>
+      <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+      <div class="wrap" style="padding-top:0;padding-bottom:80px" id="media-block-home" data-media-section="Home"></div>
     </div>
 
     <!-- ══ JOURNAL ══ -->
@@ -385,6 +445,8 @@ textarea.f-input{resize:vertical;min-height:90px}
             <p style="font-size:15px">No articles yet. Check back soon — or ask Elsa directly via the chat.</p>
           </div>
         </div>
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div id="media-block-journal" data-media-section="Journal" style="margin-top:48px"></div>
         <div style="height:80px"></div>
       </div>
     </div>
@@ -418,6 +480,25 @@ textarea.f-input{resize:vertical;min-height:90px}
         <span class="section-sup" style="text-align:left">Track Record</span>
         <h2 class="section-h2" style="text-align:left;font-size:clamp(26px,4vw,40px);margin-bottom:24px">Proven Experience</h2>
         <div style="display:flex;flex-direction:column;gap:20px" id="exp-grid"></div>
+
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div class="card" style="background:rgba(255,255,255,0.45);margin-top:48px;border:1px solid rgba(201,168,76,0.25)">
+          <span class="section-sup" style="text-align:left;margin-bottom:4px">Drive-Synced Library</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);margin-bottom:20px">🎞️ Media & Slideshows</h3>
+          <div id="media-block-vault" data-media-section="Vault"></div>
+        </div>
+        <div style="height:80px"></div>
+      </div>
+    </div>
+
+    <!-- ══ GALLERY (full media library, filterable by section) ══ -->
+    <div id="tab-gallery" class="tab-content">
+      <div class="wrap">
+        <span class="section-sup">Visual Archive</span>
+        <h2 class="section-h2">The Gallery</h2>
+        <p class="section-sub">Slideshows, photos, presentations, and videos — synced directly from Google Drive.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px" id="gallery-filter-bar"></div>
+        <div id="media-block-gallery" data-media-section="all"></div>
         <div style="height:80px"></div>
       </div>
     </div>
@@ -692,6 +773,12 @@ textarea.f-input{resize:vertical;min-height:90px}
           </div>
         </div>
 
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div class="wrap" style="padding-top:32px">
+          <span class="section-sup" style="text-align:left">Drive-Synced Library</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);margin-bottom:20px;text-align:left">🎞️ HR Suite Media</h3>
+          <div id="media-block-hr-suite" data-media-section="HR Suite"></div>
+        </div>
       </div>
     </div>
 
@@ -722,6 +809,8 @@ textarea.f-input{resize:vertical;min-height:90px}
           <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🇺🇸</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">USAID · Court Survey</h4></div><p style="font-size:14px;color:var(--mid);line-height:1.7">Maintained professional neutrality and diplomatic communication while conducting court user surveys at Monywa District Court — trusted with sensitive civic data as a student volunteer.</p></div>
           <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:26px">🏥</div><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink)">MSF · Data Entry</h4></div><p style="font-size:14px;color:var(--mid);line-height:1.7">Entrusted with sensitive humanitarian data for Médecins Sans Frontières in Homalin, Sagaing Region — upholding the highest standards of data integrity under pressure.</p></div>
         </div>
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div id="media-block-compliance" data-media-section="Compliance" style="padding-bottom:60px"></div>
       </div>
     </div>
 
@@ -742,7 +831,7 @@ textarea.f-input{resize:vertical;min-height:90px}
             <code style="background:rgba(201,168,76,.15);color:var(--gold);padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid rgba(201,168,76,.3)">/google_calendar</code>
           </div>
         </div>
-        <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(242,164,181,.07));padding-bottom:80px">
+        <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(242,164,181,.07));margin-bottom:32px">
           <div style="display:flex;gap:16px;align-items:flex-start">
             <span style="font-size:34px">✨</span>
             <div>
@@ -751,6 +840,8 @@ textarea.f-input{resize:vertical;min-height:90px}
             </div>
           </div>
         </div>
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div id="media-block-automation" data-media-section="Automation" style="padding-bottom:80px"></div>
       </div>
     </div>
 
@@ -770,6 +861,8 @@ textarea.f-input{resize:vertical;min-height:90px}
             <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--rose-d)"></div><span style="font-size:14px;color:var(--mid)">Monywa District</span></div>
           </div>
         </div>
+        <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+        <div id="media-block-humanitarian" data-media-section="Humanitarian Path" style="margin-top:32px"></div>
         <div style="height:80px"></div>
       </div>
     </div>
@@ -794,6 +887,21 @@ textarea.f-input{resize:vertical;min-height:90px}
           </div>
         </div>
         <div class="grid2" id="contact-grid"></div>
+
+        <!-- ADORABLE CALENDAR + HOLIDAYS -->
+        <div class="cal-card" style="margin-top:48px">
+          <div class="cal-head">
+            <button class="cal-nav" onclick="calChangeMonth(-1)">‹</button>
+            <h4 id="cal-month-label">—</h4>
+            <button class="cal-nav" onclick="calChangeMonth(1)">›</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <span><span class="cal-dot" style="background:linear-gradient(135deg,var(--rose-d),var(--lav-d))"></span>Today</span>
+            <span><span class="cal-dot" style="background:var(--gold)"></span>Holiday</span>
+          </div>
+          <div id="cal-holiday-tip"></div>
+        </div>
         <div style="text-align:center;margin-top:80px;padding-bottom:60px">
           <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent);margin:0 auto 20px"></div>
           <!-- SECRET ADMIN TRIGGER: click the rose 5x -->
@@ -1267,6 +1375,8 @@ function renderAll() {
   renderLiveDashboard();
   renderFinancialDashboard();
   startMarketFluctuator(); // periodic 30-min re-check + simulated drift; initial real data comes via syncDynamicEcosystem()
+  renderAllMediaBlocks(); // empty-state placeholders; real content arrives via syncDynamicEcosystem()
+  renderCalendar();
 }
 
 function renderExperienceList(arr) {
@@ -1365,10 +1475,224 @@ async function syncDynamicEcosystem() {
       calculateFinancials();
     }
 
+    // 8. Sync Media Library (PowerPoints, photos, slideshows, videos —
+    //    synced from Drive via the "Media" tab, refreshed daily by your
+    //    Apps Script trigger — see MEDIA_SETUP.md)
+    if (data.media && data.media.length > 0) {
+      window.MEDIA_LIBRARY = data.media;
+      renderAllMediaBlocks();
+    }
+
     showToast("✨ Connected with Workspace");
   } catch(e) {
     console.warn("Ecosystem offline or CORS restricted. Running smoothly in secure fallback mode.");
   }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MEDIA LIBRARY — renders Drive-synced PowerPoints, photos,
+   slideshows & videos into every section's media block, plus
+   the dedicated Gallery tab. Data arrives via syncDynamicEcosystem()
+   as window.MEDIA_LIBRARY (an array of rows from the "Media"
+   Sheet tab — see MEDIA_SETUP.md for how that tab gets filled).
+═══════════════════════════════════════════════════════ */
+window.MEDIA_LIBRARY = window.MEDIA_LIBRARY || [];
+let _galleryActiveFilter = 'all';
+
+const MEDIA_TYPE_LABELS = {
+  presentation: '📊 Slides',
+  video: '🎬 Video',
+  image: '🖼️ Photo',
+  pdf: '📄 PDF',
+  other: '📁 File'
+};
+
+/* ═══════════════════════════════════════════════════════
+   ADORABLE CALENDAR + MYANMAR HOLIDAYS
+   Dates are year-specific (lunar/movable holidays shift each
+   year) — keyed as "YYYY-MM-DD". Source: official 2026 Myanmar
+   public holiday calendar. Update yearly as needed.
+═══════════════════════════════════════════════════════ */
+const MM_HOLIDAYS = {
+  '2026-01-01': "New Year's Day 🎊",
+  '2026-01-02': "Day after New Year's Day",
+  '2026-01-04': "Independence Day 🇲🇲",
+  '2026-02-12': "Union Day",
+  '2026-02-13': "Union Day (bridge day)",
+  '2026-02-16': "Chinese New Year 🧧",
+  '2026-02-17': "Chinese New Year Holiday 🧧",
+  '2026-03-02': "Full Moon Day of Tabaung / Peasants' Day",
+  '2026-03-27': "Armed Forces Day",
+  '2026-04-11': "Thingyan (Water Festival) 💦",
+  '2026-04-12': "Thingyan (Water Festival) 💦",
+  '2026-04-13': "Thingyan (Water Festival) 💦",
+  '2026-04-14': "Thingyan (Water Festival) 💦",
+  '2026-04-15': "Thingyan (Water Festival) 💦",
+  '2026-04-16': "Thingyan (Water Festival) 💦",
+  '2026-04-17': "Myanmar New Year 🎉",
+  '2026-04-18': "Myanmar New Year Holiday",
+  '2026-04-19': "Myanmar New Year Holiday",
+  '2026-04-30': "Full Moon Day of Kasone (Buddha's Birth) ☸️",
+  '2026-05-01': "Labour Day",
+  '2026-05-27': "Eid al-Adha",
+  '2026-07-19': "Martyrs' Day",
+  '2026-07-29': "Full Moon Day of Waso (Start of Buddhist Lent) ☸️",
+  '2026-10-25': "Full Moon Day of Thadingyut 🏮",
+  '2026-10-26': "Thadingyut Holiday 🏮",
+  '2026-10-27': "Thadingyut Holiday 🏮",
+  '2026-11-08': "Deepavali 🪔",
+  '2026-11-23': "Full Moon Day of Tazaungmone 🏮",
+  '2026-11-24': "Tazaungmone Holiday 🏮",
+  '2026-12-04': "National Day",
+  '2026-12-25': "Christmas Day 🎄"
+};
+let calViewDate = new Date();
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  const label = document.getElementById('cal-month-label');
+  if (!grid || !label) return;
+
+  const year = calViewDate.getFullYear();
+  const month = calViewDate.getMonth();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent = `${monthNames[month]} ${year}`;
+
+  const today = new Date();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  let html = ['Su','Mo','Tu','We','Th','Fr','Sa'].map(d => `<div class="cal-dow">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const holidayName = MM_HOLIDAYS[dateKey];
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    const cls = ['cal-day', isToday ? 'today' : '', holidayName ? 'holiday' : ''].filter(Boolean).join(' ');
+    const clickAttr = holidayName ? ` onclick="showHolidayTip('${holidayName.replace(/'/g,"\\'")}')"` : '';
+    html += `<div class="${cls}"${clickAttr} title="${holidayName || ''}">${d}</div>`;
+  }
+  grid.innerHTML = html;
+
+  const tip = document.getElementById('cal-holiday-tip');
+  if (tip) {
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    tip.textContent = MM_HOLIDAYS[todayKey] ? `🎊 Today is ${MM_HOLIDAYS[todayKey]}!` : '';
+  }
+}
+
+function calChangeMonth(delta) {
+  calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + delta, 1);
+  renderCalendar();
+}
+
+function showHolidayTip(name) {
+  const tip = document.getElementById('cal-holiday-tip');
+  if (tip) tip.textContent = '🎉 ' + name;
+}
+
+function renderAllMediaBlocks() {
+  document.querySelectorAll('[data-media-section]').forEach(container => {
+    const section = container.dataset.mediaSection;
+    if (container.id === 'media-block-gallery') {
+      renderGalleryFilterBar();
+      renderMediaGrid(container, _galleryActiveFilter === 'all' ? null : _galleryActiveFilter);
+    } else {
+      renderMediaGrid(container, section);
+    }
+  });
+}
+
+/**
+ * Renders a media grid into `container`. If `section` is null/undefined,
+ * shows everything (used by the Gallery tab's "All" filter).
+ */
+function renderMediaGrid(container, section) {
+  const items = window.MEDIA_LIBRARY.filter(m => !section || m.Section === section);
+
+  if (items.length === 0) {
+    container.innerHTML = `<div class="media-empty">No media yet for this section — drop a file into the matching Drive folder and it'll appear here automatically.</div>`;
+    return;
+  }
+
+  // newest first
+  const sorted = [...items].sort((a, b) => new Date(b.Modified) - new Date(a.Modified));
+
+  container.innerHTML = `<div class="media-grid">${sorted.map(m => mediaCardHtml(m)).join('')}</div>`;
+}
+
+function mediaCardHtml(m) {
+  const typeLabel = MEDIA_TYPE_LABELS[m.Type] || MEDIA_TYPE_LABELS.other;
+  const thumb = m.Type === 'image' ? m.ThumbnailUrl : (m.ThumbnailUrl || '');
+  const thumbHtml = thumb
+    ? `<img class="media-thumb" src="${thumb}" alt="${escapeHtml(m.Caption || m.Name)}" loading="lazy" onerror="this.style.display='none'">`
+    : `<div class="media-thumb" style="display:flex;align-items:center;justify-content:center;font-size:40px">${typeLabel.split(' ')[0]}</div>`;
+
+  return `
+    <div class="media-card" onclick='openMediaLightbox(${JSON.stringify(m).replace(/'/g, "&#39;")})'>
+      <span class="media-type-badge ${m.Type}">${typeLabel}</span>
+      ${thumbHtml}
+      <div class="media-caption">
+        <div class="media-caption-title">${escapeHtml(m.Name)}</div>
+        <div class="media-caption-sub">${escapeHtml(m.Section)}${m.Caption && m.Caption !== m.Name ? ' · ' + escapeHtml(m.Caption) : ''}</div>
+      </div>
+    </div>`;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function openMediaLightbox(m) {
+  const frame = document.getElementById('media-lightbox-frame');
+  const title = document.getElementById('media-lightbox-title');
+  const openLink = document.getElementById('media-lightbox-open');
+
+  title.textContent = m.Caption && m.Caption !== m.Name ? m.Caption : m.Name;
+  openLink.href = m.ViewUrl || '#';
+
+  if (m.EmbedUrl && (m.Type === 'presentation' || m.Type === 'pdf' || m.Type === 'video')) {
+    const sep = m.EmbedUrl.includes('?') ? '&' : '?';
+    const autoplayUrl = (m.Type === 'video' || m.Type === 'presentation')
+      ? `${m.EmbedUrl}${sep}autoplay=1`
+      : m.EmbedUrl;
+    frame.innerHTML = `<iframe src="${autoplayUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else if (m.Type === 'image') {
+    frame.innerHTML = `<img src="${m.ThumbnailUrl ? m.ThumbnailUrl.replace('w800','w1600') : m.EmbedUrl}" alt="${escapeHtml(m.Caption || m.Name)}">`;
+  } else {
+    frame.innerHTML = `<div style="height:300px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-direction:column;gap:12px">
+      <span style="font-size:40px">📁</span>
+      <span>Preview not available for this file type — use "Open in Drive" below.</span>
+    </div>`;
+  }
+
+  document.getElementById('media-lightbox').classList.add('open');
+}
+
+function closeMediaLightbox() {
+  document.getElementById('media-lightbox').classList.remove('open');
+  document.getElementById('media-lightbox-frame').innerHTML = '';
+}
+
+function renderGalleryFilterBar() {
+  const bar = document.getElementById('gallery-filter-bar');
+  if (!bar) return;
+  const sections = [...new Set(window.MEDIA_LIBRARY.map(m => m.Section))];
+  const allBtn = `<button class="pill" style="cursor:pointer;border:none;background:${_galleryActiveFilter==='all'?'var(--rose-deep)':'rgba(0,0,0,.06)'};color:${_galleryActiveFilter==='all'?'#fff':'var(--mid)'}" onclick="setGalleryFilter('all')">All</button>`;
+  const sectionBtns = sections.map(s =>
+    `<button class="pill" style="cursor:pointer;border:none;background:${_galleryActiveFilter===s?'var(--rose-deep)':'rgba(0,0,0,.06)'};color:${_galleryActiveFilter===s?'#fff':'var(--mid)'}" onclick="setGalleryFilter('${s.replace(/'/g,"\\'")}')">${escapeHtml(s)}</button>`
+  ).join('');
+  bar.innerHTML = allBtn + sectionBtns;
+}
+
+function setGalleryFilter(section) {
+  _galleryActiveFilter = section;
+  const container = document.getElementById('media-block-gallery');
+  renderGalleryFilterBar();
+  renderMediaGrid(container, section === 'all' ? null : section);
+  logActionClick(`Gallery filter: ${section}`, 'Gallery');
 }
 
 /* ── Live Search Journal ── */
