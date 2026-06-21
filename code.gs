@@ -19,7 +19,8 @@ function doGet(e) {
       articles: getActiveArticles(db.getSheetByName("Articles")),
       testimonials: getActiveTestimonials(db.getSheetByName("Testimonials")),
       downloads: getSheetRows(db.getSheetByName("Downloads")),
-      markets: getSheetDataAsObj(db.getSheetByName("Markets"), "Key", "Value")
+      markets: getSheetDataAsObj(db.getSheetByName("Markets"), "Key", "Value"),
+      media: getSheetRows(db.getSheetByName("Media"))
     });
   }
   if (action === "search") {
@@ -31,6 +32,9 @@ function doGet(e) {
   }
   if (action === "markets") {
     return getMarketsAction();
+  }
+  if (action === "media") {
+    return renderJson({ media: getSheetRows(db.getSheetByName("Media")) });
   }
   return renderJson({ status: "connected", engine: "v1.0.0" });
 }
@@ -50,6 +54,12 @@ function doPost(e) {
       return renderJson({ success: true });
     } else if (action === "admin_update") {
       return handleAdminUpdate(db, postData);
+    } else if (action === "refresh_media") {
+      if (postData.secretKey !== "YOUR_SECURE_ADMIN_PASSKEY") {
+        return renderJson({ success: false, error: "Unauthorized access" });
+      }
+      refreshMediaLibrary();
+      return renderJson({ success: true, message: "Media library rescanned." });
     }
     return renderJson({ success: false, error: "Action route unrecognized" });
   } catch(err) {
@@ -386,4 +396,160 @@ function setupMarketsTab() {
   }
   Logger.log('Markets tab ready. Now run "refreshMarketsDaily" once to populate it, ' +
     'then set up the daily trigger (see SETUP_GUIDE.md).');
+}
+
+/* ═══════════════════════════════════════════════════════
+   MEDIA LIBRARY MODULE
+   ─────────────────────────────────────────────────────
+   Drop a PowerPoint, photo, slideshow, or video into the
+   matching Drive subfolder and it appears on the site —
+   no manual cataloguing needed. A daily trigger (same
+   pattern as Markets) rescans all 7 section folders and
+   caches the results into a "Media" tab. The site only
+   ever reads that tab — it never talks to the Drive API
+   directly from the browser.
+
+   Folder structure expected inside ROOT_MEDIA_FOLDER_ID:
+     Home / Journal / Vault / HR Suite / Compliance /
+     Automation / Humanitarian Path
+
+   Optional custom caption: rename the file in Drive to
+   "Short Title — your caption here.ext" and the part after
+   the em-dash (—) or double-hyphen (--) becomes the caption.
+   Otherwise the caption is just the cleaned-up filename.
+═══════════════════════════════════════════════════════ */
+const ROOT_MEDIA_FOLDER_ID = "1-Hh7v9y2OqOhCkAP9uAKZh-hcFCnk3K4";
+const MEDIA_SECTIONS = ["Home", "Journal", "Vault", "HR Suite", "Compliance", "Automation", "Humanitarian Path"];
+
+/**
+ * One-time helper: run this once from the Apps Script editor to create
+ * the "Media" tab (if missing) and the 7 section subfolders inside your
+ * chosen Drive root folder (if missing). Safe to re-run.
+ */
+function setupMediaLibrary() {
+  // 1. Ensure the Media tab exists with the right headers
+  const db = getDb();
+  let sheet = db.getSheetByName("Media");
+  if (!sheet) {
+    sheet = db.insertSheet("Media");
+    sheet.appendRow(["FileId", "Name", "Caption", "Section", "Type", "MimeType", "ViewUrl", "EmbedUrl", "ThumbnailUrl", "Modified"]);
+    sheet.getRange(1, 1, 1, 10).setFontWeight("bold");
+  }
+
+  // 2. Ensure the root + 7 section subfolders exist
+  if (!ROOT_MEDIA_FOLDER_ID || ROOT_MEDIA_FOLDER_ID.indexOf("PASTE_YOUR") === 0) {
+    Logger.log('Set ROOT_MEDIA_FOLDER_ID first: create a folder in Drive, open it, ' +
+      'copy the ID from the URL (the part after /folders/), paste it in, then re-run this.');
+    return;
+  }
+  const root = DriveApp.getFolderById(ROOT_MEDIA_FOLDER_ID);
+  MEDIA_SECTIONS.forEach(name => {
+    const existing = root.getFoldersByName(name);
+    if (!existing.hasNext()) {
+      root.createFolder(name);
+      Logger.log('Created subfolder: ' + name);
+    }
+  });
+
+  Logger.log('Media library ready. Drop files into the section subfolders, then run ' +
+    '"refreshMediaLibrary" once to scan them, and set up its daily trigger.');
+}
+
+/**
+ * Entry point for the daily time-driven trigger (and the manual
+ * "refresh_media" admin action). Scans all 7 section folders and
+ * rewrites the Media tab from scratch — Drive is always the source
+ * of truth, so a full rebuild each run keeps things simple and correct
+ * (deleted files in Drive disappear from the site automatically too).
+ */
+function refreshMediaLibrary() {
+  if (!ROOT_MEDIA_FOLDER_ID || ROOT_MEDIA_FOLDER_ID.indexOf("PASTE_YOUR") === 0) {
+    Logger.log("ROOT_MEDIA_FOLDER_ID not set — run setupMediaLibrary() first.");
+    return;
+  }
+  const db = getDb();
+  const sheet = db.getSheetByName("Media");
+  if (!sheet) {
+    Logger.log('No "Media" tab found — run setupMediaLibrary() first.');
+    return;
+  }
+
+  const root = DriveApp.getFolderById(ROOT_MEDIA_FOLDER_ID);
+  const rows = [];
+
+  MEDIA_SECTIONS.forEach(sectionName => {
+    const folders = root.getFoldersByName(sectionName);
+    if (!folders.hasNext()) return;
+    const folder = folders.next();
+    const files = folder.getFiles();
+
+    while (files.hasNext()) {
+      const file = files.next();
+      try {
+        rows.push(buildMediaRow(file, sectionName));
+      } catch (err) {
+        Logger.log("Skipped file '" + file.getName() + "': " + err.message);
+      }
+    }
+  });
+
+  // Wipe and rewrite (keeping the header row)
+  const lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).clearContent();
+  }
+  if (rows.length > 0) {
+    sheet.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
+  }
+
+  Logger.log("Media library refreshed: " + rows.length + " files across " + MEDIA_SECTIONS.length + " sections.");
+}
+
+/**
+ * Builds one row [FileId, Name, Caption, Section, Type, MimeType,
+ * ViewUrl, EmbedUrl, ThumbnailUrl, Modified] for a single Drive file.
+ */
+function buildMediaRow(file, sectionName) {
+  const id = file.getId();
+  const rawName = file.getName();
+  const mimeType = file.getMimeType();
+  const modified = file.getLastUpdated().toISOString();
+
+  // Custom caption support: "Short Title — caption text.ext" or "Title -- caption.ext"
+  let displayName = rawName.replace(/\.[^/.]+$/, ""); // strip extension
+  let caption = displayName;
+  const splitMatch = displayName.split(/—|--/);
+  if (splitMatch.length > 1) {
+    displayName = splitMatch[0].trim();
+    caption = splitMatch.slice(1).join("—").trim();
+  }
+
+  const type = classifyMediaType(mimeType);
+  const viewUrl = "https://drive.google.com/file/d/" + id + "/view";
+  const embedUrl = buildEmbedUrl(id, type, mimeType);
+  const thumbnailUrl = "https://drive.google.com/thumbnail?id=" + id + "&sz=w800";
+
+  return [id, displayName, caption, sectionName, type, mimeType, viewUrl, embedUrl, thumbnailUrl, modified];
+}
+
+function classifyMediaType(mimeType) {
+  if (mimeType === "application/vnd.google-apps.presentation" ||
+      mimeType === "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+      mimeType === "application/vnd.ms-powerpoint") {
+    return "presentation";
+  }
+  if (mimeType.indexOf("video/") === 0 || mimeType === "application/vnd.google-apps.video") return "video";
+  if (mimeType.indexOf("image/") === 0) return "image";
+  if (mimeType === "application/pdf") return "pdf";
+  return "other";
+}
+
+/**
+ * Drive's embeddable preview URL works for PPTX, PDF, video, and images —
+ * same /preview pattern regardless of type, which keeps the iframe logic
+ * on the site simple.
+ */
+function buildEmbedUrl(id, type, mimeType) {
+  if (type === "other") return null; // no good inline preview; site falls back to a download link
+  return "https://drive.google.com/file/d/" + id + "/preview";
 }
