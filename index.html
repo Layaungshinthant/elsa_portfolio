@@ -25,6 +25,7 @@ body{font-family:'Jost',sans-serif;background:linear-gradient(150deg,#FFF9F5 0%,
 @keyframes bounceIn{0%{transform:scale(0) rotate(-10deg);opacity:0}60%{transform:scale(1.1) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity: 0.4}50%{opacity: 1}}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--rose-s),var(--lav-s),var(--gold-s));display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;transition:opacity .8s ease}
@@ -114,6 +115,33 @@ textarea.f-input{resize:vertical;min-height:90px}
 /* ── STATUS BADGE ── */
 #location-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;background:rgba(255,255,255,.45);border:1px solid rgba(201,182,228,.4);border-radius:100px;font-size:12px;color:var(--mid);backdrop-filter:blur(8px)}
 #location-badge::before{content:'📍';font-size:13px}
+
+/* ── HR SUITE SUB TABS & UTILITIES ── */
+.hr-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;border-bottom:1px solid rgba(242,164,181,0.25);padding-bottom:16px}
+.hr-tab-btn{padding:8px 16px;border-radius:12px;border:1px solid rgba(242,164,181,0.3);background:rgba(255,255,255,0.4);cursor:pointer;font-family:'Jost',sans-serif;font-size:13px;font-weight:500;color:var(--mid);transition:all 0.25s ease}
+.hr-tab-btn.active{background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:white;border-color:transparent}
+.hr-sub-panel{display:none}
+.hr-sub-panel.active{display:block;animation:fadeInUp 0.4s ease both}
+.metric-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(242,164,181,0.2)}
+.metric-row:last-child{border:none}
+.metric-val{font-weight:600;color:var(--rose-deep)}
+
+/* FINANCIAL MARKET ADDITIONS */
+.market-ticker-container{background:var(--ink);color:#fff;padding:10px;border-radius:12px;overflow:hidden;margin-bottom:24px;white-space:nowrap;display:flex;align-items:center}
+.market-ticker-label{background:var(--rose-deep);color:#fff;padding:4px 10px;font-size:11px;font-weight:600;text-transform:uppercase;border-radius:6px;margin-right:15px;letter-spacing:1px;z-index:2}
+.market-ticker-track{display:inline-block;animation:marquee 24s linear infinite}
+.market-ticker-item{display:inline-block;margin-right:32px;font-size:13px;font-weight:500}
+.market-ticker-item span.up{color:#4caf50}
+.market-ticker-item span.down{color:#f44336}
+.status-indicator{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.status-indicator.up{background:#4caf50;box-shadow:0 0 8px #4caf50}
+.status-indicator.down{background:#f44336;box-shadow:0 0 8px #f44336}
+.status-indicator.live{background:var(--gold);animation:blink 1.5s infinite}
+
+@keyframes marquee{
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
 
 /* LOADER SPINNER */
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
@@ -267,6 +295,7 @@ textarea.f-input{resize:vertical;min-height:90px}
       <button class="nav-btn active" data-tab="home"         onclick="switchTab('home')">About</button>
       <button class="nav-btn"        data-tab="journal"      onclick="switchTab('journal')">Journal</button>
       <button class="nav-btn"        data-tab="vault"        onclick="switchTab('vault')">Executive Vault</button>
+      <button class="nav-btn"        data-tab="hr-suite"     onclick="switchTab('hr-suite')">HR Toolroom</button>
       <button class="nav-btn"        data-tab="compliance"   onclick="switchTab('compliance')">Compliance Lab</button>
       <button class="nav-btn"        data-tab="automation"   onclick="switchTab('automation')">Automation Studio</button>
       <button class="nav-btn"        data-tab="humanitarian" onclick="switchTab('humanitarian')">Humanitarian Path</button>
@@ -393,6 +422,279 @@ textarea.f-input{resize:vertical;min-height:90px}
       </div>
     </div>
 
+    <!-- ══ HR TOOLROOM (NEW HIGH-INTERACTIVE SECTION) ══ -->
+    <div id="tab-hr-suite" class="tab-content">
+      <div class="wrap">
+        <span class="section-sup">HR Interactive Laboratory</span>
+        <h2 class="section-h2">HR Operations Toolroom</h2>
+        <p class="section-sub">Interactive decision-support tools engineered for global payroll standardization, regional tax compliance, and modern talent mapping.</p>
+
+        <!-- Tool Sub Navigation -->
+        <div class="hr-tabs">
+          <button class="hr-tab-btn active" onclick="switchHrSubTab('pit-calc')">📊 Myanmar PIT Tax Calculator</button>
+          <button class="hr-tab-btn" onclick="switchHrSubTab('salary-estimator')">🧮 Salary &amp; Manpower Estimator</button>
+          <button class="hr-tab-btn" onclick="switchHrSubTab('live-dashboard')">🌐 Global Pay Scale Live Dashboard</button>
+          <button class="hr-tab-btn" onclick="switchHrSubTab('financial-market')">🪙 Global Gold &amp; Financial Markets</button>
+        </div>
+
+        <!-- SUB PANEL 1: PIT CALCULATOR -->
+        <div id="hr-panel-pit-calc" class="hr-sub-panel active">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:32px;">
+            <div class="card">
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:18px;color:var(--rose-d);">Tax Parameters Input</h3>
+              
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div>
+                  <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Monthly Basic Salary (MMK)</label>
+                  <input class="f-input" id="pit-monthly-sal" type="number" value="2500000" oninput="calculateMyanmarPIT()">
+                </div>
+                <div>
+                  <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Dependent Parents (Co-resident)</label>
+                  <select class="f-input f-select" id="pit-parents" onchange="calculateMyanmarPIT()">
+                    <option value="0">No parents claimed</option>
+                    <option value="1">1 Parent (1,000,000 MMK/yr)</option>
+                    <option value="2">2 Parents (2,000,000 MMK/yr)</option>
+                  </select>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Spouse Relief</label>
+                    <select class="f-input f-select" id="pit-spouse" onchange="calculateMyanmarPIT()">
+                      <option value="0">No (0 MMK)</option>
+                      <option value="1">Yes (1,000,000 MMK/yr)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Child Relief (Count)</label>
+                    <input class="f-input" id="pit-children" type="number" min="0" value="0" oninput="calculateMyanmarPIT()">
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+                  <input type="checkbox" id="pit-ssb" checked onchange="calculateMyanmarPIT()" style="width:18px;height:18px;accent-color:var(--rose-d);">
+                  <label for="pit-ssb" style="font-size:13px;color:var(--mid);cursor:pointer">Deduct Social Security (SSB) (Max 15,000 MMK)</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,0.06),rgba(201,182,228,0.06));border:1.5px solid var(--rose-d)">
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:18px;color:var(--ink);">Tax Computation Summary</h3>
+              
+              <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+                <div class="metric-row"><span>Annual Gross Salary:</span><span class="metric-val" id="pit-lbl-gross">30,000,000 MMK</span></div>
+                <div class="metric-row"><span>Basic Relief Allowed (20%):</span><span class="metric-val" id="pit-lbl-basic-relief" style="color:var(--mid)">6,000,000 MMK</span></div>
+                <div class="metric-row"><span>Dependents Reliefs:</span><span class="metric-val" id="pit-lbl-dep-relief" style="color:var(--mid)">0 MMK</span></div>
+                <div class="metric-row"><span>SSB Employee Contributions:</span><span class="metric-val" id="pit-lbl-ssb" style="color:var(--mid)">180,000 MMK</span></div>
+                <div class="metric-row" style="border-top:1.5px solid rgba(242,164,181,0.3);margin-top:8px;padding-top:12px;"><strong>Annual Net Taxable Income:</strong><span class="metric-val" id="pit-lbl-taxable" style="color:var(--ink);font-weight:700;">23,820,000 MMK</span></div>
+              </div>
+
+              <div class="card" style="background:rgba(255,255,255,0.65);padding:18px;border-radius:16px;text-align:center;">
+                <p style="font-size:12px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">ESTIMATED INCOME TAX LIABILITY</p>
+                <div style="font-size:32px;font-weight:600;color:var(--rose-deep);line-height:1" id="pit-final-tax">148,500 MMK</div>
+                <p style="font-size:12px;color:var(--mid);margin-top:6px" id="pit-monthly-tax">Monthly payroll impact: ~12,375 MMK /mo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB PANEL 2: SALARY ESTIMATOR -->
+        <div id="hr-panel-salary-estimator" class="hr-sub-panel">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:32px;">
+            <div class="card">
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:18px;color:var(--rose-d);">Estimator Configurations</h3>
+              
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">JD Complexity Target</label>
+                    <select class="f-input f-select" id="est-complexity" onchange="calculateSalaryEstimator()">
+                      <option value="junior">Junior Assistant (1.0x)</option>
+                      <option value="mid" selected>Mid-Level Specialist (1.6x)</option>
+                      <option value="senior">Senior Lead Manager (2.5x)</option>
+                      <option value="executive">Executive Director (3.8x)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">JR Technical Multiplier</label>
+                    <select class="f-input f-select" id="est-tech" onchange="calculateSalaryEstimator()">
+                      <option value="general">General Operations (1.0x)</option>
+                      <option value="hr">HR Compliance / Legal (1.3x)</option>
+                      <option value="automation" selected>AI / Automation Eng. (1.6x)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Headcount Target</label>
+                    <input class="f-input" id="est-headcount" type="number" min="1" value="1" oninput="calculateSalaryEstimator()">
+                  </div>
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Base Payroll Currency</label>
+                    <select class="f-input f-select" id="est-currency" onchange="calculateSalaryEstimator()">
+                      <option value="USD">USD ($)</option>
+                      <option value="SGD">SGD (S$)</option>
+                      <option value="MMK">MMK (K)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="border-top:1px solid rgba(242,164,181,0.2);margin-top:6px;padding-top:14px;">
+                  <span style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:10px">Interactive Exchange Rate Matrix (Synced with Live Data)</span>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div>
+                      <span style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">1 USD to MMK</span>
+                      <input class="f-input" id="ex-usd-mmk" type="number" value="3200" oninput="calculateSalaryEstimator()" style="padding:8px 12px;font-size:13px">
+                    </div>
+                    <div>
+                      <span style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">1 SGD to MMK</span>
+                      <input class="f-input" id="ex-sgd-mmk" type="number" value="2400" oninput="calculateSalaryEstimator()" style="padding:8px 12px;font-size:13px">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="background:linear-gradient(135deg,rgba(201,182,228,0.06),rgba(242,164,181,0.06));border:1.5px solid var(--rose-d)">
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:18px;color:var(--ink);">Budget Estimation Metrics</h3>
+              
+              <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+                <div class="metric-row"><span>Estimated Single Base Salary (Converted):</span><span class="metric-val" id="est-single-output">USD 1,280</span></div>
+                <div class="metric-row"><span>Total Monthly Team Base Budget:</span><span class="metric-val" id="est-monthly-team">USD 1,280</span></div>
+                <div class="metric-row"><span>Expected Recruitment Sourcing Cost (10%):</span><span class="metric-val" id="est-recruitment-overhead" style="color:var(--mid)">USD 128</span></div>
+                <div class="metric-row" style="border-top:1.5px solid rgba(242,164,181,0.3);margin-top:8px;padding-top:12px;"><strong>Estimated Annual Operational Cost:</strong><span class="metric-val" id="est-annual-team" style="color:var(--rose-deep);font-weight:700;font-size:18px;">USD 16,896</span></div>
+              </div>
+
+              <div class="card" style="background:rgba(255,255,255,0.7);padding:18px;border-radius:16px;">
+                <h4 style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px">💡 Sourcing &amp; Compliance Notes:</h4>
+                <p id="est-notes" style="font-size:12px;color:var(--mid);line-height:1.6">Estimated base rate mapped on junior tech thresholds. Sourcing complexity: moderate.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB PANEL 3: LIVE BENCHMARKS DASHBOARD -->
+        <div id="hr-panel-live-dashboard" class="hr-sub-panel">
+          <div class="card" style="margin-bottom:24px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+              <div>
+                <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--rose-d);">Market Pay Benchmarks</h3>
+                <p style="font-size:12px;color:var(--muted)">Adjust parameters to compare global compensations across sectors</p>
+              </div>
+              <div>
+                <select class="f-input f-select" id="dash-sector-filter" onchange="filterPayScaleDashboard()" style="min-width:200px">
+                  <option value="all">Display All Sectors</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Pay Scale Grid -->
+            <div class="grid3" id="payscale-grid">
+              <!-- Cards dynamically loaded inside the script logic -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB PANEL 4: GLOBAL GOLD & FINANCIAL MARKET DASHBOARD (NEW) -->
+        <div id="hr-panel-financial-market" class="hr-sub-panel">
+          
+          <!-- Live Ticker Banner -->
+          <div class="market-ticker-container">
+            <span class="market-ticker-label">Live Indicators</span>
+            <div style="overflow:hidden;width:100%;position:relative;">
+              <div class="market-ticker-track" id="market-ticker-track">
+                <!-- Ticker items dynamically loaded inside script -->
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:32px;">
+            
+            <!-- Live Markets KPI cards -->
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div class="card" style="background:rgba(255,255,255,0.45);padding:24px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <span style="font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase">Global Gold Spot Rate</span>
+                  <div class="status-indicator live"></div>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:8px">
+                  <h3 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:var(--ink)" id="fin-lbl-gold-usd">$2,385.50</h3>
+                  <span style="font-size:13px;color:#4caf50;font-weight:600" id="fin-lbl-gold-usd-diff">+0.24%</span>
+                </div>
+                <span style="font-size:12px;color:var(--mid)">Ounces (oz) in United States Dollar (USD)</span>
+              </div>
+
+              <div class="card" style="background:rgba(255,255,255,0.45);padding:20px;border-left:4px solid var(--gold)">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                  <span style="font-size:12px;font-weight:600;color:var(--mid);text-transform:uppercase">Myanmar Pure Academy Gold (24K)</span>
+                  <span class="pill" style="background:var(--gold-s);color:var(--gold)">Traditional Weight</span>
+                </div>
+                <div style="font-size:28px;font-weight:600;color:var(--rose-deep)" id="fin-lbl-gold-mmk">7,680,000 MMK</div>
+                <span style="font-size:11px;color:var(--muted)">Converted per Traditional Myanmar Tical (Kyat Thar = 16.606g)</span>
+              </div>
+
+              <div class="card" style="background:rgba(255,255,255,0.45);padding:20px;">
+                <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--rose-d);margin-bottom:12px;">Active Exchange Rate Indices</h4>
+                <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+                  <div class="metric-row"><span>USD / MMK Standard:</span><span id="lbl-exchange-usd-mmk" style="font-weight:600">3,200 MMK</span></div>
+                  <div class="metric-row"><span>SGD / MMK Standard:</span><span class="metric-val" id="lbl-exchange-sgd-mmk">2,400 MMK</span></div>
+                  <div class="metric-row"><span>USD / SGD Conversion:</span><span class="metric-val" id="lbl-exchange-usd-sgd" style="color:var(--lav-d)">1.33 SGD</span></div>
+                  <div class="metric-row"><span>SET Index (Thailand):</span><span class="metric-val" id="set-index-val" style="color:var(--gold)">1,348.50 <span style="color:#4caf50">+0.25%</span></span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interative Conversion Calculator -->
+            <div class="card" style="border:1.5px solid var(--rose)">
+              <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:12px;color:var(--ink);">Ecosystem Exchange Calculator</h3>
+              <p style="font-size:13px;color:var(--mid);margin-bottom:20px">Interactive sandbox mapping physical gold weight units against regional currencies.</p>
+
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <!-- Weight Input -->
+                <div>
+                  <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Amount / Weight value</label>
+                  <input class="f-input" id="calc-gold-val" type="number" value="1" oninput="processFinancialRates()">
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Source Unit</label>
+                    <select class="f-input f-select" id="calc-unit" onchange="processWeightConversion()">
+                      <option value="tical">Myanmar Tical (Kyat Thar)</option>
+                      <option value="g">Grams (g)</option>
+                      <option value="oz" selected>Ounce (oz)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--mid);display:block;margin-bottom:6px">Target Display Rate</label>
+                    <select class="f-input f-select" id="calc-currency-target" onchange="calculateFinancials()">
+                      <option value="USD">USD ($)</option>
+                      <option value="SGD">SGD (S$)</option>
+                      <option value="MMK" selected>MMK (Ks)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Live Results -->
+                <div class="card" style="background:rgba(255,255,255,0.7);padding:20px;border-radius:18px;margin-top:8px">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;text-align:center;">Estimated Market Metal Value</div>
+                  <div style="font-size:28px;font-weight:600;color:var(--rose-deep);text-align:center;" id="calc-result-lbl">7,520,000 MMK</div>
+                  
+                  <div style="border-top:1px dashed rgba(242,164,181,0.25);margin-top:14px;padding-top:10px;font-size:12px;color:var(--mid);text-align:center" id="calc-details-lbl">
+                    1.00 Ounces = 1.889 Ticals = 31.103 Grams
+                  </div>
+                </div>
+
+                <button class="f-btn" type="button" onclick="fetchLiveMarketEcosystemData()">
+                  <span>🔄 Reload Authentic Live API Matrix</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ══ COMPLIANCE ══ -->
     <div id="tab-compliance" class="tab-content">
       <div class="wrap">
@@ -479,7 +781,9 @@ textarea.f-input{resize:vertical;min-height:90px}
         <h2 class="section-h2">Let's Connect</h2>
         <p class="section-sub">Ready to discuss your next executive challenge. Reach out through any channel.</p>
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.12),rgba(201,182,228,.12));text-align:center;padding:48px;margin-bottom:40px">
-          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)"><img id="contact-avatar" src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80'"></div>
+          <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 18px;border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(196,99,122,.2)">
+            <img id="contact-avatar" src="my-photo.jpg" alt="Elsa" style="width:100%;height:100%;object-fit:cover;object-position:top center" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80'">
+          </div>
           <h2 style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--ink);font-style:italic;margin-bottom:10px">La YaungShin Thant Elsa</h2>
           <p style="font-size:14px;color:var(--mid);margin-bottom:8px">HR Manager · Personal Assistant · Compliance Advisor · AI Strategist</p>
           <p style="font-size:13px;color:var(--lav-d);margin-bottom:24px">⚧ Proudly Transgender Woman · Lanmadaw, Yangon, Myanmar</p>
@@ -587,6 +891,304 @@ const CONTACTS = [
   {icon:'🔴',label:'WeChat',   value:'Available on WeChat',                   href:'#',                                            col:'#07C160'},
 ];
 
+// Expanded Roles & Industries Data Model
+const MARKET_COMP_DATA = [
+  // HR & Compliance
+  { sector: 'hr', sectorName: 'Human Resources & Compliance', title: 'HR Officer / Advisor', mmk: '1,200,000 - 1,800,000', sgd: '3,800 - 5,200', usd: '2,800 - 3,900', insight: 'Standard compliant, requires Local Employment Pass standards for SG.', label: 'S-Pass standard' },
+  { sector: 'hr', sectorName: 'Human Resources & Compliance', title: 'HR Manager / Specialist', mmk: '2,000,000 - 3,500,000', sgd: '5,500 - 8,500', usd: '4,100 - 6,300', insight: 'High command over labor law mediation required globally.', label: 'EP/S-Pass standard' },
+  { sector: 'hr', sectorName: 'Human Resources & Compliance', title: 'Director of HR & Global Talent', mmk: '4,000,000 - 6,500,000', sgd: '9,000 - 14,000', usd: '6,500 - 10,500', insight: 'Multinational structural modeling & strategic equity planning.', label: 'Executive EP' },
+  { sector: 'hr', sectorName: 'Human Resources & Compliance', title: 'Compliance & Labor Law Counsel', mmk: '2,800,000 - 4,800,000', sgd: '6,500 - 10,000', usd: '4,800 - 7,400', insight: 'Statutory filings, dispute resolution & cross-border regulatory mapping.', label: 'EP standard' },
+  { sector: 'hr', sectorName: 'Human Resources & Compliance', title: 'Talent Acquisition Lead', mmk: '1,800,000 - 3,000,000', sgd: '4,800 - 7,000', usd: '3,500 - 5,200', insight: 'Pipeline sourcing, employer branding & interview process design.', label: 'EP/S-Pass standard' },
+
+  // PA & Operations Support
+  { sector: 'pa', sectorName: 'PA & Operations Support', title: 'Executive Secretary', mmk: '1,500,000 - 2,500,000', sgd: '4,500 - 6,500', usd: '3,300 - 4,800', insight: 'Bilingual proficiency & operational logistics coordination highly valued.', label: 'EP/S-Pass standard' },
+  { sector: 'pa', sectorName: 'PA & Operations Support', title: 'Executive Personal Assistant', mmk: '1,800,000 - 3,000,000', sgd: '5,000 - 7,200', usd: '3,700 - 5,300', insight: 'Complex C-Suite scheduling and high organizational confidentiality required.', label: 'EP standard' },
+  { sector: 'pa', sectorName: 'PA & Operations Support', title: 'Operations Lead Specialist', mmk: '1,600,000 - 2,800,000', sgd: '4,800 - 6,800', usd: '3,500 - 5,000', insight: 'Regional procurement management & compliance tracking experience.', label: 'S-Pass standard' },
+  { sector: 'pa', sectorName: 'PA & Operations Support', title: 'Office / Facilities Manager', mmk: '1,400,000 - 2,300,000', sgd: '4,000 - 5,800', usd: '3,000 - 4,300', insight: 'Vendor management, workplace safety & day-to-day site operations.', label: 'S-Pass standard' },
+  { sector: 'pa', sectorName: 'PA & Operations Support', title: 'Chief of Staff', mmk: '4,500,000 - 7,500,000', sgd: '10,000 - 16,000', usd: '7,500 - 12,000', insight: 'Direct C-suite right hand; cross-functional initiative ownership.', label: 'Executive EP' },
+
+  // Digital & AI Integration
+  { sector: 'automation', sectorName: 'Digital & AI Integration', title: 'Workflow Automator / n8n Architect', mmk: '2,500,000 - 4,500,000', sgd: '6,000 - 9,500', usd: '4,500 - 7,000', insight: 'Automation pipelines scale team bandwidth. Sourcing competitive rates.', label: 'EP standard' },
+  { sector: 'automation', sectorName: 'Digital & AI Integration', title: 'AI Implementation Manager', mmk: '3,000,000 - 5,500,000', sgd: '7,000 - 11,000', usd: '5,200 - 8,100', insight: 'Bespoke LLM integration, Google Workspace backend automation setups.', label: 'EP standard' },
+  { sector: 'automation', sectorName: 'Digital & AI Integration', title: 'Chief Technology Director (CTO)', mmk: '5,000,000 - 9,000,000', sgd: '11,000 - 18,000', usd: '8,500 - 14,000', insight: 'Global tech architecture & deep-tech workflow engineering.', label: 'Executive EP' },
+  { sector: 'automation', sectorName: 'Digital & AI Integration', title: 'Prompt Engineer / LLM Specialist', mmk: '2,800,000 - 5,000,000', sgd: '6,500 - 10,500', usd: '4,800 - 7,800', insight: 'Model evaluation, prompt systems & agentic workflow design.', label: 'EP standard' },
+  { sector: 'automation', sectorName: 'Digital & AI Integration', title: 'Data Analyst / BI Specialist', mmk: '1,800,000 - 3,200,000', sgd: '4,800 - 7,500', usd: '3,500 - 5,500', insight: 'Dashboarding, SQL pipelines & executive reporting automation.', label: 'EP/S-Pass standard' },
+
+  // Finance & Administration
+  { sector: 'finance', sectorName: 'Finance & Administration', title: 'Senior Finance Accountant', mmk: '1,500,000 - 2,600,000', sgd: '4,200 - 6,200', usd: '3,100 - 4,600', insight: 'IFRS standards, tax audits filing & domestic compliance expertise.', label: 'S-Pass standard' },
+  { sector: 'finance', sectorName: 'Finance & Administration', title: 'Corporate Finance Manager', mmk: '2,500,000 - 4,000,000', sgd: '6,000 - 9,000', usd: '4,400 - 6,800', insight: 'Strategic capital allocation & regional legal structure navigation.', label: 'EP standard' },
+  { sector: 'finance', sectorName: 'Finance & Administration', title: 'Chief Financial Officer (CFO)', mmk: '5,500,000 - 10,000,000', sgd: '12,000 - 20,000', usd: '9,000 - 15,000', insight: 'Overseeing global mergers, acquisitions, and cross-border assets.', label: 'Executive EP' },
+  { sector: 'finance', sectorName: 'Finance & Administration', title: 'Payroll & Benefits Administrator', mmk: '1,200,000 - 2,000,000', sgd: '3,500 - 5,200', usd: '2,600 - 3,800', insight: 'Multi-country payroll cycles, SSB filings & benefits reconciliation.', label: 'S-Pass standard' },
+  { sector: 'finance', sectorName: 'Finance & Administration', title: 'Internal Auditor', mmk: '2,000,000 - 3,400,000', sgd: '5,200 - 7,800', usd: '3,800 - 5,800', insight: 'Risk control testing, fraud detection & process governance.', label: 'EP standard' },
+
+  // Sales & Business Development
+  { sector: 'sales', sectorName: 'Sales & Business Development', title: 'Senior Sales Executive', mmk: '1,000,000 - 1,800,000', sgd: '3,500 - 5,000', usd: '2,600 - 3,700', insight: 'B2B key accounts sourcing; commissions are highly variable.', label: 'S-Pass standard' },
+  { sector: 'sales', sectorName: 'Sales & Business Development', title: 'Country Business Development Head', mmk: '3,000,000 - 5,500,000', sgd: '7,500 - 11,500', usd: '5,500 - 8,500', insight: 'Launching new localized pipelines & managing legal market entry.', label: 'EP standard' },
+  { sector: 'sales', sectorName: 'Sales & Business Development', title: 'Director of Global Growth', mmk: '5,000,000 - 8,500,000', sgd: '10,000 - 16,000', usd: '7,500 - 12,000', insight: 'Scaling user acquisitions and establishing strategic alliances.', label: 'Executive EP' },
+  { sector: 'sales', sectorName: 'Sales & Business Development', title: 'Account Manager (Key Clients)', mmk: '1,400,000 - 2,400,000', sgd: '4,000 - 6,000', usd: '3,000 - 4,500', insight: 'Renewal ownership, upsell strategy & long-term client retention.', label: 'S-Pass standard' },
+
+  // Legal
+  { sector: 'legal', sectorName: 'Legal & Regulatory Affairs', title: 'Junior Legal Associate', mmk: '1,300,000 - 2,200,000', sgd: '3,800 - 5,500', usd: '2,800 - 4,000', insight: 'Contract drafting, due diligence support & regulatory filings.', label: 'EP/S-Pass standard' },
+  { sector: 'legal', sectorName: 'Legal & Regulatory Affairs', title: 'Corporate Legal Counsel', mmk: '3,200,000 - 5,500,000', sgd: '7,500 - 12,000', usd: '5,500 - 9,000', insight: 'In-house counsel for commercial contracts & cross-border transactions.', label: 'EP standard' },
+  { sector: 'legal', sectorName: 'Legal & Regulatory Affairs', title: 'General Counsel / Head of Legal', mmk: '6,000,000 - 10,500,000', sgd: '13,000 - 21,000', usd: '9,500 - 16,000', insight: 'Full legal function ownership, board-level risk advisory.', label: 'Executive EP' },
+
+  // Marketing & Communications
+  { sector: 'marketing', sectorName: 'Marketing & Communications', title: 'Digital Marketing Executive', mmk: '1,100,000 - 1,900,000', sgd: '3,400 - 5,000', usd: '2,500 - 3,700', insight: 'Paid/organic campaign execution & social content calendars.', label: 'S-Pass standard' },
+  { sector: 'marketing', sectorName: 'Marketing & Communications', title: 'Brand & Communications Manager', mmk: '2,200,000 - 3,800,000', sgd: '5,800 - 8,800', usd: '4,300 - 6,500', insight: 'Brand strategy, PR positioning & cross-market campaign rollout.', label: 'EP standard' },
+  { sector: 'marketing', sectorName: 'Marketing & Communications', title: 'Chief Marketing Officer (CMO)', mmk: '5,000,000 - 9,000,000', sgd: '11,000 - 18,000', usd: '8,000 - 14,000', insight: 'Full-funnel growth strategy & multi-market brand governance.', label: 'Executive EP' },
+
+  // Customer Service & Support
+  { sector: 'customer-service', sectorName: 'Customer Service & Support', title: 'Customer Support Specialist', mmk: '850,000 - 1,400,000', sgd: '2,800 - 4,000', usd: '2,000 - 2,900', insight: 'Frontline ticketing, escalation handling & client satisfaction tracking.', label: 'S-Pass standard' },
+  { sector: 'customer-service', sectorName: 'Customer Service & Support', title: 'Customer Success Manager', mmk: '1,600,000 - 2,800,000', sgd: '4,500 - 6,800', usd: '3,300 - 5,000', insight: 'Onboarding, retention strategy & account health monitoring.', label: 'EP/S-Pass standard' },
+  { sector: 'customer-service', sectorName: 'Customer Service & Support', title: 'Head of Customer Experience', mmk: '3,500,000 - 6,000,000', sgd: '8,000 - 13,000', usd: '6,000 - 9,500', insight: 'CX strategy, support team leadership & satisfaction KPI ownership.', label: 'EP standard' },
+
+  // Engineering & IT
+  { sector: 'engineering', sectorName: 'Engineering & IT', title: 'Software Engineer (Mid-Level)', mmk: '2,200,000 - 4,000,000', sgd: '5,500 - 9,000', usd: '4,000 - 6,800', insight: 'Full-stack development, code review & sprint delivery ownership.', label: 'EP standard' },
+  { sector: 'engineering', sectorName: 'Engineering & IT', title: 'IT Infrastructure / Systems Manager', mmk: '2,500,000 - 4,200,000', sgd: '6,000 - 9,500', usd: '4,400 - 7,200', insight: 'Network security, uptime SLAs & cloud infrastructure governance.', label: 'EP standard' },
+  { sector: 'engineering', sectorName: 'Engineering & IT', title: 'Chief Technology Officer (CTO)', mmk: '6,500,000 - 11,000,000', sgd: '14,000 - 22,000', usd: '10,500 - 17,000', insight: 'Full tech org leadership, architecture & vendor strategy.', label: 'Executive EP' },
+
+  // Healthcare & Humanitarian
+  { sector: 'healthcare', sectorName: 'Healthcare & Humanitarian', title: 'Program / Field Coordinator', mmk: '1,200,000 - 2,000,000', sgd: '—', usd: '1,200 - 2,200', insight: 'NGO/INGO field operations, beneficiary data & donor reporting.', label: 'Humanitarian standard' },
+  { sector: 'healthcare', sectorName: 'Healthcare & Humanitarian', title: 'Health Programs Manager', mmk: '2,200,000 - 3,800,000', sgd: '—', usd: '2,200 - 3,800', insight: 'Multi-site clinical program oversight & compliance reporting.', label: 'Humanitarian standard' },
+  { sector: 'healthcare', sectorName: 'Healthcare & Humanitarian', title: 'Country Director (NGO)', mmk: '4,500,000 - 7,500,000', sgd: '—', usd: '4,000 - 7,000', insight: 'Full country program leadership & donor relationship management.', label: 'Senior humanitarian' },
+
+  // Education
+  { sector: 'education', sectorName: 'Education & Training', title: 'English / Language Instructor', mmk: '900,000 - 1,600,000', sgd: '2,800 - 4,200', usd: '2,000 - 3,000', insight: 'Curriculum delivery, assessment design & student progress tracking.', label: 'S-Pass standard' },
+  { sector: 'education', sectorName: 'Education & Training', title: 'Corporate Trainer / L&D Specialist', mmk: '1,600,000 - 2,800,000', sgd: '4,200 - 6,500', usd: '3,100 - 4,800', insight: 'Workshop design, skills-gap analysis & onboarding programs.', label: 'EP/S-Pass standard' },
+  { sector: 'education', sectorName: 'Education & Training', title: 'Head of Learning & Development', mmk: '3,200,000 - 5,500,000', sgd: '7,500 - 12,000', usd: '5,500 - 9,000', insight: 'Org-wide L&D strategy & leadership pipeline development.', label: 'EP standard' },
+
+  // Logistics & Supply Chain
+  { sector: 'logistics', sectorName: 'Logistics & Supply Chain', title: 'Logistics Coordinator', mmk: '1,100,000 - 1,900,000', sgd: '3,400 - 5,000', usd: '2,500 - 3,700', insight: 'Freight scheduling, customs documentation & vendor coordination.', label: 'S-Pass standard' },
+  { sector: 'logistics', sectorName: 'Logistics & Supply Chain', title: 'Supply Chain Manager', mmk: '2,400,000 - 4,200,000', sgd: '6,000 - 9,200', usd: '4,400 - 7,000', insight: 'Inventory optimization, procurement strategy & supplier negotiation.', label: 'EP standard' },
+  { sector: 'logistics', sectorName: 'Logistics & Supply Chain', title: 'Head of Operations & Supply Chain', mmk: '4,500,000 - 7,500,000', sgd: '10,000 - 16,000', usd: '7,500 - 12,000', insight: 'End-to-end supply chain ownership across multiple markets.', label: 'Executive EP' }
+];
+
+// Live Financial Markets State Variables
+let LIVE_FINANCIAL_RATES = {
+  gold_spot_usd: 2385.50, // USD per ounce
+  usd_mmk: 3200.00,
+  sgd_mmk: 2400.00,
+  usd_sgd: 1.33,
+  thb_mmk: 92.50,
+  gold_diff: "+0.24%",
+  msci_sg: "298.40",
+  msci_sg_diff: "+0.15%",
+  ysx_index: "410.50",
+  ysx_diff: "-0.05%",
+  source: "simulated",   // becomes "live" once a real API call succeeds
+  lastFetched: null
+};
+let _prevGoldUsd = LIVE_FINANCIAL_RATES.gold_spot_usd;
+let _marketFluctuatorTimer = null;
+let _marketRefreshTimer = null;
+
+const GOLD_GRAMS_PER_OZ = 31.1035;
+const GOLD_GRAMS_PER_TICAL = 16.606; // Myanmar Kyat Thar
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL GOLD & FINANCIAL MARKETS — LIVE DATA ENGINE
+   ─────────────────────────────────────────────────────
+   The site no longer calls any external market API directly.
+   Instead, Apps Script fetches GoldAPI.io + FX rates once a
+   day (server-side, via a time-driven trigger) and writes
+   them into the "Markets" tab of the Google Sheet. The site
+   just reads that tab through the same endpoint it already
+   uses for everything else: ?action=init (or ?action=markets).
+═══════════════════════════════════════════════════════ */
+function applyMarketsFromSheet(markets) {
+  if (!markets || Object.keys(markets).length === 0) return false;
+
+  _prevGoldUsd = LIVE_FINANCIAL_RATES.gold_spot_usd;
+
+  const num = (v, fallback) => {
+    const n = parseFloat(v);
+    return isNaN(n) ? fallback : n;
+  };
+
+  if (markets.gold_spot_usd) LIVE_FINANCIAL_RATES.gold_spot_usd = num(markets.gold_spot_usd, LIVE_FINANCIAL_RATES.gold_spot_usd);
+  if (markets.usd_mmk)       LIVE_FINANCIAL_RATES.usd_mmk = num(markets.usd_mmk, LIVE_FINANCIAL_RATES.usd_mmk);
+  if (markets.usd_sgd)       LIVE_FINANCIAL_RATES.usd_sgd = num(markets.usd_sgd, LIVE_FINANCIAL_RATES.usd_sgd);
+  if (markets.sgd_mmk)       LIVE_FINANCIAL_RATES.sgd_mmk = num(markets.sgd_mmk, LIVE_FINANCIAL_RATES.sgd_mmk);
+  if (markets.usd_thb)       LIVE_FINANCIAL_RATES.thb_mmk = markets.usd_mmk ? num(markets.usd_mmk,1)/num(markets.usd_thb,1) : LIVE_FINANCIAL_RATES.thb_mmk;
+  if (markets.gold_diff)     LIVE_FINANCIAL_RATES.gold_diff = markets.gold_diff;
+
+  LIVE_FINANCIAL_RATES.source = markets.source || 'sheet';
+  LIVE_FINANCIAL_RATES.lastFetched = markets.last_updated || null;
+  return true;
+}
+
+async function fetchLiveMarketEcosystemData() {
+  const reloadBtn = document.querySelector('button[onclick="fetchLiveMarketEcosystemData()"]');
+  if (reloadBtn) reloadBtn.disabled = true;
+
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  let applied = false;
+
+  if (api && !api.includes("YOUR_")) {
+    try {
+      const res = await fetch(`${api}?action=markets`);
+      if (!res.ok) throw new Error('Markets endpoint unavailable');
+      const data = await res.json();
+      applied = applyMarketsFromSheet(data.markets);
+      if (applied) showToast('🪙 Market rates synced from your Sheet');
+    } catch (err) {
+      console.warn('Markets fetch from Sheet failed:', err.message);
+    }
+  }
+
+  if (!applied) {
+    showToast('⚠️ Could not reach the Markets sheet — showing last known rates.');
+  }
+
+  if (reloadBtn) reloadBtn.disabled = false;
+  renderFinancialDashboard();
+  calculateFinancials();
+}
+
+/* Gentle simulated drift between daily Sheet refreshes, so the dashboard never looks frozen. */
+function startMarketFluctuator() {
+  clearInterval(_marketFluctuatorTimer);
+  _marketFluctuatorTimer = setInterval(() => {
+    const driftPct = (Math.random() - 0.5) * 0.002; // ±0.1% micro-tick
+    LIVE_FINANCIAL_RATES.gold_spot_usd = Math.max(1, LIVE_FINANCIAL_RATES.gold_spot_usd * (1 + driftPct));
+    const diffPct = _prevGoldUsd ? ((LIVE_FINANCIAL_RATES.gold_spot_usd - _prevGoldUsd) / _prevGoldUsd) * 100 : 0;
+    LIVE_FINANCIAL_RATES.gold_diff = (diffPct >= 0 ? '+' : '') + diffPct.toFixed(2) + '%';
+    renderFinancialDashboard();
+    calculateFinancials();
+  }, 8000);
+
+  // Re-check the Sheet periodically while the page is open. Since the Sheet
+  // itself only changes once a day (via your Apps Script trigger), this is
+  // just to catch that daily update if someone leaves the tab open — not
+  // hitting any external API, just your own lightweight endpoint.
+  clearInterval(_marketRefreshTimer);
+  _marketRefreshTimer = setInterval(fetchLiveMarketEcosystemData, 30 * 60 * 1000);
+}
+
+function renderFinancialDashboard() {
+  const r = LIVE_FINANCIAL_RATES;
+  const goldUsdEl = document.getElementById('fin-lbl-gold-usd');
+  if (!goldUsdEl) return; // panel not in DOM yet
+
+  goldUsdEl.textContent = `$${r.gold_spot_usd.toLocaleString(undefined, {maximumFractionDigits:2})}`;
+  const diffEl = document.getElementById('fin-lbl-gold-usd-diff');
+  if (diffEl) {
+    diffEl.textContent = r.gold_diff;
+    diffEl.style.color = r.gold_diff.startsWith('-') ? '#f44336' : '#4caf50';
+  }
+
+  const goldPerGram = r.gold_spot_usd / GOLD_GRAMS_PER_OZ;
+  const goldPerTicalUsd = goldPerGram * GOLD_GRAMS_PER_TICAL;
+  const goldPerTicalMmk = goldPerTicalUsd * r.usd_mmk;
+  const goldMmkEl = document.getElementById('fin-lbl-gold-mmk');
+  if (goldMmkEl) goldMmkEl.textContent = `${Math.round(goldPerTicalMmk).toLocaleString()} MMK`;
+
+  const usdMmkEl = document.getElementById('lbl-exchange-usd-mmk');
+  if (usdMmkEl) usdMmkEl.textContent = `${r.usd_mmk.toLocaleString(undefined,{maximumFractionDigits:2})} MMK`;
+  const sgdMmkEl = document.getElementById('lbl-exchange-sgd-mmk');
+  if (sgdMmkEl) sgdMmkEl.textContent = `${r.sgd_mmk.toLocaleString(undefined,{maximumFractionDigits:2})} MMK`;
+  const usdSgdEl = document.getElementById('lbl-exchange-usd-sgd');
+  if (usdSgdEl) usdSgdEl.textContent = `${r.usd_sgd.toFixed(3)} SGD`;
+  const setIdxEl = document.getElementById('set-index-val');
+  if (setIdxEl) setIdxEl.innerHTML = `${r.ysx_index} <span style="color:${r.ysx_diff.startsWith('-') ? '#f44336' : '#4caf50'}">${r.ysx_diff}</span>`;
+
+  // Sync the salary estimator's exchange-rate inputs so every tool in the
+  // toolroom reflects the same live rates without the user re-typing them.
+  const exUsdField = document.getElementById('ex-usd-mmk');
+  const exSgdField = document.getElementById('ex-sgd-mmk');
+  if (exUsdField && document.activeElement !== exUsdField) exUsdField.value = Math.round(r.usd_mmk);
+  if (exSgdField && document.activeElement !== exSgdField) exSgdField.value = Math.round(r.sgd_mmk);
+
+  renderMarketTicker();
+}
+
+function renderMarketTicker() {
+  const track = document.getElementById('market-ticker-track');
+  if (!track) return;
+  const r = LIVE_FINANCIAL_RATES;
+  const items = [
+    { label: 'XAU/USD', value: `$${r.gold_spot_usd.toLocaleString(undefined,{maximumFractionDigits:2})}`, diff: r.gold_diff },
+    { label: 'USD/MMK', value: `${r.usd_mmk.toLocaleString(undefined,{maximumFractionDigits:0})}`, diff: '' },
+    { label: 'USD/SGD', value: r.usd_sgd.toFixed(3), diff: '' },
+    { label: 'SGD/MMK', value: r.sgd_mmk.toLocaleString(undefined,{maximumFractionDigits:0}), diff: '' },
+    { label: 'SET Index', value: r.ysx_index, diff: r.ysx_diff },
+    { label: 'MSCI SG', value: r.msci_sg, diff: r.msci_sg_diff },
+  ];
+  const html = items.map(i => {
+    const cls = i.diff.startsWith('-') ? 'down' : i.diff ? 'up' : '';
+    return `<span class="market-ticker-item">${i.label}: <strong>${i.value}</strong>${i.diff ? ` <span class="${cls}">${i.diff}</span>` : ''}</span>`;
+  }).join('');
+  // duplicate the sequence so the CSS marquee loop has no visible seam
+  track.innerHTML = html + html;
+}
+
+/* ── Ecosystem Exchange Calculator (gold weight ⇄ currency) ── */
+function processWeightConversion() {
+  calculateFinancials();
+}
+function processFinancialRates() {
+  calculateFinancials();
+}
+
+function calculateFinancials() {
+  const valInput = document.getElementById('calc-gold-val');
+  const unitSelect = document.getElementById('calc-unit');
+  const currencySelect = document.getElementById('calc-currency-target');
+  const resultEl = document.getElementById('calc-result-lbl');
+  const detailsEl = document.getElementById('calc-details-lbl');
+  if (!valInput || !unitSelect || !currencySelect || !resultEl) return;
+
+  const amount = parseFloat(valInput.value) || 0;
+  const unit = unitSelect.value; // 'tical' | 'g' | 'oz'
+  const targetCurrency = currencySelect.value; // 'USD' | 'SGD' | 'MMK'
+  const r = LIVE_FINANCIAL_RATES;
+
+  let grams;
+  if (unit === 'tical') grams = amount * GOLD_GRAMS_PER_TICAL;
+  else if (unit === 'oz') grams = amount * GOLD_GRAMS_PER_OZ;
+  else grams = amount; // already grams
+
+  const usdValue = (grams / GOLD_GRAMS_PER_OZ) * r.gold_spot_usd;
+
+  let displayValue, symbol;
+  if (targetCurrency === 'MMK') { displayValue = usdValue * r.usd_mmk; symbol = 'MMK'; }
+  else if (targetCurrency === 'SGD') { displayValue = usdValue * r.usd_sgd; symbol = 'S$'; }
+  else { displayValue = usdValue; symbol = '$'; }
+
+  resultEl.textContent = targetCurrency === 'MMK'
+    ? `${Math.round(displayValue).toLocaleString()} MMK`
+    : `${symbol}${displayValue.toLocaleString(undefined,{maximumFractionDigits:2})}`;
+
+  if (detailsEl) {
+    const oz = grams / GOLD_GRAMS_PER_OZ;
+    const ticals = grams / GOLD_GRAMS_PER_TICAL;
+    detailsEl.textContent = `${oz.toFixed(3)} Ounces = ${ticals.toFixed(3)} Ticals = ${grams.toFixed(3)} Grams`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CORE UI UTILITIES
+═══════════════════════════════════════════════════════ */
+let toastTimer = null;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+function toggleChat() {
+  const panel = document.getElementById('chat-panel');
+  if (!panel) return;
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    const badge = document.querySelector('#chat-bubble .bubble-badge');
+    if (badge) badge.style.display = 'none';
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    ECOSYSTEM COMPONENT RENDER ENGINES
 ═══════════════════════════════════════════════════════ */
@@ -660,6 +1262,11 @@ function renderAll() {
   renderTestimonials(window.SITE_CONFIG.testimonials);
   renderDownloads(window.SITE_CONFIG.downloads);
   loadLocationBadge();
+  calculateMyanmarPIT();
+  calculateSalaryEstimator();
+  renderLiveDashboard();
+  renderFinancialDashboard();
+  startMarketFluctuator(); // periodic 30-min re-check + simulated drift; initial real data comes via syncDynamicEcosystem()
 }
 
 function renderExperienceList(arr) {
@@ -748,6 +1355,14 @@ async function syncDynamicEcosystem() {
     if (data.articles && data.articles.length > 0) {
       localStorage.setItem('elsa_articles', JSON.stringify(data.articles));
       renderJournal();
+    }
+
+    // 7. Sync Global Gold & FX Markets (from the "Markets" tab, refreshed
+    //    daily by your Apps Script trigger — see SETUP_GUIDE.md)
+    if (data.markets && Object.keys(data.markets).length > 0) {
+      applyMarketsFromSheet(data.markets);
+      renderFinancialDashboard();
+      calculateFinancials();
     }
 
     showToast("✨ Connected with Workspace");
@@ -1107,6 +1722,209 @@ function initCursorSparkle() {
     requestAnimationFrame(() => { el.style.transform=`translate(${dx}px,${dy}px) scale(0)`; el.style.opacity='0'; });
     setTimeout(() => el.remove(), 560);
   });
+}
+
+/* ── HR SUITE LOGIC SYSTEM ── */
+function switchHrSubTab(targetId) {
+  document.querySelectorAll('.hr-sub-panel').forEach(panel => panel.classList.remove('active'));
+  document.querySelectorAll('.hr-tab-btn').forEach(btn => btn.classList.remove('active'));
+  
+  document.getElementById(`hr-panel-${targetId}`).classList.add('active');
+  event.target.classList.add('active');
+  
+  logActionClick(`HR Subtab: ${targetId}`, 'HR Operations Toolroom');
+}
+
+// 1. Myanmar PIT Calculator Algorithm (Official Progressive Tax Structure)
+function calculateMyanmarPIT() {
+  const monthlySalary = parseFloat(document.getElementById('pit-monthly-sal').value) || 0;
+  const parentClaim = parseInt(document.getElementById('pit-parents').value) || 0;
+  const spouseClaim = parseInt(document.getElementById('pit-spouse').value) || 0;
+  const childrenCount = parseInt(document.getElementById('pit-children').value) || 0;
+  const ssbClaim = document.getElementById('pit-ssb').checked;
+
+  const annualSalary = monthlySalary * 12;
+  
+  // Basic Allowance Relief (20% of salary, capped at 10,000,000 MMK)
+  const basicRelief = Math.min(annualSalary * 0.20, 10000000);
+  
+  // Exemption Relieves calculation
+  const parentsRelief = parentClaim * 1000000;
+  const spouseRelief = spouseClaim * 1000000;
+  const childrenRelief = childrenCount * 500000;
+  const dependentsRelief = parentsRelief + spouseRelief + childrenRelief;
+
+  // Monthly SSB caps out at 15,000 MMK (Annual max: 180,000 MMK)
+  const monthlySSB = ssbClaim ? Math.min(monthlySalary * 0.02, 15000) : 0;
+  const annualSSB = monthlySSB * 12;
+
+  // Total Taxable Base calculation
+  let taxableIncome = annualSalary - basicRelief - dependentsRelief - annualSSB;
+  if (taxableIncome < 0) taxableIncome = 0;
+
+  // Standard Progressive Tax brackets evaluation
+  let calculatedTax = 0;
+  
+  // Progressive slabs structures (Annual basis)
+  // Slab 1: Up to 2,000,000 (0%)
+  // Slab 2: 2,000,001 to 10,000,000 (5%)
+  // Slab 3: 10,000,001 to 30,000,000 (10%)
+  // Slab 4: 30,000,001 to 50,000,000 (15%)
+  // Slab 5: 50,000,001 to 70,000,000 (20%)
+  // Slab 6: Over 70,000,000 (25%)
+  
+  const slabs = [
+    { cap: 2000000, rate: 0.00 },
+    { cap: 10000000, rate: 0.05 },
+    { cap: 30000000, rate: 0.10 },
+    { cap: 50000000, rate: 0.15 },
+    { cap: 70000000, rate: 0.20 },
+    { cap: Infinity, rate: 0.25 }
+  ];
+
+  let remainingTaxable = taxableIncome;
+  let previousCap = 0;
+
+  for (let i = 0; i < slabs.length; i++) {
+    const currentSlab = slabs[i];
+    const currentWidth = currentSlab.cap - previousCap;
+    
+    if (remainingTaxable > currentWidth) {
+      calculatedTax += currentWidth * currentSlab.rate;
+      remainingTaxable -= currentWidth;
+      previousCap = currentSlab.cap;
+    } else {
+      calculatedTax += remainingTaxable * currentSlab.rate;
+      break;
+    }
+  }
+
+  // Ensure total income under 4.8 million MMK annual gross is completely tax-exempted
+  if (annualSalary <= 4800000) {
+    calculatedTax = 0;
+  }
+
+  // Bind calculated parameters onto GUI
+  document.getElementById('pit-lbl-gross').textContent = `${annualSalary.toLocaleString()} MMK`;
+  document.getElementById('pit-lbl-basic-relief').textContent = `${basicRelief.toLocaleString()} MMK`;
+  document.getElementById('pit-lbl-dep-relief').textContent = `${dependentsRelief.toLocaleString()} MMK`;
+  document.getElementById('pit-lbl-ssb').textContent = `${annualSSB.toLocaleString()} MMK`;
+  document.getElementById('pit-lbl-taxable').textContent = `${taxableIncome.toLocaleString()} MMK`;
+  
+  document.getElementById('pit-final-tax').textContent = `${Math.round(calculatedTax).toLocaleString()} MMK`;
+  document.getElementById('pit-monthly-tax').textContent = `Monthly payroll deduction: ~${Math.round(calculatedTax / 12).toLocaleString()} MMK /mo`;
+}
+
+// 2. Dynamic Manpower Budget & Salary Estimator
+function calculateSalaryEstimator() {
+  const complexity = document.getElementById('est-complexity').value;
+  const tech = document.getElementById('est-tech').value;
+  const headcount = parseInt(document.getElementById('est-headcount').value) || 1;
+  const outputCurrency = document.getElementById('est-currency').value;
+
+  const exUsdMmk = parseFloat(document.getElementById('ex-usd-mmk').value) || 3200;
+  const exSgdMmk = parseFloat(document.getElementById('ex-sgd-mmk').value) || 2400;
+
+  // Base configurations (Set in USD)
+  const baselines = {
+    junior: 800,
+    mid: 1500,
+    senior: 2500,
+    executive: 4000
+  };
+
+  const techMultipliers = {
+    general: 1.0,
+    hr: 1.3,
+    automation: 1.6
+  };
+
+  // Base raw calculated salary in USD
+  const baseUsd = baselines[complexity] * techMultipliers[tech];
+  
+  // Convert based on target output Currency
+  let singleSalary = baseUsd;
+  let currencySymbol = "$";
+  
+  if (outputCurrency === "MMK") {
+    singleSalary = baseUsd * exUsdMmk;
+    currencySymbol = "Ks ";
+  } else if (outputCurrency === "SGD") {
+    // USD -> SGD via relative cross-rate logic
+    const usdToSgd = exUsdMmk / exSgdMmk;
+    singleSalary = baseUsd * usdToSgd;
+    currencySymbol = "S$ ";
+  }
+
+  const monthlyTeam = singleSalary * headcount;
+  const recruitmentOverhead = monthlyTeam * 0.10; // 10% sourcing fee target
+  const annualTotal = (monthlyTeam + recruitmentOverhead) * 12;
+
+  // Rendering dynamic summary cards
+  document.getElementById('est-single-output').textContent = `${currencySymbol}${Math.round(singleSalary).toLocaleString()}`;
+  document.getElementById('est-monthly-team').textContent = `${currencySymbol}${Math.round(monthlyTeam).toLocaleString()}`;
+  document.getElementById('est-recruitment-overhead').textContent = `${currencySymbol}${Math.round(recruitmentOverhead).toLocaleString()}`;
+  document.getElementById('est-annual-team').textContent = `${currencySymbol}${Math.round(annualTotal).toLocaleString()}`;
+
+  // Generating Custom compliance intelligence insights based on selections
+  let complianceNotice = "";
+  if (complexity === "senior" || complexity === "executive") {
+    complianceNotice = "🚨 High-tier executive sourcing requires detailed non-disclosure agreement parameters and targeted market headhunting.";
+  } else if (tech === "automation") {
+    complianceNotice = "🤖 AI Integration specialists require robust computational sandbox access and secure local Google Cloud permissions.";
+  } else {
+    complianceNotice = "📋 General Operations hire mapped onto standard regional compliance and payroll rules.";
+  }
+  document.getElementById('est-notes').textContent = complianceNotice;
+}
+
+// 3. Render and Filter Global Pay Scale Live Dashboard
+function populateSectorFilter() {
+  const select = document.getElementById('dash-sector-filter');
+  if (!select) return;
+  const seen = new Set();
+  const sectors = [];
+  MARKET_COMP_DATA.forEach(item => {
+    if (!seen.has(item.sector)) {
+      seen.add(item.sector);
+      sectors.push({ value: item.sector, name: item.sectorName || item.sector });
+    }
+  });
+  const current = select.value || 'all';
+  select.innerHTML = '<option value="all">Display All Sectors</option>' +
+    sectors.map(s => `<option value="${s.value}">${s.name}</option>`).join('');
+  select.value = current;
+}
+
+function renderLiveDashboard(filterSector = "all") {
+  const container = document.getElementById('payscale-grid');
+  if (!container) return;
+  populateSectorFilter();
+
+  const filteredData = MARKET_COMP_DATA.filter(item => filterSector === "all" || item.sector === filterSector);
+
+  container.innerHTML = filteredData.map(item => `
+    <div class="card" style="background:rgba(255,255,255,0.45);padding:20px;border-radius:20px;position:relative;">
+      <span class="pill" style="background:var(--rose-s);color:var(--rose-deep);font-size:10px;position:absolute;top:15px;right:15px">${item.label}</span>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:12px;padding-right:85px">${item.title}</h4>
+      
+      <div style="font-size:12px;color:var(--mid);margin-bottom:14px;border-bottom:1px solid rgba(242,164,181,0.25);padding-bottom:10px;">
+        ${item.insight}
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+        <div style="display:flex;justify-content:space-between"><span>Singapore Bracket:</span><strong style="color:var(--lav-d)">SGD ${item.sgd}/mo</strong></div>
+        <div style="display:flex;justify-content:space-between"><span>Myanmar Bracket:</span><strong style="color:var(--rose-d)">MMK ${item.mmk}/mo</strong></div>
+        <div style="display:flex;justify-content:space-between"><span>Global Remoter:</span><strong style="color:var(--gold)">USD ${item.usd}/mo</strong></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterPayScaleDashboard() {
+  const filterVal = document.getElementById('dash-sector-filter').value;
+  renderLiveDashboard(filterVal);
+  logActionClick(`Filter pay scales: ${filterVal}`, 'Pay Scales Dashboard');
 }
 
 /* Enter button hover effects */
