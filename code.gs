@@ -204,7 +204,7 @@ function renderJson(data) {
    Fallback source: gold-api.com (free, no key, used only
                     if GoldAPI.io fails on a given run)
 ═══════════════════════════════════════════════════════ */
-const GOLDAPI_KEY = "PASTE_YOUR_GOLDAPI_IO_KEY_HERE"; // from https://www.goldapi.io/dashboard
+const GOLDAPI_KEY = "goldapi-44fdc10033143d349dfffdc247c4837c-io"; // from https://www.goldapi.io/dashboard
 const MARKET_CURRENCIES = ["USD", "MMK", "SGD", "THB", "EUR"]; // one GoldAPI.io call per currency
 
 /**
