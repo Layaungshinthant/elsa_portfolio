@@ -141,6 +141,77 @@ textarea.f-input{resize:vertical;min-height:90px}
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:999;background:var(--ink);color:#fff;padding:12px 24px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;transition:all .3s ease;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── DARK MODE ── */
+body.dark{--ink:#F0E8EC;--mid:#C9B6C8;--muted:#8A7A88;--bg:#1A0E18;--surface:#251520;--card-bg:rgba(255,255,255,.04);--border:rgba(255,255,255,.08)}
+body.dark .card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+body.dark body,body.dark .wrap{background:transparent}
+body.dark nav{background:rgba(26,14,24,.85);border-bottom-color:rgba(242,164,181,.15)}
+body.dark #app{background:linear-gradient(135deg,#1A0E18 0%,#1E1128 50%,#1A0E18 100%)}
+body.dark .card{color:var(--ink)}
+body.dark #admin-panel,body.dark #chat-panel{background:linear-gradient(135deg,#251520,#1e1128)}
+body.dark .f-input{background:rgba(255,255,255,.06);color:var(--ink);border-color:rgba(255,255,255,.1)}
+body.dark .cal-day{color:var(--mid)}
+body.dark .cal-day.today{color:#fff}
+body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08)}
+#theme-toggle{position:fixed;top:18px;right:16px;z-index:600;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.3);backdrop-filter:blur(8px);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:.25s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+#theme-toggle:hover{transform:scale(1.1)}
+
+/* ── TYPING ANIMATION ── */
+#typing-tagline{font-size:clamp(12px,2vw,15px);color:var(--mid);margin-bottom:8px;letter-spacing:.5px;min-height:22px}
+#typing-tagline::after{content:'|';animation:blink .75s step-end infinite;color:var(--rose-d)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── SKILL PROGRESS RINGS ── */
+.skill-ring-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:24px;justify-items:center}
+.skill-ring-item{display:flex;flex-direction:column;align-items:center;gap:10px;cursor:default}
+.skill-ring-item:hover .skill-ring-circle{filter:drop-shadow(0 4px 12px rgba(196,99,122,.35))}
+.skill-ring-svg{transform:rotate(-90deg)}
+.skill-ring-track{fill:none;stroke:rgba(196,99,122,.12);stroke-width:6}
+.skill-ring-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.25,.46,.45,.94)}
+.skill-ring-label{font-size:12px;font-weight:600;color:var(--ink);text-align:center;line-height:1.3}
+.skill-ring-pct{font-size:11px;color:var(--rose-d);font-weight:600}
+
+/* ── TESTIMONIALS CAROUSEL ── */
+.testimonial-track-wrap{overflow:hidden;position:relative}
+.testimonial-track{display:flex;transition:transform .5s cubic-bezier(.25,.46,.45,.94)}
+.testimonial-slide{flex:0 0 100%;padding:0 4px;box-sizing:border-box}
+.testimonial-card{background:linear-gradient(135deg,rgba(242,164,181,.08),rgba(201,182,228,.08));border:1px solid rgba(242,164,181,.2);border-radius:20px;padding:28px;position:relative}
+.testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--ink);line-height:1.6;margin-bottom:18px}
+.testimonial-quote::before{content:'"';font-size:48px;color:var(--rose);line-height:0;vertical-align:-18px;margin-right:4px;font-family:'Cormorant Garamond',serif}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--rose);flex-shrink:0;background:linear-gradient(135deg,var(--rose),var(--lav-d));display:flex;align-items:center;justify-content:center;font-size:18px}
+.testimonial-dots{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.testimonial-dot{width:8px;height:8px;border-radius:50%;background:rgba(196,99,122,.25);border:none;cursor:pointer;transition:.2s;padding:0}
+.testimonial-dot.active{background:var(--rose-d);width:22px;border-radius:4px}
+
+/* ── WORLD CLOCKS ── */
+.clock-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:24px 0}
+.clock-card{flex:1;min-width:140px;max-width:180px;background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1));border:1px solid rgba(242,164,181,.2);border-radius:16px;padding:18px 14px;text-align:center}
+.clock-time{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ink);letter-spacing:1px;line-height:1}
+.clock-city{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--rose-d);text-transform:uppercase;margin-top:6px}
+.clock-tz{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* ── AVAILABILITY BADGE ── */
+#avail-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid;margin-bottom:20px}
+#avail-badge.open{background:rgba(76,175,80,.1);border-color:rgba(76,175,80,.4);color:#2e7d32}
+#avail-badge.employed{background:rgba(242,164,181,.1);border-color:rgba(196,99,122,.35);color:var(--rose-deep)}
+#avail-badge.available-from{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.4);color:#7a6010}
+.avail-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:availPulse 2s ease-in-out infinite}
+@keyframes availPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.7}}
+
+/* ── VISITOR COUNTER ── */
+#visitor-counter{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:5px 12px;background:rgba(255,255,255,.3);border-radius:100px;backdrop-filter:blur(4px)}
+
+/* ── CV DOWNLOAD ── */
+.cv-download-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 28px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:100px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;text-decoration:none;transition:all .25s ease;box-shadow:0 6px 20px rgba(196,99,122,.3)}
+.cv-download-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(196,99,122,.4)}
+
+/* ── CASE STUDY CARDS ── */
+.case-card{background:linear-gradient(135deg,rgba(242,164,181,.06),rgba(201,182,228,.06));border:1px solid rgba(201,182,228,.25);border-radius:20px;padding:28px;position:relative;overflow:hidden}
+.case-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(to bottom,var(--rose-d),var(--lav-d))}
+.case-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rose-d);margin-bottom:10px;display:block}
+.case-result{display:inline-flex;align-items:center;gap:6px;background:rgba(76,175,80,.12);color:#2e7d32;font-size:12px;font-weight:700;padding:4px 12px;border-radius:100px;margin-top:12px}
+
 /* ── ADMIN MODE ── */
 #admin-overlay{position:fixed;inset:0;z-index:800;background:rgba(45,31,45,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center}
 #admin-overlay.open{display:flex}
@@ -208,15 +279,19 @@ textarea.f-input{resize:vertical;min-height:90px}
     <span class="pill" style="background:var(--rose-deep);color:#fff;font-size:10px;letter-spacing:2px;margin-bottom:18px;display:inline-block">✦ DIGITAL PORTFOLIO ✦</span>
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,72px);font-weight:300;color:var(--ink);line-height:1.05;letter-spacing:-1px;margin-bottom:4px">La YaungShin</h1>
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(36px,7vw,72px);font-weight:600;color:var(--rose-d);font-style:italic;line-height:1.05;letter-spacing:-1px;margin-bottom:14px">Thant Elsa</h1>
-    <p style="font-size:clamp(12px,2vw,15px);color:var(--mid);margin-bottom:8px;letter-spacing:.5px">HR Professional · Personal Assistant · AI-Forward Strategist</p>
-    <p style="font-size:13px;color:var(--lav-d);margin-bottom:36px">⚧ Proudly Transgender Woman</p>
+    <p id="typing-tagline"></p>
+    <p style="font-size:13px;color:var(--lav-d);margin-bottom:24px">⚧ Proudly Transgender Woman</p>
+    <div id="avail-badge" class="open"><span class="avail-dot"></span>Open to Opportunities</div>
+    <br>
     <button id="enter-btn" onclick="enterPortfolio()" style="padding:15px 48px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:100px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 30px rgba(196,99,122,.35);transition:all .25s ease">✦ Experience the Portfolio</button>
-    <p style="font-size:11px;color:var(--muted);margin-top:20px;letter-spacing:.5px">Scroll · Discover · Connect</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:.5px">Scroll · Discover · Connect</p>
+    <div style="margin-top:14px"><span id="visitor-counter">👁 <span id="visit-count">—</span> visits</span></div>
   </div>
 </div>
 
 <!-- THREE.JS CANVAS -->
 <canvas id="three-canvas"></canvas>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
 
 <!-- ═══════════════════════════════════
      CHAT BUBBLE + PANEL (GOOGLE CONNECTED)
@@ -413,10 +488,27 @@ textarea.f-input{resize:vertical;min-height:90px}
         <span class="section-sup">Expertise</span>
         <h2 class="section-h2">The Skill Suite</h2>
         <p class="section-sub">A rare blend of legal precision, human insight, and digital fluency.</p>
-        <div class="grid3" id="skills-grid"></div>
+        <div class="skill-ring-grid" id="skills-grid"></div>
+      </div>
+      <!-- CASE STUDIES -->
+      <div class="wrap" style="padding-top:0">
+        <span class="section-sup">Proven Impact</span>
+        <h2 class="section-h2">Case Studies</h2>
+        <p class="section-sub">Real problems. Real solutions. Real results.</p>
+        <div class="grid2" id="case-studies-grid">
+          <div class="case-card"><span class="case-tag">HR Operations · Myanmar ↔ Singapore</span><h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">Cross-Border HR Compliance Overhaul</h4><p style="font-size:14px;color:var(--mid);line-height:1.7">Inherited a placement process with inconsistent MOM documentation and untracked employee grievances across the SG-Myanmar corridor. Rebuilt the onboarding framework to meet S-Pass/EP standards, reducing documentation errors to zero and resolving 12 active grievances within 6 weeks.</p><div class="case-result">✦ Zero compliance flags for 14 consecutive months</div></div>
+          <div class="case-card"><span class="case-tag">Executive Support · Hexing Group</span><h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">C-Suite Calendar & Stakeholder System</h4><p style="font-size:14px;color:var(--mid);line-height:1.7">Senior management had no unified system for cross-timezone scheduling across 3 international offices, leading to missed meetings and duplicate engagements. Designed and maintained a priority-gated scheduling protocol with Telegram-based alerts, reducing scheduling conflicts by ~90%.</p><div class="case-result">✦ 90% reduction in scheduling conflicts</div></div>
+          <div class="case-card"><span class="case-tag">AI Automation · Layaung Bot</span><h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">Facebook Messenger Auto-Reply System</h4><p style="font-size:14px;color:var(--mid);line-height:1.7">A clothing shop was missing customer inquiries after hours, losing sales and damaging reputation. Built a fully automated Messenger bot using Gemini AI with a Burmese-language sales persona, knowledge base, and Telegram admin controls — zero missed messages since deployment.</p><div class="case-result">✦ 24/7 response coverage, 0 missed inquiries</div></div>
+          <div class="case-card"><span class="case-tag">Data Integrity · Humanitarian Sector</span><h4 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:10px">MSF Sensitive Data Management</h4><p style="font-size:14px;color:var(--mid);line-height:1.7">Trusted with sensitive humanitarian records for MSF operations in conflict-adjacent Sagaing Region. Maintained 100% data accuracy across high-volume entry under time pressure, with strict confidentiality protocols observed throughout the full engagement.</p><div class="case-result">✦ 100% data accuracy, zero confidentiality incidents</div></div>
+        </div>
+      </div>
+      <!-- CV DOWNLOAD -->
+      <div class="wrap" style="padding-top:0;text-align:center">
+        <a id="cv-download-btn" class="cv-download-btn" href="#" onclick="trackCvDownload(event)">⬇ Download CV / Résumé</a>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px">PDF · Last updated 2026</p>
       </div>
       <!-- CERTS -->
-      <div class="wrap" style="padding-top:0;padding-bottom:80px">
+      <div class="wrap" style="padding-top:32px;padding-bottom:80px">
         <div class="card" style="background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.1))">
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);margin-bottom:20px">✦ Certifications</h3>
           <div class="grid2" id="certs-grid"></div>
@@ -474,7 +566,12 @@ textarea.f-input{resize:vertical;min-height:90px}
         <div class="card" style="background:rgba(255,255,255,0.45);margin-bottom:48px;border:1px solid rgba(201,182,228,0.25);">
           <span class="section-sup" style="text-align:left;margin-bottom:4px">Social Validation</span>
           <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);margin-bottom:20px">✨ Endorsements &amp; Testimonials</h3>
-          <div class="grid2" id="testimonials-grid"></div>
+          <div class="testimonial-track-wrap">
+            <div class="testimonial-track" id="testimonial-track"></div>
+          </div>
+          <div class="testimonial-dots" id="testimonial-dots"></div>
+          <!-- keep legacy id for existing renderTestimonials() compat -->
+          <div id="testimonials-grid" style="display:none"></div>
         </div>
 
         <span class="section-sup" style="text-align:left">Track Record</span>
@@ -887,6 +984,22 @@ textarea.f-input{resize:vertical;min-height:90px}
           </div>
         </div>
         <div class="grid2" id="contact-grid"></div>
+        <!-- WORLD CLOCKS -->
+        <div class="card" style="margin-top:32px;text-align:center">
+          <span class="section-sup" style="text-align:center">Time Zones</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:4px">🕐 Current Time</h3>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:8px">I'm available during business hours in these zones</p>
+          <div class="clock-row">
+            <div class="clock-card"><div class="clock-time" id="clock-mmr">--:--</div><div class="clock-city">Yangon</div><div class="clock-tz">MMT · UTC+6:30</div></div>
+            <div class="clock-card"><div class="clock-time" id="clock-sgp">--:--</div><div class="clock-city">Singapore</div><div class="clock-tz">SGT · UTC+8</div></div>
+            <div class="clock-card"><div class="clock-time" id="clock-lon">--:--</div><div class="clock-city">London</div><div class="clock-tz">BST/GMT</div></div>
+            <div class="clock-card"><div class="clock-time" id="clock-nyc">--:--</div><div class="clock-city">New York</div><div class="clock-tz">EST/EDT</div></div>
+          </div>
+        </div>
+        <!-- CV DOWNLOAD IN CONNECT -->
+        <div style="text-align:center;margin-top:32px">
+          <a class="cv-download-btn" href="#" onclick="trackCvDownload(event)">⬇ Download My CV</a>
+        </div>
 
         <!-- ADORABLE CALENDAR + HOLIDAYS -->
         <div class="cal-card" style="margin-top:48px">
@@ -921,7 +1034,7 @@ textarea.f-input{resize:vertical;min-height:90px}
 ═══════════════════════════════════════════════════════ */
 window.SITE_CONFIG = {
   location: 'Yangon, Myanmar · Open to Opportunities',
-  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbx1Rp1oXD8QbXPWxuT5IMFw6vl929DL4ALSLMcg_w6PPiUMwA2KX5a_DQs3rLTP18dnbA/exec',
+  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec',
   articles: [],
   testimonials: [
     { Name: 'Thura Soe', Role: 'Chief Operations Officer', Text: 'Elsa transformed our operations with structured AI integrations while keeping labor guidelines completely compliant.' },
@@ -1298,15 +1411,202 @@ function toggleChat() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   🌙 DARK / LIGHT MODE TOGGLE
+═══════════════════════════════════════════════════════ */
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('elsa_theme', isDark ? 'dark' : 'light');
+}
+(function() {
+  if (localStorage.getItem('elsa_theme') === 'dark') {
+    document.body.classList.add('dark');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = '☀️';
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════
+   ✍️ TYPING ANIMATION (splash tagline)
+═══════════════════════════════════════════════════════ */
+const TYPING_ROLES = [
+  'HR Manager & Compliance Advisor',
+  'Executive Personal Assistant',
+  'AI Automation Strategist',
+  'Labor Law Specialist',
+  'Cross-Border HR Expert',
+  'Digital Workflow Architect'
+];
+let _typingIdx = 0, _typingChar = 0, _typingDir = 1, _typingTimer = null;
+function startTypingAnimation() {
+  const el = document.getElementById('typing-tagline');
+  if (!el) return;
+  function tick() {
+    const role = TYPING_ROLES[_typingIdx];
+    if (_typingDir === 1) {
+      _typingChar++;
+      el.textContent = role.slice(0, _typingChar);
+      if (_typingChar >= role.length) { _typingDir = -1; _typingTimer = setTimeout(tick, 1800); return; }
+    } else {
+      _typingChar--;
+      el.textContent = role.slice(0, _typingChar);
+      if (_typingChar === 0) { _typingDir = 1; _typingIdx = (_typingIdx + 1) % TYPING_ROLES.length; }
+    }
+    _typingTimer = setTimeout(tick, _typingDir === 1 ? 68 : 32);
+  }
+  tick();
+}
+
+/* ═══════════════════════════════════════════════════════
+   💫 SKILL PROGRESS RINGS (replaces flat card grid)
+═══════════════════════════════════════════════════════ */
+const SKILL_RINGS = [
+  { icon:'⚖️', name:'Legal Analysis',       pct:92, color:'#C4637A' },
+  { icon:'👥', name:'Human Resources',       pct:95, color:'#8B6DB8' },
+  { icon:'🗂️', name:'Executive Support',     pct:90, color:'#C9A84C' },
+  { icon:'🤖', name:'AI & Automation',       pct:85, color:'#C4637A' },
+  { icon:'🌐', name:'English C1',            pct:93, color:'#8B6DB8' },
+  { icon:'🕊️', name:'Stakeholder Diplomacy', pct:88, color:'#C9A84C' },
+];
+function renderSkillRings() {
+  const grid = document.getElementById('skills-grid');
+  if (!grid) return;
+  const R = 42, CIRC = 2 * Math.PI * R;
+  grid.innerHTML = SKILL_RINGS.map((s, i) => {
+    const offset = CIRC - (s.pct / 100) * CIRC;
+    return `<div class="skill-ring-item">
+      <svg class="skill-ring-svg" width="100" height="100" viewBox="0 0 100 100">
+        <circle class="skill-ring-track" cx="50" cy="50" r="${R}"/>
+        <circle class="skill-ring-fill" cx="50" cy="50" r="${R}"
+          stroke="${s.color}"
+          stroke-dasharray="${CIRC}"
+          stroke-dashoffset="${CIRC}"
+          id="ring-fill-${i}"/>
+        <text x="50" y="54" text-anchor="middle" font-size="18" dominant-baseline="middle" transform="rotate(90,50,50)">${s.icon}</text>
+      </svg>
+      <div class="skill-ring-label">${s.name}</div>
+      <div class="skill-ring-pct">${s.pct}%</div>
+    </div>`;
+  }).join('');
+  // Animate after a short delay so transition fires
+  setTimeout(() => {
+    SKILL_RINGS.forEach((s, i) => {
+      const fill = document.getElementById(`ring-fill-${i}`);
+      if (fill) {
+        const CIRC2 = 2 * Math.PI * R;
+        fill.style.strokeDashoffset = String(CIRC2 - (s.pct / 100) * CIRC2);
+      }
+    });
+  }, 300);
+}
+
+/* ═══════════════════════════════════════════════════════
+   💬 TESTIMONIALS CAROUSEL
+═══════════════════════════════════════════════════════ */
+let _carouselIdx = 0, _carouselTimer = null;
+function renderTestimonialsCarousel(arr) {
+  const track = document.getElementById('testimonial-track');
+  const dots = document.getElementById('testimonial-dots');
+  if (!track || !arr || arr.length === 0) return;
+  track.innerHTML = arr.map(t => `
+    <div class="testimonial-slide">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">${t.Quote || t.quote || t.Body || ''}</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">${t.Avatar || '👤'}</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink)">${t.Name || t.name || 'Anonymous'}</div>
+            <div style="font-size:12px;color:var(--muted)">${t.Role || t.role || ''}</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+  dots.innerHTML = arr.map((_, i) =>
+    `<button class="testimonial-dot${i===0?' active':''}" onclick="goCarousel(${i})"></button>`
+  ).join('');
+  goCarousel(0, false);
+  clearInterval(_carouselTimer);
+  if (arr.length > 1) _carouselTimer = setInterval(() => goCarousel((_carouselIdx + 1) % arr.length), 5000);
+}
+function goCarousel(idx, animate) {
+  _carouselIdx = idx;
+  const track = document.getElementById('testimonial-track');
+  if (track) track.style.transform = `translateX(-${idx * 100}%)`;
+  document.querySelectorAll('.testimonial-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+/* ═══════════════════════════════════════════════════════
+   🕐 WORLD CLOCKS (live, updates every second)
+═══════════════════════════════════════════════════════ */
+function startWorldClocks() {
+  const clocks = [
+    { id:'clock-mmr', tz:'Asia/Rangoon' },
+    { id:'clock-sgp', tz:'Asia/Singapore' },
+    { id:'clock-lon', tz:'Europe/London' },
+    { id:'clock-nyc', tz:'America/New_York' },
+  ];
+  function tick() {
+    const now = new Date();
+    clocks.forEach(c => {
+      const el = document.getElementById(c.id);
+      if (!el) return;
+      el.textContent = now.toLocaleTimeString('en-GB', { timeZone: c.tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+    });
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   🟢 AVAILABILITY BADGE (reads from Sheet config)
+═══════════════════════════════════════════════════════ */
+function updateAvailabilityBadge(config) {
+  const badge = document.getElementById('avail-badge');
+  if (!badge) return;
+  const status = (config && config.availability_status) || 'open';
+  const label  = (config && config.availability_label)  || 'Open to Opportunities';
+  badge.className = 'open'; // reset
+  if (status === 'employed') badge.className = 'employed';
+  else if (status === 'available-from') badge.className = 'available-from';
+  badge.innerHTML = `<span class="avail-dot"></span>${label}`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   👁 VISITOR COUNTER (stored in Clicks sheet via log_click)
+═══════════════════════════════════════════════════════ */
+function updateVisitorCount(config) {
+  const el = document.getElementById('visit-count');
+  if (!el) return;
+  const count = (config && config.visitor_count) ? parseInt(config.visitor_count).toLocaleString() : '—';
+  el.textContent = count;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ⬇ CV DOWNLOAD WITH TRACKING
+═══════════════════════════════════════════════════════ */
+function trackCvDownload(e) {
+  const cvUrl = window.SITE_CONFIG && window.SITE_CONFIG.cv_url;
+  if (!cvUrl || cvUrl.includes('YOUR_')) {
+    e.preventDefault();
+    showToast('⚠️ CV URL not configured yet — add cv_url to your Config Sheet tab.');
+    return;
+  }
+  const btn = e.currentTarget;
+  if (btn) btn.href = cvUrl;
+  logActionClick('CV Download', 'Home / Connect');
+}
+// Set CV URL from config
+function applyCvUrl(config) {
+  const url = config && config.cv_url;
+  if (!url) return;
+  document.querySelectorAll('.cv-download-btn, #cv-download-btn').forEach(btn => { btn.href = url; });
+}
+
+/* ═══════════════════════════════════════════════════════
    ECOSYSTEM COMPONENT RENDER ENGINES
 ═══════════════════════════════════════════════════════ */
 function renderAll() {
-  document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
-    `<div class="card" onclick="logActionClick('${s.name}', 'Expertise Section')"><div style="font-size:36px;margin-bottom:12px">${s.icon}</div>
-     <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:8px">${s.name}</h3>
-     <p style="font-size:14px;color:var(--mid);line-height:1.65">${s.desc}</p>
-     <div style="height:2px;background:linear-gradient(90deg,var(--rose),transparent);margin-top:20px;border-radius:2px"></div></div>`
-  ).join('');
+  renderSkillRings();
 
   document.getElementById('certs-grid').innerHTML = CERTS.map(c =>
     `<div style="display:flex;align-items:center;gap:14px" onclick="logActionClick('${c.cert}', 'Certifications Layer')">
@@ -1377,6 +1677,8 @@ function renderAll() {
   startMarketFluctuator(); // periodic 30-min re-check + simulated drift; initial real data comes via syncDynamicEcosystem()
   renderAllMediaBlocks(); // empty-state placeholders; real content arrives via syncDynamicEcosystem()
   renderCalendar();
+  startTypingAnimation();
+  startWorldClocks();
 }
 
 function renderExperienceList(arr) {
@@ -1436,7 +1738,7 @@ async function syncDynamicEcosystem() {
       localStorage.setItem('elsa_location', data.config.location_status);
       loadLocationBadge();
     }
-    
+
     // 2. Check & Sync Profile Picture across Splash and Chat Avatars
     if (data.config && data.config.profile_picture) {
       const pfp = data.config.profile_picture;
@@ -1444,6 +1746,13 @@ async function syncDynamicEcosystem() {
       document.getElementById('chat-avatar-img').src = pfp;
       document.getElementById('main-avatar').src = pfp;
       document.getElementById('contact-avatar').src = pfp;
+    }
+
+    // 2b. Availability badge + CV URL from config
+    if (data.config) {
+      updateAvailabilityBadge(data.config);
+      applyCvUrl(data.config);
+      updateVisitorCount(data.config);
     }
 
     // 3. Sync and override Experience lists
@@ -1454,6 +1763,7 @@ async function syncDynamicEcosystem() {
     // 4. Sync dynamic Testimonials
     if (data.testimonials && data.testimonials.length > 0) {
       renderTestimonials(data.testimonials);
+      renderTestimonialsCarousel(data.testimonials);
     }
 
     // 5. Sync dynamic Downloads
