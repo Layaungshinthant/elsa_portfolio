@@ -1032,10 +1032,30 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
 /* ═══════════════════════════════════════════════════════
    ECOSYSTEM ENGINE & PERMANENT CONFIG - (HARDCODED URL FIXED)
 ═══════════════════════════════════════════════════════ */
-window.SITE_CONFIG = {
-  location: 'Yangon, Myanmar · Open to Opportunities',
-  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec',
-  articles: [],
+// REPLACE WITH THIS
+document.addEventListener("DOMContentLoaded", async () => {
+    const url = "https://script.google.com/macros/s/AKfycbx1Rp1oXD8QbXPWxuT5IMFw6vl929DL4ALSLMcg_w6PPiUMwA2KX5a_DQs3rLTP18dnbA/exec";
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json(); // Assumes your script returns a JSON array of articles
+
+        // Now inject the data into your page
+        // Replace 'article-container' with the ID of the div where your articles appear
+        const container = document.getElementById('article-container');
+        
+        container.innerHTML = data.map(article => `
+            <div class="article-card">
+                <h2>${article.Title}</h2>
+                <p>${article.Body}</p>
+                <small>${article.Date}</small>
+            </div>
+        `).join('');
+
+    } catch (error) {
+        console.error("Error loading articles:", error);
+    }
+});,
   testimonials: [
     { Name: 'Thura Soe', Role: 'Chief Operations Officer', Text: 'Elsa transformed our operations with structured AI integrations while keeping labor guidelines completely compliant.' },
     { Name: 'Yin Min', Role: 'Executive Board Member', Text: 'Her legal reasoning, combined with advanced PA workflow orchestration, saved our executive team dozens of planning hours every week.' }
