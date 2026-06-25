@@ -1034,7 +1034,7 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
 ═══════════════════════════════════════════════════════ */
 window.SITE_CONFIG = {
   location: 'Yangon, Myanmar · Open to Opportunities',
-  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbxtmd2HoKvgUIwYNGOxJdbEZ6PM3kKo2-LoEJm6Rh4NprRV8iaRQd65TA_HGdAzEnIpYg/exec',
+  google_sheet_script_url: 'https://script.google.com/macros/s/AKfycbxmRHapfbFK_6YL2FbzUMZmAYEn4B9e1z9uM-8Z4cdoRBnii7cX7iZe4_Ycy2h7AqqFiQ/exec',
   articles: [],
   testimonials: [
     { Name: 'Thura Soe', Role: 'Chief Operations Officer', Text: 'Elsa transformed our operations with structured AI integrations while keeping labor guidelines completely compliant.' },
@@ -1413,8 +1413,16 @@ function toggleChat() {
 /* ═══════════════════════════════════════════════════════
    🌙 DARK / LIGHT MODE TOGGLE
 ═══════════════════════════════════════════════════════ */
-function toggleTheme() {
-  const isDark = document.body.classList.toggle('dark');
+function toggleMobileNav() {
+  const overlay = document.getElementById('nav-mobile-overlay');
+  const burger  = document.getElementById('nav-hamburger');
+  if (!overlay) return;
+  const open = overlay.classList.toggle('open');
+  if (burger) burger.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function toggleTheme() {  const isDark = document.body.classList.toggle('dark');
   document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('elsa_theme', isDark ? 'dark' : 'light');
 }
@@ -1771,8 +1779,9 @@ async function syncDynamicEcosystem() {
       renderDownloads(data.downloads);
     }
 
-    // 6. Cache and Sync dynamic articles
-    if (data.articles && data.articles.length > 0) {
+    // 6. Sync articles from Sheet — Sheet always wins over localStorage cache
+    if (data.articles) {
+      window.SHEET_ARTICLES = data.articles; // raw Sheet rows
       localStorage.setItem('elsa_articles', JSON.stringify(data.articles));
       renderJournal();
     }
@@ -2199,21 +2208,40 @@ function deleteArticle(index) {
   showToast('🗑 Article deleted.');
 }
 
+// Sheet data is the source of truth — stored in window.SHEET_ARTICLES when
+// syncDynamicEcosystem() succeeds. localStorage is only a fallback for offline.
+window.SHEET_ARTICLES = null;
+
 function getArticles() {
+  if (window.SHEET_ARTICLES !== null) return window.SHEET_ARTICLES;
   const stored = localStorage.getItem('elsa_articles');
   if (stored) return JSON.parse(stored);
   return window.SITE_CONFIG.articles || [];
 }
 
+// Normalise Sheet row (Title/Body/Date/Status) → consistent {title,body,date,id}
+function normaliseArticle(a) {
+  return {
+    id:     a.ID    || a.id    || Date.now(),
+    title:  a.Title || a.title || 'Untitled',
+    body:   a.Body  || a.body  || '',
+    date:   a.Date  || a.date  || new Date().toISOString(),
+    status: a.Status|| a.status|| 'Published'
+  };
+}
+
 function renderJournal() {
-  const articles = getArticles();
+  const raw = getArticles();
+  const articles = raw.map(normaliseArticle)
+    .filter(a => a.status === 'Published')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
   renderArticlesFeed(articles);
 }
 
 function refreshAdminArticlesList() {
   const el = document.getElementById('admin-articles-list');
   if (!el) return;
-  const articles = getArticles();
+  const articles = getArticles().map(normaliseArticle).filter(a => a.status === 'Published').sort((a,b) => new Date(b.date)-new Date(a.date));
   if (articles.length === 0) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">No articles yet.</p>'; return; }
   el.innerHTML = articles.map((a, i) => {
     const d = new Date(a.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
@@ -2222,22 +2250,6 @@ function refreshAdminArticlesList() {
       <button onclick="deleteArticle(${i})" style="background:rgba(196,99,122,.1);border:none;color:var(--rose-d);cursor:pointer;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600">✕</button>
     </div>`;
   }).join('');
-}
-
-/* ── Export Config ── */
-function exportConfig() {
-  const articles = getArticles();
-  const location  = localStorage.getItem('elsa_location') || window.SITE_CONFIG.location;
-  const config = { location, articles };
-  const json = JSON.stringify(config, null, 2);
-  document.getElementById('export-output').textContent = json;
-  showToast('Config generated — copy it below!');
-}
-
-function copyExport() {
-  const txt = document.getElementById('export-output').textContent;
-  if (!txt || txt === '— click Generate Export —') { showToast('⚠️ Generate first!'); return; }
-  navigator.clipboard.writeText(txt).then(() => showToast('✓ Copied to clipboard!'));
 }
 
 /* ═══════════════════════════════════════════════════════
