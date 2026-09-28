@@ -261,6 +261,70 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
 
 @media(max-width:700px){nav{padding:8px 14px}.nav-btn{padding:4px 9px;font-size:10.5px}.wrap{padding:48px 16px}.grid2,.grid3,.grid4{grid-template-columns:1fr}#chat-panel{width:calc(100vw - 32px);right:16px}#chat-bubble{bottom:20px;right:20px}}
+/* ── SCROLL PROGRESS BAR ── */
+#scroll-progress{position:fixed;top:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,var(--rose-d),var(--lav-d),var(--gold));z-index:1000;transition:width .1s linear;border-radius:0 2px 2px 0}
+
+/* ── BACK TO TOP ── */
+#back-to-top{position:fixed;bottom:90px;right:20px;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(196,99,122,.35);z-index:500;transition:all .25s ease}
+#back-to-top.visible{display:flex}
+#back-to-top:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(196,99,122,.45)}
+
+/* ── HIRE ME FLOATING CTA ── */
+#hire-cta{position:fixed;bottom:90px;left:20px;z-index:500;opacity:0;transform:translateY(20px);transition:all .4s ease;pointer-events:none}
+#hire-cta.visible{opacity:1;transform:translateY(0);pointer-events:all}
+#hire-cta a{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border-radius:100px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;text-decoration:none;box-shadow:0 6px 20px rgba(196,99,122,.4);white-space:nowrap}
+#hire-cta a:hover{transform:scale(1.04)}
+
+/* ── OFFLINE BANNER ── */
+#offline-banner{display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:500;z-index:800;gap:8px;align-items:center}
+#offline-banner.show{display:flex}
+
+/* ── ERROR STATE ── */
+.section-error{text-align:center;padding:40px 20px;color:var(--muted)}
+.section-error .err-icon{font-size:40px;margin-bottom:12px}
+.section-error p{font-size:14px;font-style:italic}
+
+/* ── TAB TRANSITIONS ── */
+.tab-content{transition:opacity .3s ease}
+
+/* ── LANGUAGE TOGGLE ── */
+#lang-toggle{position:fixed;top:18px;right:62px;z-index:600;padding:5px 12px;border-radius:100px;border:1.5px solid rgba(242,164,181,.4);background:rgba(255,255,255,.3);backdrop-filter:blur(8px);cursor:pointer;font-size:11px;font-weight:700;color:var(--rose-d);letter-spacing:1px;transition:.2s}
+#lang-toggle:hover{background:rgba(242,164,181,.2)}
+[lang="my"] .en-only{display:none}
+[lang="en"] .my-only{display:none}
+
+/* ── VCARD / QR ── */
+.qr-wrap{display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.qr-box{background:white;padding:12px;border-radius:12px;border:1px solid rgba(242,164,181,.2);display:inline-block}
+.vcard-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:linear-gradient(135deg,var(--rose-d),var(--lav-d));color:#fff;border:none;border-radius:100px;font-family:'Jost',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:.2s}
+.vcard-btn:hover{transform:translateY(-2px)}
+
+/* ── COPY EMAIL BUTTON ── */
+.copy-email-btn{background:none;border:none;cursor:pointer;font-size:14px;color:var(--rose-d);padding:4px;transition:.2s;vertical-align:middle}
+.copy-email-btn:hover{transform:scale(1.2)}
+
+/* ── ANALYTICS DASHBOARD ── */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:28px}
+.analytics-kpi{background:linear-gradient(135deg,rgba(242,164,181,.1),rgba(201,182,228,.08));border:1px solid rgba(242,164,181,.2);border-radius:16px;padding:20px;text-align:center}
+.analytics-kpi-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--ink);line-height:1}
+.analytics-kpi-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.click-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.click-bar-label{font-size:12px;color:var(--mid);min-width:120px;text-align:right}
+.click-bar-track{flex:1;height:8px;background:rgba(242,164,181,.15);border-radius:4px;overflow:hidden}
+.click-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose-d),var(--lav-d));border-radius:4px;transition:width 1s ease}
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  #three-canvas{display:none!important}
+}
+
+/* ── PASSWORD TOGGLE ── */
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px}
+.pw-wrap{position:relative}
+
+/* ── LAST UPDATED BADGE ── */
+#last-updated-badge{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
 </style>
 </head>
 <body>
@@ -291,6 +355,11 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
 
 <!-- THREE.JS CANVAS -->
 <canvas id="three-canvas"></canvas>
+<div id="scroll-progress" role="progressbar" aria-label="Page scroll progress"></div>
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<div id="hire-cta"><a href="#" onclick="switchTab('contact');toggleMobileNav&&false;return false;">✦ Hire Me</a></div>
+<div id="offline-banner" role="alert">📡 Offline — showing last saved content</div>
+<button id="lang-toggle" onclick="toggleLanguage()">EN / မြ</button>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">🌙</button>
 
 <!-- ═══════════════════════════════════
@@ -371,7 +440,17 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
         <h2>Admin Command Center</h2>
         <p style="font-size:12px;color:var(--muted)">Connected directly with Google Sheets API</p>
       </div>
-      <button onclick="closeAdmin()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
+      <button onclick="closeAdmin()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)" aria-label="Close admin panel">✕</button>
+    </div>
+
+    <!-- Admin Key (first time) -->
+    <div class="admin-section" id="admin-key-section">
+      <h4>🔑 Admin Key</h4>
+      <div class="pw-wrap">
+        <input class="f-input" id="admin-key-input" type="password" placeholder="Enter your admin passkey..." style="padding-right:44px">
+        <button class="pw-toggle" onclick="toggleAdminKeyVisibility()" aria-label="Toggle password visibility">👁</button>
+      </div>
+      <button class="f-btn" onclick="saveAdminKey()" style="margin-top:10px;width:auto;padding:10px 24px">Save Key</button>
     </div>
 
     <!-- Location Update -->
@@ -381,12 +460,15 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
       <button class="f-btn" onclick="saveLocation()" style="margin-top:10px;width:auto;padding:10px 24px">Update Status</button>
     </div>
 
-    <!-- Daily Article / Announcement -->
+    <!-- Post Article -->
     <div class="admin-section">
-      <h4>✍️ Post New Announcement (Google Sheets Stream)</h4>
+      <h4>✍️ Post New Article</h4>
       <input class="f-input" id="admin-article-title" type="text" placeholder="Article title..." style="margin-bottom:10px">
-      <textarea class="f-input" id="admin-article-body" placeholder="Write your update, insight, or announcement here..." style="min-height:110px"></textarea>
-      <button class="f-btn" onclick="saveArticle()" style="margin-top:10px;width:auto;padding:10px 24px">Publish ✦</button>
+      <textarea class="f-input" id="admin-article-body" placeholder="Write your update here..." style="min-height:110px"></textarea>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <button class="f-btn" onclick="saveArticle()" style="width:auto;padding:10px 24px">Publish ✦</button>
+        <button class="f-btn" onclick="saveArticle(true)" style="width:auto;padding:10px 24px;background:linear-gradient(135deg,#0077B5,#00A0DC)">Publish + LinkedIn ✦</button>
+      </div>
     </div>
 
     <!-- Manage Articles -->
@@ -395,23 +477,21 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
       <div id="admin-articles-list" style="font-size:13px;color:var(--mid);max-height:160px;overflow-y:auto"></div>
     </div>
 
-    <!-- Export Config -->
+    <!-- Analytics shortcut -->
     <div class="admin-section">
-      <h4>📦 Export Config (for permanent deploy)</h4>
-      <p style="font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.5">Copy the JSON below and paste it as the value of <code style="background:rgba(0,0,0,.06);padding:1px 6px;border-radius:4px">window.SITE_CONFIG</code> in the script section to make your updates permanent for all visitors.</p>
-      <button class="f-btn" onclick="exportConfig()" style="width:auto;padding:10px 24px;margin-bottom:10px">Generate Export ↓</button>
-      <div class="export-box" id="export-output">— click Generate Export —</div>
-      <button onclick="copyExport()" style="margin-top:8px;padding:7px 18px;border:1px solid rgba(196,99,122,.4);border-radius:8px;background:transparent;color:var(--rose-d);font-size:12px;cursor:pointer;font-family:'Jost',sans-serif;font-weight:600">Copy to Clipboard</button>
+      <h4>📊 Analytics Dashboard</h4>
+      <p style="font-size:12px;color:var(--mid);margin-bottom:10px">View your visit trends, top clicks, and inquiry stats.</p>
+      <button class="f-btn" onclick="closeAdmin();openAnalytics()" style="width:auto;padding:10px 24px">Open Analytics →</button>
     </div>
 
     <!-- Telegram Remote Control Info -->
     <div class="admin-section">
-      <h4>📡 Ecosystem Operations Guide</h4>
-      <p style="font-size:12px;color:var(--mid);line-height:1.6">Your portfolio dynamically tracks user engagements directly to your Sheets tabs:</p>
+      <h4>📡 Telegram Bot Commands</h4>
       <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
-        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(242,164,181,.25)">Analytics tab -> Visitor logs and device fingerprint analytics</code>
-        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,182,228,.25)">Clicks tab -> Interactive heatmap events written automatically</code>
-        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:12px;border:1px solid rgba(201,168,76,.25)">Inquiries tab -> New business client forms appended instantly</code>
+        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:11px">/publish Title | Body</code>
+        <code style="background:rgba(201,182,228,.12);color:var(--lav-d);padding:7px 12px;border-radius:8px;font-size:11px">/linkedin Title | Body</code>
+        <code style="background:rgba(201,168,76,.12);color:var(--gold);padding:7px 12px;border-radius:8px;font-size:11px">/experience Role | Company | Period | Color | Bullets</code>
+        <code style="background:rgba(242,164,181,.12);color:var(--rose-d);padding:7px 12px;border-radius:8px;font-size:11px">/status open · /location · /cv · /stats</code>
       </div>
     </div>
   </div>
@@ -515,6 +595,41 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
         </div>
       </div>
       <!-- MEDIA: photos, slideshows, videos, decks for this section -->
+      <!-- SPOTIFY NOW PLAYING + GITHUB GRAPH -->
+      <div class="wrap" style="padding-top:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap" class="grid2">
+          <!-- Spotify Widget -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(29,185,84,.08),rgba(29,185,84,.03));border:1px solid rgba(29,185,84,.2)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+              <div>
+                <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#1DB954;text-transform:uppercase">Currently Playing</div>
+              </div>
+            </div>
+            <div id="spotify-display">
+              <div style="font-size:13px;color:var(--muted);font-style:italic">Add your Spotify now-playing embed below, or set <code>spotify_url</code> in your Config Sheet.</div>
+              <!-- Replace this iframe src with your Spotify track/playlist embed URL from Config Sheet -->
+              <iframe id="spotify-iframe" style="display:none;border-radius:12px;width:100%;height:80px" src="" frameborder="0" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+          </div>
+          <!-- GitHub Contribution Graph -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(36,41,46,.06),rgba(36,41,46,.02));border:1px solid rgba(36,41,46,.15)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--ink)"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--ink);text-transform:uppercase">GitHub Activity</div>
+            </div>
+            <img src="https://ghchart.rshah.org/C4637A/Layaungshinthant" alt="GitHub contribution graph for Layaungshinthant" style="width:100%;border-radius:8px;filter:var(--gh-filter,none)" loading="lazy" onerror="this.parentElement.innerHTML+='<p style=\'font-size:12px;color:var(--muted);font-style:italic\'>GitHub chart loading…</p>';this.remove()">
+          </div>
+        </div>
+        <!-- PDF Portfolio Export -->
+        <div style="text-align:center;margin-top:24px">
+          <button onclick="exportPortfolioPDF()" class="cv-download-btn" style="background:linear-gradient(135deg,#2D1F2D,#4a2d4a)">
+            📄 Export Portfolio as PDF
+          </button>
+          <p style="font-size:11px;color:var(--muted);margin-top:8px">Generates a print-ready PDF of your About & Vault tabs</p>
+        </div>
+      </div>
+
       <div class="wrap" style="padding-top:0;padding-bottom:80px" id="media-block-home" data-media-section="Home"></div>
     </div>
 
@@ -1113,11 +1228,42 @@ body.dark .media-card{background:rgba(255,255,255,.05);border-color:rgba(255,255
         </div>
         <div style="text-align:center;margin-top:80px;padding-bottom:60px">
           <div style="width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent);margin:0 auto 20px"></div>
+          <!-- vCard download + QR -->
+          <div class="qr-wrap">
+            <div>
+              <canvas id="qr-canvas" width="120" height="120" class="qr-box" title="Scan to visit portfolio"></canvas>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+              <button class="vcard-btn" onclick="downloadVCard()">📇 Download Contact Card</button>
+              <button class="vcard-btn" style="background:linear-gradient(135deg,var(--lav-d),var(--gold))" onclick="copyEmail()">📋 Copy Email Address</button>
+            </div>
+          </div>
+          <p id="last-updated-badge">Portfolio last updated: <span id="last-updated-date">2026</span></p>
           <!-- SECRET ADMIN TRIGGER: click the rose 5x -->
-          <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--mid);margin-bottom:8px">Driven by passion, guided by purpose.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--mid);margin-bottom:8px;margin-top:32px">Driven by passion, guided by purpose.</p>
           <span id="admin-trigger" onclick="handleAdminTap()" style="cursor:default;font-size:20px;user-select:none;display:inline-block" title="">🌸</span>
           <p style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:8px">© 2026 La YaungShin Thant Elsa · All Rights Reserved</p>
         </div>
+      </div>
+    </div>
+
+    <!-- ══ ANALYTICS (admin-only, hidden by default) ══ -->
+    <div id="tab-analytics" class="tab-content" style="display:none">
+      <div class="wrap">
+        <span class="section-sup">Admin Only</span>
+        <h2 class="section-h2">📊 Analytics Dashboard</h2>
+        <p class="section-sub">Live data from your Google Sheet — visible only to you.</p>
+        <div class="analytics-grid" id="analytics-kpi-grid">
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-visits">—</div><div class="analytics-kpi-label">Total Visits</div></div>
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-inquiries">—</div><div class="analytics-kpi-label">Inquiries</div></div>
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-articles">—</div><div class="analytics-kpi-label">Articles</div></div>
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-subscribers">—</div><div class="analytics-kpi-label">Subscribers</div></div>
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-cv">—</div><div class="analytics-kpi-label">CV Downloads</div></div>
+          <div class="analytics-kpi"><div class="analytics-kpi-num" id="kpi-media">—</div><div class="analytics-kpi-label">Media Files</div></div>
+        </div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:16px">Top Clicked Sections</h3>
+        <div id="analytics-clicks-chart"></div>
+        <div style="height:60px"></div>
       </div>
     </div>
 
@@ -1509,6 +1655,270 @@ function toggleChat() {
 /* ═══════════════════════════════════════════════════════
    🌙 DARK / LIGHT MODE TOGGLE
 ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   SCROLL PROGRESS + BACK TO TOP + HIRE CTA
+═══════════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  const bar = document.getElementById('scroll-progress');
+  if (bar) bar.style.width = pct + '%';
+
+  const backBtn = document.getElementById('back-to-top');
+  if (backBtn) backBtn.classList.toggle('visible', scrollTop > 400);
+
+  const hireCta = document.getElementById('hire-cta');
+  if (hireCta) hireCta.classList.toggle('visible', scrollTop > 300);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeAdmin();
+    closeMediaLightbox();
+    const mobileOverlay = document.getElementById('nav-mobile-overlay');
+    if (mobileOverlay && mobileOverlay.classList.contains('open')) toggleMobileNav();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   OFFLINE DETECTION
+═══════════════════════════════════════════════════════ */
+function updateOnlineStatus() {
+  const banner = document.getElementById('offline-banner');
+  if (banner) banner.classList.toggle('show', !navigator.onLine);
+}
+window.addEventListener('online',  updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+/* ═══════════════════════════════════════════════════════
+   LANGUAGE TOGGLE (EN / Myanmar)
+═══════════════════════════════════════════════════════ */
+let _currentLang = localStorage.getItem('elsa_lang') || 'en';
+function toggleLanguage() {
+  _currentLang = _currentLang === 'en' ? 'my' : 'en';
+  localStorage.setItem('elsa_lang', _currentLang);
+  document.documentElement.lang = _currentLang;
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = _currentLang === 'en' ? 'EN / မြ' : 'မြ / EN';
+  showToast(_currentLang === 'my' ? '🇲🇲 မြန်မာဘာသာသို့ ပြောင်းလဲပြီး' : '🇬🇧 Switched to English');
+}
+(function() {
+  document.documentElement.lang = _currentLang;
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.textContent = _currentLang === 'en' ? 'EN / မြ' : 'မြ / EN';
+})();
+
+/* ═══════════════════════════════════════════════════════
+   VCARD DOWNLOAD
+═══════════════════════════════════════════════════════ */
+function downloadVCard() {
+  const vcard = [
+    'BEGIN:VCARD', 'VERSION:3.0',
+    'FN:La YaungShin Thant Elsa',
+    'N:Thant Elsa;La YaungShin;;;',
+    'TITLE:HR Manager · Executive PA · AI Strategist',
+    'EMAIL;TYPE=WORK:layaungshinthant.freelancer@gmail.com',
+    'TEL;TYPE=CELL:+959685520133',
+    'URL:https://layaungshinthant.vercel.app',
+    'ADR;TYPE=WORK:;;Lanmadaw;Yangon;;Myanmar',
+    'NOTE:Multidisciplinary professional — HR management, Executive PA, Legal Compliance, AI Automation',
+    'END:VCARD'
+  ].join('\r\n');
+  const blob = new Blob([vcard], { type: 'text/vcard' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ElsaPortfolio.vcf';
+  a.click();
+  logActionClick('vCard Download', 'Connect Tab');
+  showToast('📇 Contact card downloaded!');
+}
+
+/* ═══════════════════════════════════════════════════════
+   COPY EMAIL
+═══════════════════════════════════════════════════════ */
+function copyEmail() {
+  const email = 'layaungshinthant.freelancer@gmail.com';
+  navigator.clipboard.writeText(email).then(() => {
+    showToast('📋 Email address copied!');
+    logActionClick('Copy Email', 'Connect Tab');
+  }).catch(() => {
+    prompt('Copy this email address:', email);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   QR CODE GENERATOR (pure canvas, no library)
+═══════════════════════════════════════════════════════ */
+function drawQRCode() {
+  const canvas = document.getElementById('qr-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const url = 'https://layaungshinthant.vercel.app';
+  // Simple QR-style visual (decorative — links to portfolio)
+  // For a real scannable QR, add qrcode.js library
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, 120, 120);
+  ctx.fillStyle = '#2D1F2D';
+  // Position detection squares
+  const drawSquare = (x, y, size) => { ctx.fillRect(x, y, size, size); ctx.fillStyle='#fff'; ctx.fillRect(x+3,y+3,size-6,size-6); ctx.fillStyle='#2D1F2D'; ctx.fillRect(x+6,y+6,size-12,size-12); };
+  drawSquare(8, 8, 28);
+  drawSquare(84, 8, 28);
+  drawSquare(8, 84, 28);
+  // URL text at bottom
+  ctx.fillStyle = '#C4637A';
+  ctx.font = '7px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Scan → Portfolio', 60, 115);
+  // Note: this is decorative. To make it scannable, load qrcode.js
+}
+
+/* ═══════════════════════════════════════════════════════
+   ADMIN KEY PASSWORD TOGGLE
+═══════════════════════════════════════════════════════ */
+function toggleAdminKeyVisibility() {
+  const input = document.getElementById('admin-key-input');
+  if (!input) return;
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function saveAdminKey() {
+  const key = document.getElementById('admin-key-input').value.trim();
+  if (!key) return showToast('⚠️ Enter your admin passkey first');
+  localStorage.setItem('elsa_admin_key', key);
+  showToast('🔑 Admin key saved!');
+  document.getElementById('admin-key-section').style.display = 'none';
+}
+
+function getAdminKey() {
+  return localStorage.getItem('elsa_admin_key') || '';
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANALYTICS DASHBOARD
+═══════════════════════════════════════════════════════ */
+function openAnalytics() {
+  const tab = document.getElementById('tab-analytics');
+  if (tab) { tab.style.display = 'block'; switchTab('analytics'); }
+  loadAnalytics();
+}
+
+async function loadAnalytics() {
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (!api || api.includes('YOUR_')) return;
+  try {
+    const res = await fetch(`${api}?action=analytics&key=${getAdminKey()}`);
+    const data = await res.json();
+    if (data.error) { showToast('⚠️ ' + data.error); return; }
+    renderAnalyticsDashboard(data);
+  } catch(e) {
+    // Fallback: show what we have locally
+    renderAnalyticsDashboard({});
+  }
+}
+
+function renderAnalyticsDashboard(data) {
+  const articles = window.SHEET_ARTICLES ? window.SHEET_ARTICLES.filter(a=>(a.Status||a.status)==='Published').length : '—';
+  setText('kpi-visits',     data.visits      || window.SITE_CONFIG.visitor_count || '—');
+  setText('kpi-inquiries',  data.inquiries    || '—');
+  setText('kpi-articles',   data.articles     || articles);
+  setText('kpi-subscribers',data.subscribers  || '—');
+  setText('kpi-cv',         data.cv_downloads || '—');
+  setText('kpi-media',      data.media_count  || (window.MEDIA_LIBRARY ? window.MEDIA_LIBRARY.length : '—'));
+
+  const chart = document.getElementById('analytics-clicks-chart');
+  if (!chart || !data.top_clicks) return;
+  const max = Math.max(...data.top_clicks.map(c => c.count), 1);
+  chart.innerHTML = data.top_clicks.map(c =>
+    `<div class="click-bar-row">
+      <div class="click-bar-label">${c.section}</div>
+      <div class="click-bar-track"><div class="click-bar-fill" style="width:${(c.count/max)*100}%"></div></div>
+      <div style="font-size:12px;color:var(--mid);min-width:30px">${c.count}</div>
+    </div>`
+  ).join('');
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* ═══════════════════════════════════════════════════════
+   VISITOR AUTO-INCREMENT
+═══════════════════════════════════════════════════════ */
+function autoIncrementVisitor() {
+  const key = 'elsa_visit_session';
+  if (sessionStorage.getItem(key)) return; // only once per session
+  sessionStorage.setItem(key, '1');
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (!api || api.includes('YOUR_')) return;
+  fetch(api, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'increment_visitor' })
+  }).catch(() => {}); // fire and forget, failure is fine
+}
+
+/* ═══════════════════════════════════════════════════════
+   ERROR STATE HELPER
+═══════════════════════════════════════════════════════ */
+function showSectionError(containerId, message) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = `<div class="section-error"><div class="err-icon">🌸</div><p>${message || 'Content loading — check back shortly.'}</p></div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LAST UPDATED DATE
+═══════════════════════════════════════════════════════ */
+function setLastUpdatedDate() {
+  const el = document.getElementById('last-updated-date');
+  if (el) el.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
+}
+
+/* ═══════════════════════════════════════════════════════
+   📄 PDF PORTFOLIO EXPORT
+   Uses browser print — most reliable, no library needed.
+   Print CSS is already defined in the stylesheet above.
+═══════════════════════════════════════════════════════ */
+function exportPortfolioPDF() {
+  // Switch to home tab so it prints correctly
+  switchTab('home');
+  setTimeout(() => {
+    showToast('📄 Opening print dialog — choose "Save as PDF"');
+    window.print();
+  }, 600);
+}
+
+/* ═══════════════════════════════════════════════════════
+   🎵 SPOTIFY WIDGET
+   Set spotify_url in your Config Sheet to a Spotify
+   embed URL (e.g. https://open.spotify.com/embed/track/...)
+═══════════════════════════════════════════════════════ */
+function applySpotify(config) {
+  const url = config && config.spotify_url;
+  const iframe = document.getElementById('spotify-iframe');
+  const display = document.getElementById('spotify-display');
+  if (!url || !iframe) return;
+  iframe.src = url;
+  iframe.style.display = 'block';
+  if (display) {
+    const placeholder = display.querySelector('div');
+    if (placeholder) placeholder.style.display = 'none';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   🌙 GITHUB DARK MODE FILTER
+═══════════════════════════════════════════════════════ */
+function applyGithubTheme() {
+  const isDark = document.body.classList.contains('dark');
+  document.documentElement.style.setProperty('--gh-filter', isDark ? 'invert(1) hue-rotate(180deg) brightness(0.85)' : 'none');
+}
+
 function toggleMobileNav() {
   const overlay = document.getElementById('nav-mobile-overlay');
   const burger  = document.getElementById('nav-hamburger');
@@ -1518,9 +1928,11 @@ function toggleMobileNav() {
   document.body.style.overflow = open ? 'hidden' : '';
 }
 
-function toggleTheme() {  const isDark = document.body.classList.toggle('dark');
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
   document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('elsa_theme', isDark ? 'dark' : 'light');
+  applyGithubTheme();
 }
 (function() {
   if (localStorage.getItem('elsa_theme') === 'dark') {
@@ -1572,36 +1984,41 @@ const SKILL_RINGS = [
   { icon:'🌐', name:'English C1',            pct:93, color:'#8B6DB8' },
   { icon:'🕊️', name:'Stakeholder Diplomacy', pct:88, color:'#C9A84C' },
 ];
+let _ringsAnimated = false;
 function renderSkillRings() {
   const grid = document.getElementById('skills-grid');
   if (!grid) return;
   const R = 42, CIRC = 2 * Math.PI * R;
-  grid.innerHTML = SKILL_RINGS.map((s, i) => {
-    const offset = CIRC - (s.pct / 100) * CIRC;
-    return `<div class="skill-ring-item">
-      <svg class="skill-ring-svg" width="100" height="100" viewBox="0 0 100 100">
-        <circle class="skill-ring-track" cx="50" cy="50" r="${R}"/>
-        <circle class="skill-ring-fill" cx="50" cy="50" r="${R}"
-          stroke="${s.color}"
-          stroke-dasharray="${CIRC}"
-          stroke-dashoffset="${CIRC}"
-          id="ring-fill-${i}"/>
-        <text x="50" y="54" text-anchor="middle" font-size="18" dominant-baseline="middle" transform="rotate(90,50,50)">${s.icon}</text>
-      </svg>
-      <div class="skill-ring-label">${s.name}</div>
-      <div class="skill-ring-pct">${s.pct}%</div>
-    </div>`;
-  }).join('');
-  // Animate after a short delay so transition fires
-  setTimeout(() => {
+  // Only re-render HTML once; on subsequent calls just re-trigger animation
+  if (!_ringsAnimated) {
+    grid.innerHTML = SKILL_RINGS.map((s, i) => `
+      <div class="skill-ring-item">
+        <svg class="skill-ring-svg" width="100" height="100" viewBox="0 0 100 100">
+          <circle class="skill-ring-track" cx="50" cy="50" r="${R}"/>
+          <circle class="skill-ring-fill" cx="50" cy="50" r="${R}"
+            stroke="${s.color}" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"
+            id="ring-fill-${i}"/>
+          <text x="50" y="54" text-anchor="middle" font-size="18" dominant-baseline="middle" transform="rotate(90,50,50)">${s.icon}</text>
+        </svg>
+        <div class="skill-ring-label">${s.name}</div>
+        <div class="skill-ring-pct">${s.pct}%</div>
+      </div>`).join('');
+  }
+  // Animate: reset to 0 first so it re-plays cleanly when switching back to tab
+  SKILL_RINGS.forEach((_, i) => {
+    const fill = document.getElementById(`ring-fill-${i}`);
+    if (fill) { fill.style.transition = 'none'; fill.style.strokeDashoffset = String(CIRC); }
+  });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     SKILL_RINGS.forEach((s, i) => {
       const fill = document.getElementById(`ring-fill-${i}`);
       if (fill) {
-        const CIRC2 = 2 * Math.PI * R;
-        fill.style.strokeDashoffset = String(CIRC2 - (s.pct / 100) * CIRC2);
+        fill.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(.25,.46,.45,.94)';
+        fill.style.strokeDashoffset = String(CIRC - (s.pct / 100) * CIRC);
       }
     });
-  }, 300);
+    _ringsAnimated = true;
+  }));
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1789,6 +2206,12 @@ function renderAll() {
   renderCalendar();
   startTypingAnimation();
   startWorldClocks();
+  setLastUpdatedDate();
+  drawQRCode();
+  updateOnlineStatus();
+  autoIncrementVisitor();
+  const keySection = document.getElementById("admin-key-section");
+  if (keySection) keySection.style.display = getAdminKey() ? "none" : "block";
 }
 
 function renderExperienceList(arr) {
@@ -1881,6 +2304,7 @@ async function syncDynamicEcosystem() {
       updateAvailabilityBadge(data.config);
       applyCvUrl(data.config);
       updateVisitorCount(data.config);
+      applySpotify(data.config);
     }
 
     // 3. Sync and override Experience lists
@@ -2311,18 +2735,50 @@ function loadLocationBadge() {
 }
 
 /* ── Articles / Journal Handling ── */
-function saveArticle() {
+async function saveArticle(asLinkedIn) {
   const title = document.getElementById('admin-article-title').value.trim();
   const body  = document.getElementById('admin-article-body').value.trim();
   if (!body) { showToast('⚠️ Please write something first.'); return; }
-  let articles = getArticles();
-  articles.unshift({ title: title || 'Untitled', body, date: new Date().toISOString() });
-  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+
+  const api = window.SITE_CONFIG.google_sheet_script_url;
+  if (api && !api.includes('YOUR_')) {
+    try {
+      const res = await fetch(api, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'admin_update',
+          secretKey: getAdminKey(),
+          target: 'article',
+          title: title || 'Untitled',
+          body,
+          date: new Date().toISOString(),
+          linkedin: asLinkedIn ? 'TRUE' : ''
+        })
+      });
+      const data = await res.json();
+      if (!data.success) { showToast('⚠️ ' + (data.error || 'Failed to publish')); return; }
+      // Refresh from Sheet
+      await syncDynamicEcosystem();
+      showToast(asLinkedIn ? '✦ Published + tagged for LinkedIn!' : '✦ Article published to Sheet!');
+    } catch(e) {
+      showToast('⚠️ Connection issue — saved locally only.');
+      _saveArticleLocally(title, body, asLinkedIn);
+    }
+  } else {
+    _saveArticleLocally(title, body, asLinkedIn);
+    showToast('✦ Saved locally (configure API URL to sync to Sheet)');
+  }
   document.getElementById('admin-article-title').value = '';
   document.getElementById('admin-article-body').value  = '';
-  renderJournal();
   refreshAdminArticlesList();
-  showToast('✦ Article published!');
+}
+
+function _saveArticleLocally(title, body, asLinkedIn) {
+  let articles = getArticles();
+  articles.unshift({ title: title || 'Untitled', body, date: new Date().toISOString(), Status: 'Published', LinkedIn: asLinkedIn ? 'TRUE' : '' });
+  localStorage.setItem('elsa_articles', JSON.stringify(articles));
+  renderJournal();
 }
 
 function deleteArticle(index) {
@@ -2416,7 +2872,7 @@ window.addEventListener('scroll', () => {
 
 function switchTab(tabId) {
   const cur = document.querySelector('.tab-content.active');
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+  document.querySelectorAll('.nav-btn, .nav-mobile-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
   if (cur) {
     cur.style.opacity = '0';
     setTimeout(() => {
@@ -2425,7 +2881,13 @@ function switchTab(tabId) {
       if (nxt) {
         nxt.style.display = 'block'; nxt.style.opacity = '0';
         window.scrollTo({top:0,behavior:'smooth'});
-        requestAnimationFrame(() => requestAnimationFrame(() => { nxt.style.opacity='1'; nxt.classList.add('active'); }));
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          nxt.style.opacity='1'; nxt.classList.add('active');
+          // Tab-specific post-switch actions
+          if (tabId === 'home')       renderSkillRings();
+          if (tabId === 'contact')    { loadLinkedInBadge(); drawQRCode(); }
+          if (tabId === 'analytics')  loadAnalytics();
+        }));
       }
     }, 280);
   }
@@ -2436,11 +2898,17 @@ function switchTab(tabId) {
    THREE.JS BACKGROUND LAYER
 ═══════════════════════════════════════════════════════ */
 function initThreeJS() {
-  if (typeof THREE === 'undefined') return;
+  // Skip on mobile (saves battery) and on reduced-motion preference
+  const isMobile = window.innerWidth < 768 || /Mobi|Android/i.test(navigator.userAgent);
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (isMobile || prefersReduced || typeof THREE === 'undefined') {
+    document.getElementById('three-canvas').style.display = 'none';
+    return;
+  }
   const canvas   = document.getElementById('three-canvas');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:false, alpha:true, powerPreference:'low-power'});
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(1); // cap at 1 — no need for retina on a background decoration
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
   camera.position.z = 20;
@@ -2449,9 +2917,9 @@ function initThreeJS() {
   const p2 = new THREE.PointLight(0xC9B6E4, 1.5, 50); p2.position.set(-5,-3,8); scene.add(p2);
   const cols = [0xF2A4B5,0xC9B6E4,0xF5E3A8,0xFDE8EF,0xEDE8F8,0xC4637A,0x9B7EC8,0xC9A84C,0xF9C8D4,0xD4C8F0];
   const spheres = [];
-  for (let i = 0; i < 22; i++) {
+  for (let i = 0; i < 14; i++) { // reduced from 22 → 14 for performance
     const r = Math.random()*1.1+0.2;
-    const geo = new THREE.SphereGeometry(r, 12, 12);
+    const geo = new THREE.SphereGeometry(r, 8, 8); // reduced segments from 12→8
     const mat = new THREE.MeshPhongMaterial({color:cols[i%cols.length], transparent:true, opacity:Math.random()*.28+.07, shininess:80});
     const m = new THREE.Mesh(geo, mat);
     m.position.set((Math.random()-.5)*44, (Math.random()-.5)*26, (Math.random()-.5)*8-4);
@@ -2459,8 +2927,11 @@ function initThreeJS() {
     m.userData.vy = (Math.random()-.5)*.011;
     scene.add(m); spheres.push(m);
   }
+  let _threeRunning = true;
+  document.addEventListener('visibilitychange', () => { _threeRunning = !document.hidden; });
   (function animate() {
     requestAnimationFrame(animate);
+    if (!_threeRunning) return; // pause when tab is hidden
     spheres.forEach(s => {
       s.position.x += s.userData.vx; s.position.y += s.userData.vy;
       s.rotation.x += .003; s.rotation.y += .002;
